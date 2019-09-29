@@ -1,10 +1,6 @@
-// Copyright 2019 John Douglas (@instransitvita) <blittable.bits@gmail.com>
-
 use clap::arg_enum;
 use core::str::FromStr;
-use std::error::Error;
 use std::path::PathBuf;
-use structopt::clap::AppSettings;
 use structopt::clap::ArgGroup;
 use structopt::StructOpt;
 
@@ -32,7 +28,6 @@ impl FromStr for Item {
         Ok(Item(result))
     }
 }
-
 
 #[derive(Debug, structopt_derive::StructOpt)]
 #[allow(clippy::large_enum_variant)]
@@ -69,8 +64,6 @@ struct Opts {
     essmbly: Essembly,
 }
 
-
-
 fn acct_arg_group() -> ArgGroup<'static> {
     ArgGroup::with_name("acct").required(true)
 }
@@ -80,7 +73,7 @@ arg_enum! {
     pub enum TraceLevels {  TRACE,
     DEBUG,
     INFO,
-}
+    }
 }
 
 arg_enum! {
@@ -104,35 +97,6 @@ arg_enum! {
 }
 }
 
-// #[derive(StructOpt, Debug)]
-// #[structopt(
-//     name = "essembly",
-//     about = "A cli (command line interface) for essembly.",
-//     group = acct_arg_group(),
-// )]
-// struct Opt {
-//     #[structopt(possible_values = &Modules::variants(), case_insensitive = true, group = "acct")]
-//     module: Modules,
-
-//     #[structopt(long = "post", group = "acct")]
-//     post: Option<String>,
-
-//     #[structopt(long = "balance", group = "acct")]
-//     balance: Option<String>,
-
-//     /// Needed parameter, the first on the command line.
-//     #[structopt(help = "Input file")]
-//     input: Option<String>,
-
-//     /// specify the logging target: `--log
-//     /// log.txt`). If a target is not specified, stdout is used.
-//     #[structopt(
-//         long = "log",
-//         help = "Log file, stdout if no file, no logging if not present"
-//     )]
-//     #[allow(clippy::option_option)]
-//     log: Option<Option<String>>,
-// }
 
 fn main() {
     let opt = Opts::from_args();
