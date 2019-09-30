@@ -12,3 +12,7 @@ fn main() -> ! {
     _y = x;
     loop {}
 }
+
+pub trait MicroDevice {
+
+}

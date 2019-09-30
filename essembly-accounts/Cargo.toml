@@ -1,16 +1,13 @@
 [package]
 name = "essembly-accounts"
-version = "0.1.0"
+version = "0.1.0-alpha.1"
 authors = ["blittable <blittable-bits@gmail.com>"]
 edition = "2018"
-
-default = ["prelude", "gl", "tax"]
 
 [dependencies]
 chrono = "0.4.9"
 mockall = "0.5.1"
 uuid = { version = "0.7", features = ["serde", "v4"] }
-essembly-core = { path = "../essembly-core" }
 
 [dev-dependencies]
 mockall = "0.5.1"

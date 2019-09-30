@@ -1,11 +1,10 @@
 [workspace]
 
 members = [
-  "essembly-core",
+  "essembly",
   "essembly-cli",
   "essembly-store",
   "essembly-app",
-  "essembly-web",
   "essembly-accounts",
   "essembly-inventory",
   "essembly-pos",
