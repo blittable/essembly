@@ -1,0 +1,33 @@
+[package]
+name = "essembly-store"
+version = "0.1.0"
+authors = ["blittable <blittable-bits@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+serde = "1.0"
+serde_json = "1.0"
+fallible = "0.1.2"
+serde_derive = "1.0"
+serde_regex = "0.4.0"
+tempfile = "3.0.0"
+dirs = "2.0.2"
+failure = "0.1.5"
+lazy_static = "1.4.0"
+tracing = "0.1.9"
+tracing-subscriber = "0.1.4"
+tracing-attributes = "0.1.4"
+tracing-futures = "0.0.1-alpha.1"
+tracing-log = "0.1.0"
+futures-preview = { version = "=0.3.0-alpha.18" }
+tokio = { version = "0.2.0-alpha.5" }
+toml = "0.5"
+failure_derive = "=0.1.5"
+clap = {version = "2.33", features = ["yaml"]}
+datetime = "0.4.7"
+env_logger = "0.7.0"
+num_cpus = "1.10.0"
+scoped_threadpool = "0.1.9"
+users = "0.9.1"
+
+
