@@ -10,6 +10,7 @@ categories = ["primitives", "business", "security", "encryption"]
 
 [features]
 default = [
+"core",
 "app",
 "cli",
 "inventory",
@@ -23,6 +24,7 @@ cli = ["essembly-cli"]
 inventory = ["essembly-inventory"]
 pos = ["essembly-pos"]
 store = ["essembly-store"]
+core = ["essembly-core"]
 
 [dependencies]
 essembly-app = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-app" }
@@ -31,7 +33,9 @@ essembly-inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../e
 essembly-accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-accounts" }
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 essembly-pos = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-pos" }
+essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
 tracing = "0.1.9"
+bitflags = "0.1.0"
 tracing-subscriber = "0.1.4"
 tracing-attributes = "0.1.4"
 tracing-futures = "0.0.1-alpha.1"
@@ -44,3 +48,6 @@ uuid = { version = "0.7", features = ["serde", "v5"] }
 
 [dev-dependencies]
 mockall = "0.5.1"
+
+[package.metadata.docs.rs]
+all-features = false 
