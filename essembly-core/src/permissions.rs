@@ -1,5 +1,6 @@
 use bitflags::*;
 use std::fmt;
+use std::mem;
 
 /// Permissions for all entities
 pub struct Permissions<T> {
@@ -35,14 +36,30 @@ impl<T> Permissions<T> {
             group: None,
         }
     }
+
+    pub(crate) fn enable_essembly_permissions(&mut self) -> &Permissions<T> {
+        //Permissions::<i32>::default()
+        &self.mask.set(Flags::E_ACTIVE, true);
+        &self.mask.set(Flags::O_ACTIVE, true);
+        &self.mask.set(Flags::O_ACTIVE, true);
+        &self.mask.set(Flags::O_ACTIVE, true);
+        &self.mask.set(Flags::I_SU, true);
+        self
+    }
 }
 
 bitflags! {
-    pub(crate) struct Flags: u64 {
+    pub(crate) struct Flags: u32 {
         const I = 0b00000000;
         const O = 0b00000000;
         const G = 0b00000000;
         const E = 0b00000000;
+        const O_ACTIVE = 0b10000000;
+        const E_ACTIVE = 0b10000000;
+        const G_ACTIVE = 0b10000000;
+        const I_ACTIVE = 0b10000000;
+        const I_SU = 0b10000001;
+        const MIN_ACTIVE = Self::O_ACTIVE.bits | Self::E_ACTIVE.bits | Self::G_ACTIVE.bits | Self::I_ACTIVE.bits;
     }
 }
 
@@ -81,12 +98,38 @@ pub struct PermissionError {
 //for I (individual), O (organization), G (group), E (essembly)
 fn test_create_permissions() {
     let permissions = Permissions::<i32>::default();
-    //println!("Permissions: {:?}", permissions.mask);
-    //println!("Permissions: {:?}", Flags::O);
-    //println!("Permissions: {:?}", permissions.mask.bits());
-    //println!("All: {:?}", Flags::all());
-    //println!("All Bits: {:?}", Flags::all().bits());
     assert_eq!(permissions.mask.bits(), 0b00000000);
+}
+
+#[test]
+fn test_apply_essembly_mask() {
+    let mut permissions = Permissions::<i32>::default();
+    println!("Pre-masked bits: {:?}", permissions.mask.bits());
+    assert_eq!(permissions.mask.bits(), 0b00000000);
+    let permissions_with_essembly_mask = permissions.enable_essembly_permissions();
+    println!(
+        "Newly masked bits: {:?}",
+        permissions_with_essembly_mask.mask.bits()
+    );
+    println!("Newly masked: {:?}", permissions_with_essembly_mask);
+
+    assert_eq!(
+        permissions.enable_essembly_permissions().mask,
+        Flags::E_ACTIVE
+    );
+
+    assert_eq!(
+        permissions.enable_essembly_permissions().mask,
+        Flags::MIN_ACTIVE
+    );
+}
+
+#[test]
+//Default constructed permissions should be 0 (no acccess)
+//for I (individual), O (organization), G (group), E (essembly)
+fn other_tests() {
+    let permissions = Permissions::<i32>::default();
+    println!("Size of Permissions Struct: {:?}", permissions);
 }
 
 //Entity -> Permissions
