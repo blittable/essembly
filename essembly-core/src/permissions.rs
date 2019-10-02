@@ -40,10 +40,9 @@ impl<T> Permissions<T> {
     pub(crate) fn enable_essembly_permissions(&mut self) -> &Permissions<T> {
         //Permissions::<i32>::default()
         &self.mask.set(Flags::E_ACTIVE, true);
+        &self.mask.set(Flags::I_ACTIVE, true);
+        &self.mask.set(Flags::G_ACTIVE, true);
         &self.mask.set(Flags::O_ACTIVE, true);
-        &self.mask.set(Flags::O_ACTIVE, true);
-        &self.mask.set(Flags::O_ACTIVE, true);
-        &self.mask.set(Flags::I_SU, true);
         self
     }
 }
@@ -58,9 +57,14 @@ bitflags! {
         const E_ACTIVE = 0b10000000;
         const G_ACTIVE = 0b10000000;
         const I_ACTIVE = 0b10000000;
-        const I_SU = 0b10000001;
         const MIN_ACTIVE = Self::O_ACTIVE.bits | Self::E_ACTIVE.bits | Self::G_ACTIVE.bits | Self::I_ACTIVE.bits;
     }
+}
+
+pub(crate) fn isActive<T>(p: &Permissions<T>) -> bool {
+    println!("Default bits: {:?}", p.mask.bits());
+    println!("Default bits: {:?}", Flags::MIN_ACTIVE.bits());
+    p.mask == Flags::MIN_ACTIVE
 }
 
 // explicit `Default` implementation
@@ -104,8 +108,9 @@ fn test_create_permissions() {
 #[test]
 fn test_apply_essembly_mask() {
     let mut permissions = Permissions::<i32>::default();
-    println!("Pre-masked bits: {:?}", permissions.mask.bits());
+    println!("Default bits: {:?}", permissions.mask.bits());
     assert_eq!(permissions.mask.bits(), 0b00000000);
+
     let permissions_with_essembly_mask = permissions.enable_essembly_permissions();
     println!(
         "Newly masked bits: {:?}",
@@ -128,8 +133,9 @@ fn test_apply_essembly_mask() {
 //Default constructed permissions should be 0 (no acccess)
 //for I (individual), O (organization), G (group), E (essembly)
 fn other_tests() {
-    let permissions = Permissions::<i32>::default();
-    println!("Size of Permissions Struct: {:?}", permissions);
+    let mut permissions = Permissions::<i32>::default();
+    permissions.enable_essembly_permissions();
+    assert_eq!(isActive(&permissions), true);
 }
 
 //Entity -> Permissions
