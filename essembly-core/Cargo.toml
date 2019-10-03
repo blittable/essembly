@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 bitflags = "1.2.0"
+lazy_static = "1.4.0"
 mockall = "0.5.1"
 uuid = { version = "0.7", features = ["serde", "v4"] }
 bytes = "0.4.12"

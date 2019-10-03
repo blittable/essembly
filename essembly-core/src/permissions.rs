@@ -27,7 +27,6 @@ impl<T: Default> Default for Permissions<T> {
 }
 
 impl<T> Permissions<T> {
-    /// Creates a new futures-aware mutex.
     pub fn new(t: T) -> Permissions<T> {
         Permissions {
             mask: Default::default(),
@@ -62,8 +61,6 @@ bitflags! {
 }
 
 pub(crate) fn isActive<T>(p: &Permissions<T>) -> bool {
-    println!("Default bits: {:?}", p.mask.bits());
-    println!("Default bits: {:?}", Flags::MIN_ACTIVE.bits());
     p.mask == Flags::MIN_ACTIVE
 }
 
@@ -108,15 +105,9 @@ fn test_create_permissions() {
 #[test]
 fn test_apply_essembly_mask() {
     let mut permissions = Permissions::<i32>::default();
-    println!("Default bits: {:?}", permissions.mask.bits());
     assert_eq!(permissions.mask.bits(), 0b00000000);
 
     let permissions_with_essembly_mask = permissions.enable_essembly_permissions();
-    println!(
-        "Newly masked bits: {:?}",
-        permissions_with_essembly_mask.mask.bits()
-    );
-    println!("Newly masked: {:?}", permissions_with_essembly_mask);
 
     assert_eq!(
         permissions.enable_essembly_permissions().mask,
