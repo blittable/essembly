@@ -55,7 +55,7 @@ enum Response {
 #[tokio::main]
 async fn main() -> Result<()> {
 
-    let mut db = db::SusuDB::open("susu.db".to_string()).await?;
+    let mut susu_db = db::SusuDB::open("susu.db".to_string()).await?;
     // Parse the address we're going to run this server on
     // and set up our TCP listener to accept connections.
     let addr = env::args().nth(1).unwrap_or("127.0.0.1:8080".to_string());
@@ -95,7 +95,7 @@ async fn main() -> Result<()> {
                     while let Some(result) = lines.next().await {
                         match result {
                             Ok(line) => {
-                                let response = handle_request(&line, &db);
+                                let response = handle_request(&line, &db, &susu_db);
 
                                 let response = response.serialize();
 
@@ -117,7 +117,8 @@ async fn main() -> Result<()> {
     }
 }
 
-fn handle_request(line: &str, db: &Arc<Database>) -> Response {
+fn handle_request(line: &str, db: &Arc<Database>, susu_db: &db::SusuDB) -> Response {
+
     let request = match Request::parse(&line) {
         Ok(req) => req,
         Err(e) => return Response::Error { msg: e.to_string() },
@@ -136,6 +137,7 @@ fn handle_request(line: &str, db: &Arc<Database>) -> Response {
         },
         Request::Set { key, value } => {
             let previous = db.insert(key.clone(), value.clone());
+            &susu_db.write(key.clone(), value.clone());
             Response::Set {
                 key,
                 value,

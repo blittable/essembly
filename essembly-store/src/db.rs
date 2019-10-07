@@ -5,26 +5,27 @@ use tokio::fs::{File, OpenOptions};
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-use futures::{Future, Stream, future, stream};
+use futures::lock::Mutex;
+use futures::{future, stream, Future, Stream};
 #[cfg(feature = "tokio")]
 use std::rc::Rc;
 use tokio;
-#[cfg(feature = "tokio")]
+use tokio::run;
+use tokio::fs::write;
+use tokio::prelude::Future;
 use tokio::runtime;
 use tokio::runtime::current_thread;
-use futures::lock::Mutex;
-
+#[cfg(feature = "tokio")]
 use tracing::{debug, instrument, log, Subscriber};
-use tracing_subscriber::{EnvFilter, FmtSubscriber};
 use tracing_attributes;
 use tracing_futures;
 
 pub struct SusuDB {
-    hashmap: Mutex<HashMap<String, String>>
+    path: PathBuf,
+    hashmap: Mutex<HashMap<String, String>>,
 }
 
 impl SusuDB {
-
     pub(crate) async fn open(path: String) -> Result<File> {
         configure_tracing();
         let mut options = OpenOptions::new();
@@ -33,7 +34,19 @@ impl SusuDB {
             Err(e) => return Err(Error::new(ErrorCode::DBFileAccess(e.to_string()))),
         }
     }
+
+    pub(crate) async fn write(&self, key: String, value: String) -> Result<()> {
+        let buffer = b"Hello world!";
+        let e = tokio::fs::write("foo.txt", buffer).await;
+
+        match e {
+            Ok(f) => Ok(f),
+            Err(e) => return Err(Error::new(ErrorCode::DBFileAccess(e.to_string()))),
+        }
+    }
 }
+
+
 
 #[instrument(level = "Debug")]
 fn configure_tracing() {

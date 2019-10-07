@@ -116,7 +116,6 @@ mod tests {
 
     #[test]
     fn test_config() {
-        // A sample config file loaded from memory
         let config = concat!(
             "[server.bot-acl]\n",
             "rust-teams = false\n",
