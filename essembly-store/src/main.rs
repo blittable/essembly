@@ -1,17 +1,18 @@
-#![warn(rust_2018_idioms)]
+#[allow(dead_code)]
 #[allow(warnings)]
+pub use serde_derive::{Deserialize, Serialize};
 
-mod susu_error;
 mod db;
+mod susu_error;
 
-use crate::susu_error::{Error, ErrorCode, Result};
+use crate::susu_error::{Error, ErrorCode};
 
 use std::path::PathBuf;
 
-use tracing::{debug, log, instrument, Subscriber};
-use tracing_subscriber::{EnvFilter, FmtSubscriber};
+use tracing::{debug, instrument, log, Subscriber};
 use tracing_attributes;
 use tracing_futures;
+use tracing_subscriber::{EnvFilter, FmtSubscriber};
 
 use std::collections::HashMap;
 use std::env;
@@ -25,174 +26,116 @@ use futures::{SinkExt, StreamExt};
 
 static DATABASE_NAME: &str = "susu.db";
 
-struct Database {
-    map: Mutex<HashMap<String, String>>,
+pub mod store {
+    tonic::include_proto!("mycos.essembly.susu");
 }
 
-/// Possible requests our clients can send us
-enum Request {
-    Get { key: String },
-    Set { key: String, value: String },
+use sled::Db;
+
+use std::collections::VecDeque;
+use std::str;
+use store::{SusuRequest, SusuResponse};
+use tonic::transport::{Identity, Server, ServerTlsConfig};
+use tonic::{body::BoxBody, Request, Response, Status, Streaming};
+use tower::Service;
+
+type SusuResult<T> = Result<Response<T>, Status>;
+type Stream = VecDeque<Result<SusuResponse, Status>>;
+
+fn save_to_db() -> Result<(), Box<dyn std::error::Error>> {
+    let path = "./foo.db";
+    let tree = Db::open(path)?;
+    let options = tree.open_tree("options")?;
+
+    for i in 0..10 {
+        options.insert(b"save", "doo");
+    }
+
+    let mut counter: i32 = 0;
+
+    for node in &tree.tree_names() {
+        println!("tree: {:?}", str::from_utf8(&node));
+    }
+
+    tree.flush();
+
+    Ok(())
 }
 
-/// Responses to the `Request` commands above
-enum Response {
-    Value {
-        key: String,
-        value: String,
-    },
-    Set {
-        key: String,
-        value: String,
-        previous: Option<String>,
-    },
-    Error {
-        msg: String,
-    },
-}
+#[derive(Default)]
+pub struct SusuServer;
 
+#[tonic::async_trait]
+impl store::server::Susu for SusuServer {
+    async fn unary_susu(&self, request: Request<SusuRequest>) -> SusuResult<SusuResponse> {
+        let message = request.into_inner().message;
+        println!("Message");
+
+        save_to_db();
+
+        Ok(Response::new(SusuResponse { message }))
+    }
+
+    type ServerStreamingSusuStream = Stream;
+
+    async fn client_streaming_susu(
+        &self,
+        _: Request<Streaming<SusuRequest>>,
+    ) -> SusuResult<SusuResponse> {
+        Err(Status::unimplemented("not implemented"))
+    }
+
+    type BidirectionalStreamingSusuStream = Stream;
+
+    async fn bidirectional_streaming_susu(
+        &self,
+        _: Request<Streaming<SusuRequest>>,
+    ) -> SusuResult<Self::BidirectionalStreamingSusuStream> {
+        Err(Status::unimplemented("not implemented"))
+    }
+}
 
 #[tokio::main]
-async fn main() -> Result<()> {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let cert = tokio::fs::read("tls/server.pem").await?;
+    let key = tokio::fs::read("tls/server.key").await?;
 
-    let mut susu_db = db::SusuDB::open("susu.db".to_string()).await?;
-    // Parse the address we're going to run this server on
-    // and set up our TCP listener to accept connections.
-    let addr = env::args().nth(1).unwrap_or("127.0.0.1:8080".to_string());
+    let identity = Identity::from_pem(cert, key);
 
-    let mut listener = TcpListener::bind(&addr).await.unwrap();
-    println!("Listening on: {}", addr);
+    let addr = "127.0.0.1:50051".parse().unwrap();
+    let server = SusuServer::default();
 
-    // Create the shared state of this server that will be shared amongst all
-    // clients. We populate the initial database and then create the `Database`
-    // structure. Note the usage of `Arc` here which will be used to ensure that
-    // each independently spawned client will have a reference to the in-memory
-    // database.
-    let mut initial_db = HashMap::new();
-    initial_db.insert("foo".to_string(), "bar".to_string());
-    let db = Arc::new(Database {
-        map: Mutex::new(initial_db),
-    });
+    Server::builder()
+        .tls_config(ServerTlsConfig::with_rustls().identity(identity))
+        .interceptor_fn(move |svc, req| {
+            let auth_header = req.headers().get("authorization").clone();
 
-    loop {
-        match listener.accept().await {
-            Ok((socket, _)) => {
-                // After getting a new connection first we see a clone of the database
-                // being created, which is creating a new reference for this connected
-                // client to use.
-                let db = db.clone();
+            let authed = if let Some(auth_header) = auth_header {
+                auth_header == "Bearer some-secret-token"
+            } else {
+                false
+            };
 
-                tokio::spawn(async move {
-                    // Since our protocol is line-based we use `tokio_codecs`'s `LineCodec`
-                    // to convert our stream of bytes, `socket`, into a `Stream` of lines
-                    // as well as convert our line based responses into a stream of bytes.
-                    let mut lines = Framed::new(socket, LinesCodec::new());
+            let fut = svc.call(req);
 
-                    // Here for every line we get back from the `Framed` decoder,
-                    // we parse the request, and if it's valid we generate a response
-                    // based on the values in the database.
-
-                    while let Some(result) = lines.next().await {
-                        match result {
-                            Ok(line) => {
-                                let response = handle_request(&line, &db, &susu_db);
-
-                                let response = response.serialize();
-
-                                if let Err(e) = lines.send(response).await {
-                                    println!("error on sending response; error = {:?}", e);
-                                }
-                            }
-                            Err(e) => {
-                                println!("error on decoding from socket; error = {:?}", e);
-                            }
-                        }
-                    }
-
-                    // The connection will be closed at this point as `lines.next()` has returned `None`.
-                });
-            }
-            Err(e) => println!("error accepting socket; error = {:?}", e),
-        }
-    }
-}
-
-fn handle_request(line: &str, db: &Arc<Database>, susu_db: &db::SusuDB) -> Response {
-
-    let request = match Request::parse(&line) {
-        Ok(req) => req,
-        Err(e) => return Response::Error { msg: e.to_string() },
-    };
-
-    let mut db = db.map.lock().unwrap();
-    match request {
-        Request::Get { key } => match db.get(&key) {
-            Some(value) => Response::Value {
-                key,
-                value: value.clone(),
-            },
-            None => Response::Error {
-                msg: format!("no key {}", key),
-            },
-        },
-        Request::Set { key, value } => {
-            let previous = db.insert(key.clone(), value.clone());
-            &susu_db.write(key.clone(), value.clone());
-            Response::Set {
-                key,
-                value,
-                previous,
-            }
-        }
-    }
-}
-
-impl Request {
-    fn parse(input: &str) -> Result<Request> {
-        let mut parts = input.splitn(3, " ");
-        match parts.next() {
-            Some("GET") => {
-                let key = match parts.next() {
-                    Some(key) => key,
-                    None => return Err(Error::new(ErrorCode::MessageFormat("Get must be followed by a key".to_string()))),
-                };
-                if parts.next().is_some() {
-                    return Err(Error::new(ErrorCode::MessageFormat("Key must not have any following text.".to_string())));
+            async move {
+                if authed {
+                    fut.await
+                } else {
+                    // Cancel the inner future since we never await it
+                    // the IO never gets registered.
+                    drop(fut);
+                    let res = http::Response::builder()
+                        .header("grpc-status", "16")
+                        .body(BoxBody::empty())
+                        .unwrap();
+                    Ok(res)
                 }
-                Ok(Request::Get {
-                    key: key.to_string(),
-                })
             }
-            Some("SET") => {
-                let key = match parts.next() {
-                    Some(key) => key,
-                    None => return Err(Error::new(ErrorCode::MessageFormat("Set must be followed by a key".to_string()))),
-                };
-                let value = match parts.next() {
-                    Some(value) => value,
-                    None => return Err(Error::new(ErrorCode::MessageFormat("Set needs a value.".to_string()))),
-                };
-                Ok(Request::Set {
-                    key: key.to_string(),
-                    value: value.to_string(),
-                })
-            }
-            Some(cmd) => return Err(Error::new(ErrorCode::MessageFormat("Command parse error".to_string()))),
-            None => return Err(Error::new(ErrorCode::MessageFormat("No value in command.".to_string()))),
-        }
-    }
-}
+        })
+        .clone()
+        .serve(addr, store::server::SusuServer::new(server))
+        .await?;
 
-impl Response {
-    fn serialize(&self) -> String {
-        match *self {
-            Response::Value { ref key, ref value } => format!("{} = {}", key, value),
-            Response::Set {
-                ref key,
-                ref value,
-                ref previous,
-            } => format!("set {} = `{}`, previous: {:?}", key, value, previous),
-            Response::Error { ref msg } => format!("error: {}", msg),
-        }
-    }
+    Ok(())
 }

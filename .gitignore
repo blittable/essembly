@@ -2,6 +2,7 @@ target
 *~
 work/
 tokens.toml
+*.db
 
 /tests/minicrater/*/results.actual.json
 /local-crates/*/target

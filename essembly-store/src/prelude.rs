@@ -18,4 +18,3 @@ impl FailExt for dyn Fail {
         }
     }
 }
-

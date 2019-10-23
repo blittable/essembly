@@ -1,11 +1,15 @@
+use essembly_cli::importer::Parser;
+use essembly_cli::importer::XLBRParser;
 use clap::arg_enum;
 use core::str::FromStr;
 use failure::{bail, Error, Fallible};
 use std::path::PathBuf;
+use std::string::String;
 use structopt::StructOpt;
+use tokio::fs::File;
+use tokio::prelude::{AsyncRead, Future};
 
-mod importop;
-use importop::ImportOp;
+mod importer;
 
 #[derive(Debug, Clone)]
 pub struct Transaction(String);
@@ -104,13 +108,10 @@ impl Essembly {
                 ref operation,
                 ref file,
             } => {
-                if let file_handle = importop::ImportOp::open(file.to_string()) {
-                    println!("Starting import... {:?}", file.to_string());
-                    file_handle.await?;
-                    Ok(())
-                } else {
-                    bail!("Incorrect file path or name: {:?}", file)
-                }
+                let contents = tokio::fs::read(file).await?;
+                let i: XLBRParser = Parser::new();
+                i.parse(String::from_utf8(contents).unwrap());
+                Ok(())
             }
         }
     }
@@ -174,6 +175,6 @@ arg_enum! {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    Essembly::from_args().run().await;
+    Essembly::from_args().run().await?;
     Ok(())
 }

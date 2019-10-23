@@ -9,15 +9,15 @@ pub(crate) enum ErrorType {
     Io,
     /// An error when trying to serialize or deserialize data
     Serialization,
-    /// Locking contention monsters 
+    /// Locking contention monsters
     Lockness,
-    /// DB File access errors 
+    /// DB File access errors
     DBFileAccess,
     /// Error in request or response
     MessageFormat,
 }
 
-/// SusuDB struct Error enum wrapper 
+/// SusuDB struct Error enum wrapper
 pub struct Error {
     err_code: ErrorCode,
 }
@@ -73,5 +73,5 @@ pub enum ErrorCode {
     Serialization(String),
     Lockness(String),
     DBFileAccess(String),
-    MessageFormat(String)
+    MessageFormat(String),
 }

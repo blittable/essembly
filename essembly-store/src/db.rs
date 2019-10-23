@@ -5,14 +5,11 @@ use tokio::fs::{File, OpenOptions};
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-use futures::lock::Mutex;
 use futures::{future, stream, Future, Stream};
 #[cfg(feature = "tokio")]
 use std::rc::Rc;
 use tokio;
-use tokio::run;
 use tokio::fs::write;
-use tokio::prelude::Future;
 use tokio::runtime;
 use tokio::runtime::current_thread;
 #[cfg(feature = "tokio")]
@@ -22,7 +19,6 @@ use tracing_futures;
 
 pub struct SusuDB {
     path: PathBuf,
-    hashmap: Mutex<HashMap<String, String>>,
 }
 
 impl SusuDB {
@@ -46,15 +42,13 @@ impl SusuDB {
     }
 }
 
-
-
-#[instrument(level = "Debug")]
+// #[instrument(level = "Debug")]
 fn configure_tracing() {
     let subscriber = tracing_subscriber::FmtSubscriber::builder()
         .with_env_filter("attrs_basic=trace")
         .finish();
 
-    tracing::subscriber::with_default(subscriber, || {
-        tracing::debug!("Debug output from trace");
-    });
+    // tracing::subscriber::with_default(subscriber, || {
+    //     tracing::debug!("Debug output from trace");
+    // });
 }
