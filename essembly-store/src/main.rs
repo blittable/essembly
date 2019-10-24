@@ -27,7 +27,7 @@ use futures::{SinkExt, StreamExt};
 static DATABASE_NAME: &str = "susu.db";
 
 pub mod store {
-    tonic::include_proto!("mycos.essembly.susu");
+    tonic::include_proto!("api");
 }
 
 use sled::Db;
@@ -42,7 +42,7 @@ use tower::Service;
 type SusuResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<SusuResponse, Status>>;
 
-fn save_to_db() -> Result<(), Box<dyn std::error::Error>> {
+fn save_to_db(message: String) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
     let tree = Db::open(path)?;
     let options = tree.open_tree("options")?;
@@ -68,10 +68,13 @@ pub struct SusuServer;
 #[tonic::async_trait]
 impl store::server::Susu for SusuServer {
     async fn unary_susu(&self, request: Request<SusuRequest>) -> SusuResult<SusuResponse> {
+        
         let message = request.into_inner().message;
-        println!("Message");
 
-        save_to_db();
+        match save_to_db(message.clone()) {
+            Ok(result) => (), 
+            Err(err) => eprintln!("Error saving to the database. {:?}", err), 
+        }
 
         Ok(Response::new(SusuResponse { message }))
     }

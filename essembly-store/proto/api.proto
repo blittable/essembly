@@ -1,10 +1,12 @@
-/*
+ /*
  * Copyright 2018 Mycos authors.
  */
 
  syntax = "proto3";
 
- package mycos.essembly.susu;
+package api;
+
+import "registration.proto";
 
  // SusuRequest is the request for echo.
  message SusuRequest {
@@ -16,6 +18,10 @@
    string message = 1;
  }
 
+ message Cat {
+   Chef cf = 1;
+ }
+
  // Susu is the echo service.
  service Susu {
    // UnarySusu is unary echo.
@@ -24,6 +30,6 @@
    rpc ServerStreamingSusu(SusuRequest) returns (stream SusuResponse) {}
    // ClientStreamingSusu is client side streaming.
    rpc ClientStreamingSusu(stream SusuRequest) returns (SusuResponse) {}
-   // BidirectionalStreamingSusu is bidi streaming.
+   // BidirectionalStreamingSusu is bidirectional streaming.
    rpc BidirectionalStreamingSusu(stream SusuRequest) returns (stream SusuResponse) {}
  }

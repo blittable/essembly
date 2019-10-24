@@ -27,7 +27,7 @@ use futures::{SinkExt, StreamExt};
 static DATABASE_NAME: &str = "susu.db";
 
 pub mod store {
-    tonic::include_proto!("mycos.essembly.susu");
+    tonic::include_proto!("api");
 }
 
 use sled::Db;
