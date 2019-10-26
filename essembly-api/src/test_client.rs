@@ -6,6 +6,8 @@ pub mod api {
     tonic::include_proto!("api");
 }
 
+mod db;
+mod susu_error;
 
 use tokio;
 
