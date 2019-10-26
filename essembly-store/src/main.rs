@@ -42,19 +42,37 @@ use tower::Service;
 type SusuResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<SusuResponse, Status>>;
 
-fn save_to_db(message: String) -> Result<(), Box<dyn std::error::Error>> {
+fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
     let tree = Db::open(path)?;
+
     let options = tree.open_tree("options")?;
+    let locations = tree.open_tree("locations")?;
 
     for i in 0..10 {
         options.insert(b"save", "doo");
     }
 
+    let location = message.latlng.unwrap();
+    let latitude = location.latitude;
+    let longitude = location.longitude.to_string();
+
+    locations.insert(b"goo", longitude.as_bytes()); 
+
     let mut counter: i32 = 0;
 
     for node in &tree.tree_names() {
         println!("tree: {:?}", str::from_utf8(&node));
+    }
+
+    for x in locations.into_iter() {
+        match x {
+            Ok(e) => {
+                println!("key: {:?}", str::from_utf8(&e.0));
+                println!("value: {:?}", str::from_utf8(&e.1));
+            }
+            Err(_) => (),
+        }
     }
 
     tree.flush();
@@ -67,17 +85,32 @@ pub struct SusuServer;
 
 #[tonic::async_trait]
 impl store::server::Susu for SusuServer {
-    async fn unary_susu(&self, request: Request<SusuRequest>) -> SusuResult<SusuResponse> {
-        
-        let message = request.into_inner().message;
+
+    async fn register_chef(&self, request: Request<store::SusuChefRegistration>) -> SusuResult<SusuResponse> {
+        let message = request.into_inner().address.unwrap();
+
+        println!("received message: {:?}", message);
 
         match save_to_db(message.clone()) {
-            Ok(result) => (), 
-            Err(err) => eprintln!("Error saving to the database. {:?}", err), 
+            Ok(result) => (),
+            Err(err) => eprintln!("Error saving to the database. {:?}", err),
         }
 
-        Ok(Response::new(SusuResponse { message }))
+        Ok(Response::new(SusuResponse { message:  "Received Registration".to_string()}))
     }
+
+    // async fn unary_susu(&self, request: Request<SusuRequest>) -> SusuResult<SusuResponse> {
+    //     let message = request.into_inner().message;
+
+    //     println!("received message: {:?}", message);
+
+    //     match save_to_db(message.clone()) {
+    //         Ok(result) => (),
+    //         Err(err) => eprintln!("Error saving to the database. {:?}", err),
+    //     }
+
+    //     Ok(Response::new(SusuResponse { message }))
+    // }
 
     type ServerStreamingSusuStream = Stream;
 

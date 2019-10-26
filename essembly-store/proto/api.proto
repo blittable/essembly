@@ -7,6 +7,14 @@
 package api;
 
 import "registration.proto";
+import "google/protobuf/wrappers.proto";
+
+ // Susu. Chef Registration
+ message SusuChefRegistration {
+   Chef chef = 1;
+   Address address = 2;
+   ChefRegistrationStatus status = 3;
+ }
 
  // SusuRequest is the request for echo.
  message SusuRequest {
@@ -18,12 +26,10 @@ import "registration.proto";
    string message = 1;
  }
 
- message Cat {
-   Chef cf = 1;
- }
 
  // Susu is the echo service.
  service Susu {
+   rpc RegisterChef(SusuChefRegistration) returns (SusuResponse) {}
    // UnarySusu is unary echo.
    rpc UnarySusu(SusuRequest) returns (SusuResponse) {}
    // ServerStreamingSusu is server side streaming.
