@@ -6,7 +6,6 @@ pub mod api {
     tonic::include_proto!("api");
 }
 
-
 use tokio;
 
 use api::client::SusuClient;

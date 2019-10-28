@@ -2,9 +2,11 @@
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
-
 use tracing::{debug, instrument, log, Subscriber};
 use tracing_attributes;
+
+mod config;
+use config::Config;
 
 use tokio;
 
@@ -106,6 +108,17 @@ impl store::server::Susu for SusuServer {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    //Read config file
+    let config: config::Config = config::Config::new().load();
+
+    println!("loaded Config server state: {:?}", config.server_config.state);
+
+    //let config_string = tokio::fs::read(config).await?;
+    //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();
+
+    //Initialize DB
+
     let cert = tokio::fs::read("tls/server.pem").await?;
     let key = tokio::fs::read("tls/server.key").await?;
 

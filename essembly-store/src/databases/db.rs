@@ -3,10 +3,9 @@ use super::error;
 struct Record {}
 
 trait DB {
-    type Record; 
-    fn save_record(r: Record) -> Result<(), error::Error>; 
+    type Record;
+    fn save_record(r: Record) -> Result<(), error::Error>;
 }
-
 
 // impl SusuDB {
 //     #[allow(dead_code)]

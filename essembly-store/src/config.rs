@@ -1,12 +1,11 @@
-use crate::prelude::*;
 use failure::Fallible;
 use regex::Regex;
 pub use serde_derive::{Deserialize, Serialize};
-use serde_regex;
 use std::collections::{HashMap, HashSet};
 use std::env;
 use std::ffi::OsStr;
 use std::fs::File;
+use std::fs::OpenOptions;
 use std::io::Read;
 use std::path::PathBuf;
 use toml::from_str;
@@ -18,14 +17,42 @@ pub struct Config {
     pub db_config: DBConfig,
 }
 
-fn default_config_file() -> PathBuf {
+impl Config {
+    pub fn new() -> Config {
+        let server = ServerConfig {
+            state: "".to_string(),
+        };
+
+        let db = DBConfig {
+            state: "".to_string(),
+        };
+
+        Config {
+            server_config: server,
+            db_config: db,
+        }
+    }
+
+    pub fn load(self) -> Self {
+        let config_source = default_config_file();
+        let mut f = File::open(config_source).unwrap();
+
+        let mut buffer = String::new();
+
+        f.read_to_string(&mut buffer).unwrap();
+        let tom_config: Config = toml::from_str(&buffer).unwrap();
+
+       tom_config 
+    }
+}
+
+pub fn default_config_file() -> PathBuf {
     env::var_os("SUSUDB_CONFIG")
         .unwrap_or_else(|| OsStr::new("config.toml").to_os_string())
         .into()
 }
 
-#[derive(Debug, Fail)]
-#[fail(display = "the configuration file has errors")]
+#[derive(Debug)]
 pub struct BadConfig;
 
 fn default_false() -> bool {
