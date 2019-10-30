@@ -1,0 +1,54 @@
+ /*
+ * Copyright 2018 Mycos authors.
+ */
+
+ syntax = "proto3";
+
+package api;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message Chef {
+  string first_name = 1;
+  google.protobuf.StringValue middle_name = 2;
+  google.protobuf.StringValue last_name = 3;
+  google.protobuf.StringValue nick_name = 4;
+}
+
+message Address {
+  repeated string address_lines = 1; 
+  string city = 2; 
+  string province = 3; 
+  string country = 4; 
+  google.protobuf.StringValue image_ref = 5;
+  google.protobuf.StringValue housing_estate = 6;
+  LatLng latlng = 7;
+}
+
+
+// An object representing a latitude/longitude pair. This is expressed as a pair
+// of doubles representing degrees latitude and degrees longitude. Unless
+// specified otherwise, this must conform to the
+// <a href="http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf">WGS84
+// standard</a>. Values must be within normalized ranges.
+message LatLng {
+  // The latitude in degrees. It must be in the range [-90.0, +90.0].
+  double latitude = 1;
+
+  // The longitude in degrees. It must be in the range [-180.0, +180.0].
+  double longitude = 2;
+}
+
+
+  // Status of a chef.
+  enum ChefRegistrationStatus {
+    UNKNOWN = 0;
+    REGISTRATION_IN_PROGRESS = 1;
+    REGISTRATION_COMPLETED = 2;
+    ACTIVE = 4;
+    REJECTED = 5;
+    DEACTIVATED = 6;
+    CANCELLED = 7;
+  }
+

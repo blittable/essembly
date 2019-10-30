@@ -4,14 +4,6 @@ version = "0.1.0-alpha.1"
 authors = ["blittable <blittable-bits@gmail.com>"]
 edition = "2018"
 
-build = "./build.rs"
-
-[workspace]
-
-[[bin]]
-name = "client"
-path = "src/test_client.rs"
-
 [dependencies]
 serde = "1.0"
 serde_json = "1.0"
@@ -62,7 +54,5 @@ transport = []
 [package.metadata.docs.rs]
 all-features = true
 
-[profile.release]
-debug = true
 
 

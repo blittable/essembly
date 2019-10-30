@@ -1,3 +1,4 @@
+///! database service abstracted over different database types
 #[allow(dead_code)]
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
@@ -112,13 +113,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
     let config: config::Config = config::Config::new().load();
 
-    println!("loaded Config server state: {:?}", config.server_config.state);
+    println!("loaded Config server state: {:?}", config.db_config.db);
 
     //let config_string = tokio::fs::read(config).await?;
     //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();
 
     //Initialize DB
-
     let cert = tokio::fs::read("tls/server.pem").await?;
     let key = tokio::fs::read("tls/server.key").await?;
 

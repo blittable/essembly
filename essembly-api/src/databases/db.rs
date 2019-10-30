@@ -1,20 +1,10 @@
 use super::error;
 
-struct Sled {}
-
 struct Record {}
 
 trait DB {
-    type Format;
+    type Record;
     fn save_record(r: Record) -> Result<(), error::Error>;
-}
-
-impl DB for Sled {
-    type Format = Record;
-
-    fn save_record(r: Record) -> Result<(), error::Error> {
-        Ok(())
-    }
 }
 
 // impl SusuDB {

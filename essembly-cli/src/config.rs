@@ -20,13 +20,10 @@ pub struct Config {
 impl Config {
     pub fn new() -> Config {
         let server = ServerConfig {
-            state: String::new(),
+            state: "".to_string(),
         };
 
-        let db = DBConfig {
-            state: String::new(),
-            db: String::new(),
-        };
+        let db = DBConfig { db: String::new() };
 
         Config {
             server_config: server,
@@ -69,7 +66,6 @@ pub struct ServerConfig {
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct DBConfig {
-    pub state: String,
     pub db: String,
 }
 

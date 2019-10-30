@@ -5,10 +5,6 @@
 //! libraries.
 //!
 //!
-//! `std` re-exports
-//!
-//! # Entity and User
-//!
 //! Permissions (hashes, cryptographic keys, etc.) are *held*
 //! by Users and *applied* to Entities.
 //!

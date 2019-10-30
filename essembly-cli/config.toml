@@ -1,0 +1,5 @@
+[server-config]
+state = 'running'
+
+[db-config]
+name = 'sled'

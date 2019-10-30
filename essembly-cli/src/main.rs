@@ -52,7 +52,7 @@ impl FromStr for Transaction {
 #[structopt(name = "essembly", about = "Essembly CLI")]
 pub enum Essembly {
     #[structopt(
-        name = "intialize-local",
+        name = "initialize-local",
         about = "Initialize a local instance of essembly"
     )]
     InitializeLocal,
