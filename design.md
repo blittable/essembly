@@ -24,6 +24,7 @@
         9) Extensible business rules for reporting and financials
 
 
+DESIGN:
 
                                       3rd Party API
         
@@ -34,6 +35,8 @@ APPLICATION:          client  <-------> API - N Servers <-------> ?
                         \                   |                   /
 
 TELEMETRY:                  Telemetry Router / Sink / Vector
+
+
 
 
 
@@ -51,3 +54,13 @@ Design CI/CD Rules:
 
 1) Compile all business rules to wasm to use for in-place updates - distributed http updates?
 2)   
+
+
+Blockchain
+
+1) If you have a shop, and someone wants to buy with Lite Coin or Ether, what if you could accept it, and charge a tiny free for the transaction?integration with crypto.com's platform (or something like it) could let us optionally offer that to users with near real-time transactions.In countries where it is still not legal, disable it. You are effectively making each merchant a crypto-broker.
+
+2) Business logic within an enterprise - multiple facility implementation - can have a canonical ledger to reference and share (e.g. inventory)
+
+
+

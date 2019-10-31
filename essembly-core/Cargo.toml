@@ -4,6 +4,9 @@ version = "0.1.0-alpha.1"
 authors = ["blittable <blittable-bits@gmail.com>"]
 edition = "2018"
 
+[lib]
+path = "src/lib.rs"
+
 [dependencies]
 bitflags = "1.2.0"
 lazy_static = "1.4.0"
@@ -13,3 +16,4 @@ bytes = "0.4.12"
 
 [dev-dependencies]
 mockall = "0.5.1"
+

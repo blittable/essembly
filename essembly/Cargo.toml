@@ -11,30 +11,31 @@ categories = ["primitives", "business", "security", "encryption"]
 [features]
 default = [
 "core",
+"interfaces",
 "app",
 "cli",
-"inventory",
 "store",
 "pos",
 ]
 
+core = ["essembly-core"]
+interfaces = ["essembly-interfaces"]
 app = ["essembly-app"]
-accounts = ["essembly-accounts"]
 cli = ["essembly-cli"]
-inventory = ["essembly-inventory"]
 pos = ["essembly-pos"]
 store = ["essembly-store"]
-core = ["essembly-core"]
 
 [dependencies]
+essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
+accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/accounts" }
+inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/inventory" }
+
+essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
+
 essembly-app = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-app" }
 essembly-cli = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cli" }
-essembly-inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-inventory" }
-essembly-accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-accounts" }
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 essembly-pos = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-pos" }
-essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
-essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
 tracing = "0.1.9"
 bitflags = "0.1.0"
 tracing-subscriber = "0.1.4"

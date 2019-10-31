@@ -12,7 +12,7 @@ Project Overview:
 - [x] registration protobuf file
 - [x] Separate protos to a diff project
 - [x] proto-factory should generate to proto directory
-- [] protos should compile to their own crate 
+- [x] protos should compile to their own crate 
 - [] research ML integration
 - [] research wasm/wasi integration
 
@@ -24,7 +24,6 @@ Todo Tests:
 
 Todo Tasks:
 - Build 
-
 
 Accounting Systems:
 1) Express accounting software (basic)
