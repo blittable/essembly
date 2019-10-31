@@ -1,1 +1,2 @@
-## The essembly-store crate is the database layer for assembly 
+## Overview
+The essembly-store crate is the database layer for essembly 

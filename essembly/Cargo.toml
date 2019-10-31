@@ -12,17 +12,13 @@ categories = ["primitives", "business", "security", "encryption"]
 default = [
 "core",
 "interfaces",
-"app",
 "cli",
 "store",
-"pos",
 ]
 
 core = ["essembly-core"]
 interfaces = ["essembly-interfaces"]
-app = ["essembly-app"]
 cli = ["essembly-cli"]
-pos = ["essembly-pos"]
 store = ["essembly-store"]
 
 [dependencies]
@@ -32,10 +28,8 @@ inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-c
 
 essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
 
-essembly-app = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-app" }
 essembly-cli = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cli" }
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
-essembly-pos = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-pos" }
 tracing = "0.1.9"
 bitflags = "0.1.0"
 tracing-subscriber = "0.1.4"

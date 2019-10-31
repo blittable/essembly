@@ -1,0 +1,10 @@
+[server-config]
+state = 'running'
+
+[db-config]
+primary-db = { db = "sled", ip = "localhost", protocol = "grpc" }
+remote-db = { db = "sled", ip = "localhost", protocol = "grpc" }
+
+[topology-config]
+# traffic cops are the coordinators for distributed systems
+traffic-cop = { ip = ["localhost", "123.123.123.1:2342"] }

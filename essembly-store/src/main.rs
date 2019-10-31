@@ -10,7 +10,6 @@ use essembly_interfaces::api::*;
 use essembly_interfaces::registration::*;
 
 mod config;
-use config::Config;
 
 use tokio;
 
@@ -58,7 +57,7 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    tree.flush();
+    tree.flush()?;
 
     Ok(())
 }
@@ -110,7 +109,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
     let config: config::Config = config::Config::new().load();
 
-    println!("loaded Config server state: {:?}", config.db_config.db);
+    println!("loaded Config with local db: {:?}", config.db_config.primary_db);
+    println!("loaded Config with remote db: {:?}", config.db_config.remote_db);
 
     //let config_string = tokio::fs::read(config).await?;
     //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();

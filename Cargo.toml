@@ -4,8 +4,6 @@ members = ["essembly",
 "essembly-core", 
 "essembly-cli", 
 "essembly-store", 
-"essembly-app", 
-"essembly-pos",
 "essembly-interfaces",
 ]
 
