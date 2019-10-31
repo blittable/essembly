@@ -34,6 +34,7 @@ essembly-accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../es
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 essembly-pos = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-pos" }
 essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
+essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
 tracing = "0.1.9"
 bitflags = "0.1.0"
 tracing-subscriber = "0.1.4"

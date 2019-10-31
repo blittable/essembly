@@ -12,6 +12,7 @@
 
 
     Key Features: Multi-Platform, local/IOT device with:
+        0) The first POS system with secure, memory-safe, cryto-payment integration
         1) Optional cloud synchronization,
         2) Tamper-proof transaction history,
         3) Extreme performance,
@@ -45,3 +46,8 @@ Use Cases:
 5) I have a at-home kitchen and want to offer my products to restaurants.
 6) I have a at-home kitchen and want to offer my products directly to consumers.
 7) I have a delivery service and want to receive orders and dispatch my drivers and track deliveries. 
+
+Design CI/CD Rules:
+
+1) Compile all business rules to wasm to use for in-place updates - distributed http updates?
+2)   

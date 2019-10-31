@@ -1,6 +1,0 @@
-[server-config]
-state = 'running'
-
-[db-config]
-state = 'running'
-db = 'sled'

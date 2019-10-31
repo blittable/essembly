@@ -6,6 +6,9 @@ pub use serde_derive::{Deserialize, Serialize};
 use tracing::{debug, instrument, log, Subscriber};
 use tracing_attributes;
 
+use essembly_interfaces::api::*;
+use essembly_interfaces::registration::*;
+
 mod config;
 use config::Config;
 
@@ -14,15 +17,10 @@ use tokio;
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "susu.db";
 
-pub mod store {
-    tonic::include_proto!("api");
-}
-
 use sled::Db;
 
 use std::collections::VecDeque;
 use std::str;
-use store::{SusuRequest, SusuResponse};
 use tonic::transport::{Identity, Server, ServerTlsConfig};
 use tonic::{body::BoxBody, Request, Response, Status, Streaming};
 use tower::Service;
@@ -30,7 +28,7 @@ use tower::Service;
 type SusuResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<SusuResponse, Status>>;
 
-fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>> {
+fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
     let tree = Db::open(path)?;
 
@@ -69,10 +67,10 @@ fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>>
 pub struct SusuServer;
 
 #[tonic::async_trait]
-impl store::server::Susu for SusuServer {
+impl server::Susu for SusuServer {
     async fn register_chef(
         &self,
-        request: Request<store::SusuChefRegistration>,
+        request: Request<SusuChefRegistration>,
     ) -> SusuResult<SusuResponse> {
         let message = request.into_inner().address.unwrap();
 
@@ -109,7 +107,6 @@ impl store::server::Susu for SusuServer {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     //Read config file
     let config: config::Config = config::Config::new().load();
 
@@ -125,6 +122,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let identity = Identity::from_pem(cert, key);
 
     let addr = "127.0.0.1:50051".parse().unwrap();
+
     let server = SusuServer::default();
 
     Server::builder()
@@ -147,6 +145,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     // Cancel the inner future since we never await it
                     // the IO never gets registered.
                     drop(fut);
+
                     let res = http::Response::builder()
                         .header("grpc-status", "16")
                         .body(BoxBody::empty())
@@ -156,7 +155,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         })
         .clone()
-        .serve(addr, store::server::SusuServer::new(server))
+        .add_service(server::SusuServer::new(server))
+        .serve(addr)
         .await?;
 
     Ok(())

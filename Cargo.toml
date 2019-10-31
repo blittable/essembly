@@ -8,5 +8,6 @@ members = ["essembly",
 "essembly-accounts", 
 "essembly-inventory", 
 "essembly-pos",
+"essembly-interfaces",
 ]
 

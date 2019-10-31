@@ -1,65 +1,11 @@
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Chef {
-    #[prost(string, tag = "1")]
-    pub first_name: std::string::String,
-    #[prost(message, optional, tag = "2")]
-    pub middle_name: ::std::option::Option<::std::string::String>,
-    #[prost(message, optional, tag = "3")]
-    pub last_name: ::std::option::Option<::std::string::String>,
-    #[prost(message, optional, tag = "4")]
-    pub nick_name: ::std::option::Option<::std::string::String>,
-}
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Address {
-    #[prost(string, repeated, tag = "1")]
-    pub address_lines: ::std::vec::Vec<std::string::String>,
-    #[prost(string, tag = "2")]
-    pub city: std::string::String,
-    #[prost(string, tag = "3")]
-    pub province: std::string::String,
-    #[prost(string, tag = "4")]
-    pub country: std::string::String,
-    #[prost(message, optional, tag = "5")]
-    pub image_ref: ::std::option::Option<::std::string::String>,
-    #[prost(message, optional, tag = "6")]
-    pub housing_estate: ::std::option::Option<::std::string::String>,
-    #[prost(message, optional, tag = "7")]
-    pub latlng: ::std::option::Option<LatLng>,
-}
-/// An object representing a latitude/longitude pair. This is expressed as a pair
-/// of doubles representing degrees latitude and degrees longitude. Unless
-/// specified otherwise, this must conform to the
-/// <a href="http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf">WGS84
-/// standard</a>. Values must be within normalized ranges.
-#[derive(Clone, PartialEq, ::prost::Message)]
-pub struct LatLng {
-    /// The latitude in degrees. It must be in the range [-90.0, +90.0].
-    #[prost(double, tag = "1")]
-    pub latitude: f64,
-    /// The longitude in degrees. It must be in the range [-180.0, +180.0].
-    #[prost(double, tag = "2")]
-    pub longitude: f64,
-}
-/// Status of a chef.
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
-#[repr(i32)]
-pub enum ChefRegistrationStatus {
-    Unknown = 0,
-    RegistrationInProgress = 1,
-    RegistrationCompleted = 2,
-    Active = 4,
-    Rejected = 5,
-    Deactivated = 6,
-    Cancelled = 7,
-}
 /// Susu. Chef Registration
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct SusuChefRegistration {
     #[prost(message, optional, tag = "1")]
-    pub chef: ::std::option::Option<Chef>,
+    pub chef: ::std::option::Option<super::registration::Chef>,
     #[prost(message, optional, tag = "2")]
-    pub address: ::std::option::Option<Address>,
-    #[prost(enumeration = "ChefRegistrationStatus", tag = "3")]
+    pub address: ::std::option::Option<super::registration::Address>,
+    #[prost(enumeration = "super::registration::ChefRegistrationStatus", tag = "3")]
     pub status: i32,
 }
 /// SusuRequest is the request for echo.
@@ -115,59 +61,60 @@ pub mod client {
         }
         pub async fn register_chef(
             &mut self,
-            request: tonic::Request<super::SusuChefRegistration>,
+            request: impl tonic::IntoRequest<super::SusuChefRegistration>,
         ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
             self.ready().await?;
-            let codec = tonic::codec::ProstCodec::new();
+            let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/api.Susu/RegisterChef");
-            self.inner.unary(request, path, codec).await
+            self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = " UnarySusu is unary echo."]
         pub async fn unary_susu(
             &mut self,
-            request: tonic::Request<super::SusuRequest>,
+            request: impl tonic::IntoRequest<super::SusuRequest>,
         ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
             self.ready().await?;
-            let codec = tonic::codec::ProstCodec::new();
+            let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/api.Susu/UnarySusu");
-            self.inner.unary(request, path, codec).await
+            self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = " ServerStreamingSusu is server side streaming."]
         pub async fn server_streaming_susu(
             &mut self,
-            request: tonic::Request<super::SusuRequest>,
+            request: impl tonic::IntoRequest<super::SusuRequest>,
         ) -> Result<tonic::Response<tonic::codec::Streaming<super::SusuResponse>>, tonic::Status>
         {
             self.ready().await?;
-            let codec = tonic::codec::ProstCodec::new();
+            let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/api.Susu/ServerStreamingSusu");
-            self.inner.server_streaming(request, path, codec).await
+            self.inner
+                .server_streaming(request.into_request(), path, codec)
+                .await
         }
         #[doc = " ClientStreamingSusu is client side streaming."]
-        pub async fn client_streaming_susu<S>(
+        pub async fn client_streaming_susu(
             &mut self,
-            request: tonic::Request<S>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status>
-        where
-            S: Stream<Item = super::SusuRequest> + Send + 'static,
-        {
+            request: impl tonic::IntoStreamingRequest<Message = super::SusuRequest>,
+        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
             self.ready().await?;
-            let codec = tonic::codec::ProstCodec::new();
+            let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/api.Susu/ClientStreamingSusu");
-            self.inner.client_streaming(request, path, codec).await
+            self.inner
+                .client_streaming(request.into_streaming_request(), path, codec)
+                .await
         }
         #[doc = " BidirectionalStreamingSusu is bidirectional streaming."]
-        pub async fn bidirectional_streaming_susu<S>(
+        pub async fn bidirectional_streaming_susu(
             &mut self,
-            request: tonic::Request<S>,
+            request: impl tonic::IntoStreamingRequest<Message = super::SusuRequest>,
         ) -> Result<tonic::Response<tonic::codec::Streaming<super::SusuResponse>>, tonic::Status>
-        where
-            S: Stream<Item = super::SusuRequest> + Send + 'static,
         {
             self.ready().await?;
-            let codec = tonic::codec::ProstCodec::new();
+            let codec = tonic::codec::ProstCodec::default();
             let path = http::uri::PathAndQuery::from_static("/api.Susu/BidirectionalStreamingSusu");
-            self.inner.streaming(request, path, codec).await
+            self.inner
+                .streaming(request.into_streaming_request(), path, codec)
+                .await
         }
     }
     impl<T: Clone> Clone for SusuClient<T> {
@@ -230,42 +177,18 @@ pub mod server {
         }
     }
     #[doc = " Susu is the echo service."]
-    #[derive(Clone, Debug)]
+    #[derive(Debug)]
+    #[doc(hidden)]
     pub struct SusuServer<T: Susu> {
         inner: Arc<T>,
     }
-    #[derive(Clone, Debug)]
-    #[doc(hidden)]
-    pub struct SusuServerSvc<T: Susu> {
-        inner: Arc<T>,
-    }
     impl<T: Susu> SusuServer<T> {
-        #[doc = "Create a new SusuServer from a type that implements Susu."]
         pub fn new(inner: T) -> Self {
             let inner = Arc::new(inner);
-            Self::from_shared(inner)
-        }
-        pub fn from_shared(inner: Arc<T>) -> Self {
             Self { inner }
         }
     }
-    impl<T: Susu> SusuServerSvc<T> {
-        pub fn new(inner: Arc<T>) -> Self {
-            Self { inner }
-        }
-    }
-    impl<T: Susu, R> Service<R> for SusuServer<T> {
-        type Response = SusuServerSvc<T>;
-        type Error = Never;
-        type Future = Ready<Result<Self::Response, Self::Error>>;
-        fn poll_ready(&mut self, _cx: &mut Context<'_>) -> Poll<Result<(), Self::Error>> {
-            Poll::Ready(Ok(()))
-        }
-        fn call(&mut self, _: R) -> Self::Future {
-            ok(SusuServerSvc::new(self.inner.clone()))
-        }
-    }
-    impl<T: Susu> Service<http::Request<HyperBody>> for SusuServerSvc<T> {
+    impl<T: Susu> Service<http::Request<HyperBody>> for SusuServer<T> {
         type Response = http::Response<tonic::body::BoxBody>;
         type Error = Never;
         type Future = BoxFuture<Self::Response, Self::Error>;
@@ -276,8 +199,8 @@ pub mod server {
             let inner = self.inner.clone();
             match req.uri().path() {
                 "/api.Susu/RegisterChef" => {
-                    struct RegisterChef<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::UnaryService<super::SusuChefRegistration> for RegisterChef<T> {
+                    struct RegisterChefSvc<T: Susu>(pub Arc<T>);
+                    impl<T: Susu> tonic::server::UnaryService<super::SusuChefRegistration> for RegisterChefSvc<T> {
                         type Response = super::SusuResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
@@ -291,8 +214,8 @@ pub mod server {
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = RegisterChef(inner);
-                        let codec = tonic::codec::ProstCodec::new();
+                        let method = RegisterChefSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.unary(method, req).await;
                         Ok(res)
@@ -300,8 +223,8 @@ pub mod server {
                     Box::pin(fut)
                 }
                 "/api.Susu/UnarySusu" => {
-                    struct UnarySusu<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::UnaryService<super::SusuRequest> for UnarySusu<T> {
+                    struct UnarySusuSvc<T: Susu>(pub Arc<T>);
+                    impl<T: Susu> tonic::server::UnaryService<super::SusuRequest> for UnarySusuSvc<T> {
                         type Response = super::SusuResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
@@ -315,8 +238,8 @@ pub mod server {
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = UnarySusu(inner);
-                        let codec = tonic::codec::ProstCodec::new();
+                        let method = UnarySusuSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.unary(method, req).await;
                         Ok(res)
@@ -324,8 +247,10 @@ pub mod server {
                     Box::pin(fut)
                 }
                 "/api.Susu/ServerStreamingSusu" => {
-                    struct ServerStreamingSusu<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::ServerStreamingService<super::SusuRequest> for ServerStreamingSusu<T> {
+                    struct ServerStreamingSusuSvc<T: Susu>(pub Arc<T>);
+                    impl<T: Susu> tonic::server::ServerStreamingService<super::SusuRequest>
+                        for ServerStreamingSusuSvc<T>
+                    {
                         type Response = super::SusuResponse;
                         type ResponseStream = T::ServerStreamingSusuStream;
                         type Future =
@@ -341,8 +266,8 @@ pub mod server {
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = ServerStreamingSusu(inner);
-                        let codec = tonic::codec::ProstCodec::new();
+                        let method = ServerStreamingSusuSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.server_streaming(method, req).await;
                         Ok(res)
@@ -350,8 +275,10 @@ pub mod server {
                     Box::pin(fut)
                 }
                 "/api.Susu/ClientStreamingSusu" => {
-                    struct ClientStreamingSusu<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::ClientStreamingService<super::SusuRequest> for ClientStreamingSusu<T> {
+                    struct ClientStreamingSusuSvc<T: Susu>(pub Arc<T>);
+                    impl<T: Susu> tonic::server::ClientStreamingService<super::SusuRequest>
+                        for ClientStreamingSusuSvc<T>
+                    {
                         type Response = super::SusuResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
@@ -365,8 +292,8 @@ pub mod server {
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = ClientStreamingSusu(inner);
-                        let codec = tonic::codec::ProstCodec::new();
+                        let method = ClientStreamingSusuSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.client_streaming(method, req).await;
                         Ok(res)
@@ -374,9 +301,9 @@ pub mod server {
                     Box::pin(fut)
                 }
                 "/api.Susu/BidirectionalStreamingSusu" => {
-                    struct BidirectionalStreamingSusu<T: Susu>(pub Arc<T>);
+                    struct BidirectionalStreamingSusuSvc<T: Susu>(pub Arc<T>);
                     impl<T: Susu> tonic::server::StreamingService<super::SusuRequest>
-                        for BidirectionalStreamingSusu<T>
+                        for BidirectionalStreamingSusuSvc<T>
                     {
                         type Response = super::SusuResponse;
                         type ResponseStream = T::BidirectionalStreamingSusuStream;
@@ -394,8 +321,8 @@ pub mod server {
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = BidirectionalStreamingSusu(inner);
-                        let codec = tonic::codec::ProstCodec::new();
+                        let method = BidirectionalStreamingSusuSvc(inner);
+                        let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.streaming(method, req).await;
                         Ok(res)
@@ -411,5 +338,14 @@ pub mod server {
                 }),
             }
         }
+    }
+    impl<T: Susu> Clone for SusuServer<T> {
+        fn clone(&self) -> Self {
+            let inner = self.inner.clone();
+            Self { inner }
+        }
+    }
+    impl<T: Susu> tonic::transport::ServiceName for SusuServer<T> {
+        const NAME: &'static str = "api.Susu";
     }
 }

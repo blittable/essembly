@@ -12,13 +12,14 @@ Project Overview:
 - [x] registration protobuf file
 - [x] Separate protos to a diff project
 - [x] proto-factory should generate to proto directory
-- [x] api should read from generated_proto dir 
+- [] protos should compile to their own crate 
 - [] research ML integration
 - [] research wasm/wasi integration
 
 
 Todo Tests:
-1) Unit test to check missing config.toml is handled correctly
+1) Unit test to check missing config.toml is handled correctly fo API and 
+2) 
 
 
 Todo Tasks:

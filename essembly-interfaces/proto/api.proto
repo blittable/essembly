@@ -6,14 +6,14 @@
 
 package api;
 
-import "registration.proto";
+import "registration/registration.proto";
 import "google/protobuf/wrappers.proto";
 
  // Susu. Chef Registration
  message SusuChefRegistration {
-   Chef chef = 1;
-   Address address = 2;
-   ChefRegistrationStatus status = 3;
+   registration.Chef chef = 1;
+   registration.Address address = 2;
+   registration.ChefRegistrationStatus status = 3;
  }
 
  // SusuRequest is the request for echo.

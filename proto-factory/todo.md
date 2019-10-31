@@ -1,1 +1,0 @@
-- Proto-factory is responsible for generating rust code from protobuf files
