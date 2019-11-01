@@ -64,3 +64,10 @@ Blockchain
 
 
 
+Other Notes:
+
+Accounting Systems:
+1) Express accounting software 
+2) QuickBooks accounting 
+3) ACCPAC Accounting System 
+4) SAP accounting software 

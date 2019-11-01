@@ -37,7 +37,6 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     options.insert(b"save", "doo")?;
 
     let location = message.latlng.unwrap();
-    let latitude = location.latitude.to_string();
     let longitude = location.longitude.to_string();
 
     locations.insert(b"goo_lng", longitude.as_bytes())?;

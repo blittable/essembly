@@ -38,7 +38,7 @@ fn test_chef_registration() {
 
     let new_chef: api::Chef = api::Chef {
         first_name: "Sompat".to_string(),
-        last_name: Some("Sonjai".to_string()),
+        last_name: Some("Sonjai".to_string()),new_address
         middle_name: Some(String::from("")),
         nick_name: Some("อ้วน".to_string()),
     };

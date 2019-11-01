@@ -17,7 +17,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .build_server(true)
         .out_dir(&out_dir)
         .compile(
-            &["proto/api.proto", "proto/registration/registration.proto"],
+            &[
+                "proto/api/api.proto",
+                "proto/registration/registration.proto",
+            ],
             &["proto"],
         )?;
 

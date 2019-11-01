@@ -1,3 +1,5 @@
+Todo:
+
 Project Overview:
 
 - essembly directory exposes features from the essembly module
@@ -13,20 +15,14 @@ Project Overview:
 - [x] Separate protos to a diff project
 - [x] proto-factory should generate to proto directory
 - [x] protos should compile to their own crate 
-- [] research ML integration
-- [] research wasm/wasi integration
+- [x] separate test crate
+- [] remove database refs from api 
+- [] log story 
+- [] intgegrate permissions 
+- [] vector logging sync
+- [] research wasm/wasi integration - in-place updates?
 
 
 Todo Tests:
-1) Unit test to check missing config.toml is handled correctly fo API and 
-2) 
+[x] Unit test to check missing config.toml is handled correctly fo API 
 
-
-Todo Tasks:
-- Build 
-
-Accounting Systems:
-1) Express accounting software (basic)
-2) QuickBooks accounting (easy-most voted)
-3) ACCPAC Accounting System (most voted)
-4) SAP accounting software (full functions)

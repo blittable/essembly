@@ -4,7 +4,6 @@ version = "0.1.0-alpha.1"
 authors = ["blittable <blittable-bits@gmail.com>"]
 edition = "2018"
 
-build = "./build.rs"
 
 [workspace]
 

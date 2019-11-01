@@ -1,14 +1,12 @@
-use failure::Fallible;
-use regex::Regex;
+
+#![allow(non_camel_case_types)]
+
 pub use serde_derive::{Deserialize, Serialize};
-use std::collections::{HashMap, HashSet};
 use std::env;
 use std::ffi::OsStr;
 use std::fs::File;
-use std::fs::OpenOptions;
 use std::io::Read;
 use std::path::PathBuf;
-use toml::from_str;
 
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]

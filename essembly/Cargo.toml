@@ -47,3 +47,8 @@ mockall = "0.5.1"
 
 [package.metadata.docs.rs]
 all-features = false 
+
+[[test]]
+name = "integrations"
+path = "../tests/integrations/mod.rs"
+required-features = ["protos"]
