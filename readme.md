@@ -2,7 +2,7 @@
 
 ### Project Structure
 
-![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.png)
+![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.svg)
 
 ### Testing
 
