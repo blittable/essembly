@@ -2,11 +2,20 @@
 
 ### Project Structure
 
+      `essembly-interfaces`              `essembly-api`       `essembly-store`             `essembly-core`                          `essembly-cli`
+               |                                |                   |                           |                                         |
+ types generated from protobuf files     client access api       DB storage       Security and other business logic types      Essembly reference client                   
+
+      `essembly-test`              
+             |
+      integration tests
+
+
 ### Testing
 
 Most code is tested in the .rs files themselves.  The generated code (from the protobufs) is tested in the essembly-test project (not a release assembly).  
 
-Other integration tests are in the `essembly-test` project.  
+Integration tests are in the `essembly-test` project.  
 
 #### Running Unit Tests
 From the root directory, `cargo test`

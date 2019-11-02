@@ -23,6 +23,11 @@ Project Overview:
 - [] research wasm/wasi integration - in-place updates?
 
 
+- [] Kubernetes or docker-compose:
+1) Start the DB Service
+2) Start the API Service
+3) Run a test client ?
+
 Todo Tests:
 [x] Unit test to check missing config.toml is handled correctly fo API 
 

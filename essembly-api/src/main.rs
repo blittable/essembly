@@ -3,19 +3,25 @@
 pub use serde_derive::{Deserialize, Serialize};
 
 use tokio;
+use tracing::instrument;
+use tracing::subscriber; 
+use tracing_log;
+use tracing;
+use essembly_interfaces::*;
+use tracing::{debug, error, info, warn, span, Level};
+use tracing_subscriber::FmtSubscriber;
+
+mod essembly_subscriber;
+use self::essembly_subscriber::SloggishSubscriber;
 
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "susu.db";
-
-pub mod store {
-    tonic::include_proto!("api");
-}
 
 use sled::Db;
 
 use std::collections::VecDeque;
 use std::str;
-use store::{SusuRequest, SusuResponse};
+use api::{SusuRequest, SusuResponse};
 use tonic::transport::{Identity, Server, ServerTlsConfig};
 use tonic::{body::BoxBody, Request, Response, Status, Streaming};
 use tower::Service;
@@ -23,7 +29,16 @@ use tower::Service;
 type SusuResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<SusuResponse, Status>>;
 
-fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>> {
+fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::Error>> {
+
+    debug!("started");
+    warn!("started");
+    info!("started");
+
+    #[cfg(debug)] {
+        println!("Data file loaded at: {:?}", path); 
+    }
+
     let path = "./foo.db";
     let tree = Db::open(path)?;
 
@@ -31,6 +46,11 @@ fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>>
     let locations = tree.open_tree("locations")?;
 
     options.insert(b"save", "doo")?;
+
+    #[cfg(debug)] {
+        println!("Data file loaded at: {:?}", path); 
+    }
+
 
     let location = message.latlng.unwrap();
     let latitude = location.latitude.to_string();
@@ -53,7 +73,7 @@ fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>>
         }
     }
 
-    tree.flush();
+    tree.flush()?;
 
     Ok(())
 }
@@ -62,10 +82,10 @@ fn save_to_db(message: store::Address) -> Result<(), Box<dyn std::error::Error>>
 pub struct SusuServer;
 
 #[tonic::async_trait]
-impl store::server::Susu for SusuServer {
+impl api::server::Susu for SusuServer {
     async fn register_chef(
         &self,
-        request: Request<store::SusuChefRegistration>,
+        request: Request<api::SusuChefRegistration>,
     ) -> SusuResult<SusuResponse> {
         let message = request.into_inner().address.unwrap();
 
@@ -102,6 +122,14 @@ impl store::server::Susu for SusuServer {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
+    let subscriber = SloggishSubscriber::new(2);
+    tracing::subscriber::set_global_default(subscriber).unwrap();
+
+    debug!("started");
+    warn!("started");
+    info!("started");
+
     let cert = tokio::fs::read("tls/server.pem").await?;
     let key = tokio::fs::read("tls/server.key").await?;
 
@@ -109,6 +137,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let addr = "127.0.0.1:50051".parse().unwrap();
     let server = SusuServer::default();
+
+    let subscriber = FmtSubscriber::builder() 
+        .with_max_level(Level::TRACE)
+        .finish();
+
 
     Server::builder()
         .tls_config(ServerTlsConfig::with_rustls().identity(identity))
@@ -139,7 +172,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         })
         .clone()
-        .serve(addr, store::server::SusuServer::new(server))
+        .add_service(api::server::SusuServer::new(server))
+        .serve(addr)
         .await?;
 
     Ok(())

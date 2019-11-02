@@ -1,6 +1,9 @@
 [server-config]
 state = 'running'
 
+[api-config]
+primary-api = { ip = "localhost", protocol = "grpc" }
+
 [db-config]
 primary-db = { db = "sled", ip = "localhost", protocol = "grpc" }
 remote-db = { db = "sled", ip = "localhost", protocol = "grpc" }
