@@ -1,1 +1,19 @@
-<mxfile host="www.draw.io" modified="2019-11-02T08:18:02.710Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:70.0) Gecko/20100101 Firefox/70.0" version="12.1.9" etag="9ZnsfaopdNBj9ViLKyZF" type="github"><diagram id="xn32BDt1Cey5U6hH9sLa">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="www.draw.io" modified="2019-11-02T08:25:02.946Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:70.0) Gecko/20100101 Firefox/70.0" etag="OvDuq-2cbzRtBiUz9Dnr" version="12.1.9" type="github" pages="1">
+  <diagram id="xn32BDt1Cey5U6hH9sLa" name="Page-1">
+    <mxGraphModel dx="1412" dy="914" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="-5j7owMRG52MO_8gMxMz-3" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="65" y="80" width="150" height="170" as="geometry"/>
+        </mxCell>
+        <mxCell id="-5j7owMRG52MO_8gMxMz-1" value="essembly-interfaces" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fontSize=22;" vertex="1" parent="-5j7owMRG52MO_8gMxMz-3">
+          <mxGeometry x="15" width="120" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="-5j7owMRG52MO_8gMxMz-2" value="types generated from protobuf files" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;" vertex="1" parent="-5j7owMRG52MO_8gMxMz-3">
+          <mxGeometry y="130" width="150" height="40" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
