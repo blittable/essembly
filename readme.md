@@ -2,14 +2,7 @@
 
 ### Project Structure
 
-      `essembly-interfaces`              `essembly-api`       `essembly-store`             `essembly-core`                          `essembly-cli`
-               |                                |                   |                           |                                         |
- types generated from protobuf files     client access api       DB storage       Security and other business logic types      Essembly reference client                   
-
-      `essembly-test`              
-             |
-      integration tests
-
+![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.svg)
 
 ### Testing
 

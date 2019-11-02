@@ -22,6 +22,7 @@
         7) Integrated food delivery/ordering api
         8) Integrated customer self-ordering menu 
         9) Extensible business rules for reporting and financials
+        10) Standard SDK for IoT/Cloud/Storage provided as a module
 
 
 DESIGN:
@@ -49,6 +50,11 @@ Use Cases:
 5) I have a at-home kitchen and want to offer my products to restaurants.
 6) I have a at-home kitchen and want to offer my products directly to consumers.
 7) I have a delivery service and want to receive orders and dispatch my drivers and track deliveries. 
+8) When the customer do the reservation and we reserve seat with customer's order.
+9) When the resturant don't have available seat or some food need to be cooked. User will get notification 15-20 min before it's ready.
+10) Customer need to order on their phone by scan the QR code.
+11) Customer need to know how long the order will take and when the menu ready to serve.
+12) He can make a surprise cake for dating by secret request to the kitchen.
 
 Design CI/CD Rules:
 
