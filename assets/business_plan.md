@@ -24,7 +24,6 @@ Our past experience shows that there is normally initial enthusiasm, but that it
 4. poor communication, 
 5. lack of external partners 
 
-
 How do we structure a business/project so that we minimize the risk of these problems? 
 
 Scenario #1:
@@ -68,7 +67,7 @@ Totals:
     - 19667 year one vested shares - vesting 4917 quarterly
     - $15,500 / month in salaries for $186,000 annually
 
-Questions:
+Questions / Remarks:
 
 1) What about other contributors?
 2) How to measure performance and evaluate?
@@ -76,7 +75,9 @@ Questions:
 4) Other over-head? 
 5) It would be beneficial to have an additional resource specializing in subject-mater (e.g. accounting, inventory, etc.) 
 6) What about hardware?  Proto-type year-one?
-
+7) UI is critical, so perhaps increasing the budget for that effort makes sense. 
+8) Can shares be issued to open-source contributors?  (contributor send PR, request is approved and N shares are allocated based on their effort - what about disputes?  (my code was rejected but the accepted code was a copy of my code!)) 
+9) Does an ICO make more sense?
 
 Scenario #2:
 
