@@ -25,8 +25,9 @@
         10) Standard SDK for IoT/Cloud/Storage provided as a module
 
 
-DESIGN:
+## DESIGN:
 
+```
                                       3rd Party API
         
 PROTOCOL:                      GRPC         |       ?
@@ -37,11 +38,22 @@ APPLICATION:          client  <-------> API - N Servers <-------> ?
 
 TELEMETRY:                  Telemetry Router / Sink / Vector
 
+```
+
+### Elementary of the module
+
+  ![Elementary Module](https://github.com/xenirio/essembly/blob/master/assets/essembly-elementary-design.svg)
+
+  For every module there are 3 entry point.
+  1) `command` - the `CLI` to interact the module with command set.
+  2) `communication` - the `gRPC` protocal to describe funcational/interface of the module by `.proto` file.
+  3) `monitoring` - the `Log & Telemery` details in realtime & post-processing logs.
+  
+  In each module there is a router to be the main interaction of internal module via `gRPC` protocol.  
+  In each module can contains one or many module inside.
 
 
-
-
-Use Cases:
+## Use Cases:
 
 1) I have a restaurant and I want to track my sales (traditional POS)
 2) I have a restaurant and I want to offer delivery via a 3rd party service (Grab, Panda, etc.) 
@@ -56,13 +68,13 @@ Use Cases:
 11) Customer need to know how long the order will take and when the menu ready to serve.
 12) He can make a surprise cake for dating by secret request to the kitchen.
 
-Design CI/CD Rules:
+## Design CI/CD Rules:
 
 1) Compile all business rules to wasm to use for in-place updates - distributed http updates?
 2)   
 
 
-Blockchain
+## Blockchain
 
 1) If you have a shop, and someone wants to buy with Lite Coin or Ether, what if you could accept it, and charge a tiny free for the transaction?integration with crypto.com's platform (or something like it) could let us optionally offer that to users with near real-time transactions.In countries where it is still not legal, disable it. You are effectively making each merchant a crypto-broker.
 
@@ -70,9 +82,9 @@ Blockchain
 
 
 
-Other Notes:
+## Other Notes:
 
-Accounting Systems:
+## Accounting Systems:
 1) Express accounting software 
 2) QuickBooks accounting 
 3) ACCPAC Accounting System 
