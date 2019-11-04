@@ -43,6 +43,7 @@ dirs = "2.0.2"
 
 [dev-dependencies]
 essembly-interfaces = { path = "../essembly-interfaces", version = "0.1.0-alpha.1" }
+logging = { path = "../essembly-interfaces", version = "0.1.0-alpha.1" }
 
 [test-dependencies]
 essembly-interfaces = { path = "../essembly-interfaces", version = "0.1.0-alpha.1" }

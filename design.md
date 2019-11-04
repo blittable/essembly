@@ -1,6 +1,4 @@
-
-
-                                     M_POS
+   ##                                 M_POS
 
     --------------------------------------------------------------------------
                          DART UI  (Web, Android, iOS)
@@ -39,8 +37,6 @@ TELEMETRY:                  Telemetry Router / Sink / Vector
 
 
 
-
-
 Use Cases:
 
 1) I have a restaurant and I want to track my sales (traditional POS)
@@ -50,11 +46,11 @@ Use Cases:
 5) I have a at-home kitchen and want to offer my products to restaurants.
 6) I have a at-home kitchen and want to offer my products directly to consumers.
 7) I have a delivery service and want to receive orders and dispatch my drivers and track deliveries. 
-8) When the customer do the reservation and we reserve seat with customer's order.
-9) When the resturant don't have available seat or some food need to be cooked. User will get notification 15-20 min before it's ready.
-10) Customer need to order on their phone by scan the QR code.
-11) Customer need to know how long the order will take and when the menu ready to serve.
-12) He can make a surprise cake for dating by secret request to the kitchen.
+8) When the customer makes a reservation, we can reserve a seat with customer's order.
+9) When a resturant doesn't have available seats or some prep items. User will get notifications 15-20 min before arrival. 
+10) Customer can order on their phone via a QR code.
+11) Customer needs to know how long the order will take and when it will be ready.
+12) Customer can make a 'secret' surprise cake request directly to the kitchen.
 
 Design CI/CD Rules:
 
@@ -62,18 +58,37 @@ Design CI/CD Rules:
 2)   
 
 
-Blockchain
+### Blockchain
 
 1) If you have a shop, and someone wants to buy with Lite Coin or Ether, what if you could accept it, and charge a tiny free for the transaction?integration with crypto.com's platform (or something like it) could let us optionally offer that to users with near real-time transactions.In countries where it is still not legal, disable it. You are effectively making each merchant a crypto-broker.
 
 2) Business logic within an enterprise - multiple facility implementation - can have a canonical ledger to reference and share (e.g. inventory)
 
+### The data story
+
+The primary challenges for data is a POS system is replication.  The specifics of the model depend on the typology and system requirements (e.g. transactions, fail-over vs. consensus, master-slave, etc.).
+
+A few of technologies at play:
+
+1 - RSync and simple file-based replication,
+2 - Raft consensus (with transactional and otherwise),
+3 - Blockchain consenus (Tendermint / Cosmos),
+4 - The modality of the database: document, graph, rdbms
 
 
-Other Notes:
+Databases: 
+1 - rqllite https://github.com/rqlite/rqlite
+2 - 
 
-Accounting Systems:
+
+### Other Notes:
+
+Primary Accounting Systems in ACPAC:
 1) Express accounting software 
 2) QuickBooks accounting 
 3) ACCPAC Accounting System 
 4) SAP accounting software 
+
+Misc Notes:
+1) Why can't an API (itself) be distributed via web assembly?
+2) Isn't food prep a program?  Why can't we write a language for food prep?  It dovetails with automation.

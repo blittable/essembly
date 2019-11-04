@@ -12,15 +12,19 @@
 //!
 //!
 
-#[cfg(feature = "accounts")]
-pub mod accounts;
+#[cfg(feature = "core")]
+pub mod core;
 #[cfg(feature = "app")]
 pub mod app;
 #[cfg(feature = "cli")]
 pub mod cli;
 #[cfg(feature = "inventory")]
 pub mod inventory;
+#[cfg(feature = "interfaces")]
+pub mod interfaces;
 #[cfg(feature = "pos")]
 pub mod pos;
 #[cfg(feature = "store")]
 pub mod store;
+#[cfg(feature = "logger")]
+pub mod logging;

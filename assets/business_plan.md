@@ -78,6 +78,7 @@ Questions / Remarks:
 7) UI is critical, so perhaps increasing the budget for that effort makes sense. 
 8) Can shares be issued to open-source contributors?  (contributor send PR, request is approved and N shares are allocated based on their effort - what about disputes?  (my code was rejected but the accepted code was a copy of my code!)) 
 9) Does an ICO make more sense?
+10) Localization
 
 Scenario #2:
 

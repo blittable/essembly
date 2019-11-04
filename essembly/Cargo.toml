@@ -11,12 +11,16 @@ categories = ["primitives", "business", "security", "encryption"]
 [features]
 default = [
 "core",
+"account",
 "interfaces",
+"logger",
 "cli",
 "store",
 ]
 
 core = ["essembly-core"]
+logger = ["logging"]
+account = ["accounts"]
 interfaces = ["essembly-interfaces"]
 cli = ["essembly-cli"]
 store = ["essembly-store"]
@@ -25,9 +29,9 @@ store = ["essembly-store"]
 essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
 accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/accounts" }
 inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/inventory" }
+logging = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/logging", features = ["subscriber"]}
 
 essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
-
 essembly-cli = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cli" }
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 tracing = "0.1.9"

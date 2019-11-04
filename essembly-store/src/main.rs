@@ -3,7 +3,7 @@
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
-use tracing::{debug, instrument, log, Subscriber};
+use tracing::{debug, log, Subscriber};
 use tracing_attributes;
 
 use essembly_interfaces::api::*;
