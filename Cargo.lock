@@ -405,11 +405,6 @@ dependencies = [
  "tonic 0.1.0-alpha.4 (git+https://github.com/hyperium/tonic)",
  "tower 0.3.0-alpha.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "tracing 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing-attributes 0.1.5 (git+https://github.com/tokio-rs/tracing)",
- "tracing-core 0.1.7 (git+https://github.com/tokio-rs/tracing)",
- "tracing-futures 0.1.1 (git+https://github.com/tokio-rs/tracing)",
- "tracing-log 0.1.1 (git+https://github.com/tokio-rs/tracing)",
- "tracing-subscriber 0.1.5 (git+https://github.com/tokio-rs/tracing)",
  "users 0.9.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -2402,16 +2397,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tracing-futures"
-version = "0.1.1"
-source = "git+https://github.com/tokio-rs/tracing#8720792dbdf3158c4dbfcaf879e28da7af67c3f7"
-dependencies = [
- "futures 0.1.29 (registry+https://github.com/rust-lang/crates.io-index)",
- "tokio 0.1.22 (registry+https://github.com/rust-lang/crates.io-index)",
- "tracing 0.1.10 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "tracing-log"
 version = "0.1.1"
 source = "git+https://github.com/tokio-rs/tracing#8720792dbdf3158c4dbfcaf879e28da7af67c3f7"
@@ -2953,7 +2938,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 "checksum tracing-core 0.1.7 (git+https://github.com/tokio-rs/tracing)" = "<none>"
 "checksum tracing-core 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "bc913647c520c959b6d21e35ed8fa6984971deca9f0a2fcb8c51207e0c56af1d"
 "checksum tracing-futures 0.0.1-alpha.1 (registry+https://github.com/rust-lang/crates.io-index)" = "08c7446f4fb35df7ba2c537b7e2f812f91b20a58aa2b846f028342c4d2429be0"
-"checksum tracing-futures 0.1.1 (git+https://github.com/tokio-rs/tracing)" = "<none>"
 "checksum tracing-log 0.1.1 (git+https://github.com/tokio-rs/tracing)" = "<none>"
 "checksum tracing-log 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "5e0f8c7178e13481ff6765bd169b33e8d554c5d2bbede5e32c356194be02b9b9"
 "checksum tracing-subscriber 0.1.5 (git+https://github.com/tokio-rs/tracing)" = "<none>"

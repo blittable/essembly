@@ -70,15 +70,20 @@ The primary challenges for data is a POS system is replication.  The specifics o
 
 A few of technologies at play:
 
-1 - RSync and simple file-based replication,
-2 - Raft consensus (with transactional and otherwise),
-3 - Blockchain consenus (Tendermint / Cosmos),
-4 - The modality of the database: document, graph, rdbms
-
+1. RSync and simple file-based replication,
+2. Raft consensus (with transactional and otherwise),
+3. Blockchain consenus (Tendermint / Cosmos),
+4. The modality of the database: document, graph, rdbms
 
 Databases: 
-1 - rqllite https://github.com/rqlite/rqlite
-2 - 
+1. rqllite https://github.com/rqlite/rqlite
+2. 
+
+### The logging story
+
+1 - A standalone POS or mobile POS needs some local logging functionality.
+2 - Cloud synchronized clients need to optionally share telemetry data.
+3 - Permissioned access to logs by org, etc. 
 
 
 ### Other Notes:

@@ -5,15 +5,12 @@ pub use serde_derive::{Deserialize, Serialize};
 
 use tokio;
 use tracing;
-use tracing_log;
 use essembly::interfaces::*;
 
 #[allow(unused_imports)]
 use tracing::{debug, error, info, event, warn, span, Level};
-use tracing_subscriber::FmtSubscriber;
 
 use essembly::logging;
-use essembly::logging::subscriber;
 use essembly::core::*;
 
 #[allow(dead_code)]

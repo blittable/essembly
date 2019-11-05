@@ -3,14 +3,14 @@
 pub use serde_derive::{Deserialize, Serialize};
 
 
-use essembly_interfaces::*;
+use essembly::interfaces;
+use essembly::interfaces::api::*;
+use essembly::interfaces::registration::*;
 
-mod db;
-mod susu_error;
 
 use tokio;
 
-use api::client::SusuClient;
+use essembly::interfaces::api::client::SusuClient;
 use http::header::HeaderValue;
 use tonic::transport::{Certificate, Channel, ClientTlsConfig};
 
@@ -46,7 +46,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub fn build_registration() -> api::SusuChefRegistration {
+pub fn build_registration() -> interfaces::api::SusuChefRegistration {
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 
@@ -54,12 +54,12 @@ pub fn build_registration() -> api::SusuChefRegistration {
     addresslines.push(address_line_1);
     addresslines.push(address_line_2);
 
-    let new_latlng: api::LatLng = api::LatLng {
+    let new_latlng: interfaces::registration::LatLng = interfaces::registration::LatLng {
         latitude: 13.7563,
         longitude: 100.5018,
     };
 
-    let new_address: api::Address = api::Address {
+    let new_address: interfaces::registration::Address = interfaces::registration::Address {
         address_lines: addresslines,
         city: "Bangkok".to_string(),
         province: "Bangkok".to_string(),
@@ -69,7 +69,7 @@ pub fn build_registration() -> api::SusuChefRegistration {
         latlng: Some(new_latlng),
     };
 
-    let new_chef: api::Chef = api::Chef {
+    let new_chef: interfaces::registration::Chef = interfaces::registration::Chef {
         first_name: "Sompat".to_string(),
         last_name: Some("Sonjai".to_string()),
         middle_name: Some(String::from("")),
@@ -78,9 +78,13 @@ pub fn build_registration() -> api::SusuChefRegistration {
 
     let new_registration_status = 1;
 
-    api::SusuChefRegistration {
+    registration::SusuChefRegistration {
         chef: Some(new_chef),
         address: Some(new_address),
         status: new_registration_status,
-    }
+    };
+
+
+    let read_back = new_registration.chef.unwrap().first_name;
+    assert_eq!(read_back, String::new());
 }

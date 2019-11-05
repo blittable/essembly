@@ -12,7 +12,6 @@ edition = "2018"
 
 [dependencies]
 essembly-interfaces = { path = "../essembly-interfaces", version = "0.1.0-alpha.1", optional = true }
-tokio = { version = "0.2.0-alpha.6", optional = true }
 tracing = { version = "0.1.10", optional = true }
 
 structopt = "0.3.3"
@@ -40,16 +39,14 @@ serde_derive = "1.0"
 serde_regex = "0.4.0"
 tempfile = "3.0.0"
 dirs = "2.0.2"
+tokio = { git = "https://github.com/tokio-rs/tokio.git" }
 
 [dev-dependencies]
-essembly-interfaces = { path = "../essembly-interfaces", version = "0.1.0-alpha.1" }
-logging = { path = "../essembly-interfaces", version = "0.1.0-alpha.1" }
+essembly = { path = "../essembly", version = "0.1.0-alpha.1" }
 
 [test-dependencies]
-essembly-interfaces = { path = "../essembly-interfaces", version = "0.1.0-alpha.1" }
+essembly = { path = "../essembly", version = "0.1.0-alpha.1" }
 
-[features]
-protos = ["essembly-interfaces"]
 
 
 

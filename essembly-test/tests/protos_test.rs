@@ -1,6 +1,6 @@
 #[test]
 fn test_chef_registration_status() {
-    use essembly_interfaces::*;
+    use essembly::interfaces::*;
 
     let status: registration::ChefRegistrationStatus = registration::ChefRegistrationStatus::Unknown;
     assert_eq!(status, registration::ChefRegistrationStatus::Unknown);
@@ -8,9 +8,8 @@ fn test_chef_registration_status() {
 
 #[test]
 fn test_chef_registration() {
-    use essembly_interfaces::*;
+    use essembly::interfaces::*;
 
-    println!("hi");
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 
@@ -47,4 +46,7 @@ fn test_chef_registration() {
         address: Some(new_address),
         status: new_registration_status,
     };
+
+    let read_back = new_registration.chef.unwrap().first_name;
+    assert_eq!(read_back, String::new());
 }
