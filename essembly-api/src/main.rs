@@ -16,13 +16,11 @@ use essembly::core::*;
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "susu.db";
 
-
 use std::collections::VecDeque;
 use std::str;
 use essembly::interfaces::api::{SusuRequest, SusuResponse};
-use tonic::transport::{Identity, Server, ServerTlsConfig};
-use tonic::{body::BoxBody, Request, Response, Status, Streaming};
-use tower::Service;
+use tonic::transport::{ Server, ServerTlsConfig};
+use tonic::{Request, Response, Status, Streaming};
 use essembly::core;
 
 type SusuResult<T> = Result<Response<T>, Status>;
@@ -149,9 +147,9 @@ impl api::server::Susu for SusuServer {
 //         .add_service(api::server::SusuServer::new(server))
 //         .serve(addr)
 //         .await?;
-
 //     Ok(())
 // }
+
 fn main() {
     logging::subscriber::set_global_default(logging::EssemblySubscriber::new(2)).unwrap();
 

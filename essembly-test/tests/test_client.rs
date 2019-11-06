@@ -5,43 +5,127 @@ pub use serde_derive::{Deserialize, Serialize};
 
 use essembly::interfaces;
 use essembly::interfaces::api::*;
-use essembly::interfaces::registration::*;
 
+use std::collections::VecDeque;
+
+use std::time::{Duration, Instant};
 
 use tokio;
+use tokio_test::block_on;
+use tokio_test::assert_ok;
+use tokio::timer::delay;
+
+use tonic::{
+    transport::{Identity, Server, ServerTlsConfig},
+    Request, Response, Status, Streaming,
+};
 
 use essembly::interfaces::api::client::SusuClient;
+use essembly::interfaces::api::server::*;
+use essembly::interfaces::registration::*;
+
 use http::header::HeaderValue;
-use tonic::transport::{Certificate, Channel, ClientTlsConfig};
+use tonic::body::{BoxBody};
+use tower::Service;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let pem = tokio::fs::read("tls/ca.pem").await?;
-    let ca = Certificate::from_pem(pem);
+#[derive(Default)]
+pub struct SusuServer;
 
-    let tls = ClientTlsConfig::with_rustls()
-        .ca_certificate(ca)
-        .domain_name("example.com")
-        .clone();
+type SusuResult<T> = Result<Response<T>, Status>;
+type Stream = VecDeque<Result<SusuResponse, Status>>;
 
-    let channel = Channel::from_static("http://127.0.0.1:50051")
+#[tonic::async_trait]
+impl server::Susu for SusuServer {
+    async fn register_chef(
+        &self,
+        request: Request<SusuChefRegistration>,
+    ) -> SusuResult<SusuResponse> {
+        let message = request.into_inner().address.unwrap();
+
+        println!("received message: {:?}", message);
+
+        Ok(Response::new(SusuResponse {
+            message: "Received Registration".to_string(),
+        }))
+    }
+
+    type ServerStreamingSusuStream = Stream;
+
+    async fn client_streaming_susu(
+        &self,
+        _: Request<Streaming<SusuRequest>>,
+    ) -> SusuResult<SusuResponse> {
+        Err(Status::unimplemented("not implemented"))
+    }
+
+    type BidirectionalStreamingSusuStream = Stream;
+
+    async fn bidirectional_streaming_susu(
+        &self,
+        _: Request<Streaming<SusuRequest>>,
+    ) -> SusuResult<Self::BidirectionalStreamingSusuStream> {
+        Err(Status::unimplemented("not implemented"))
+    }
+}
+
+
+//Currently this test just drops through
+#[test]
+fn run_server_test() {
+    run_server();
+}
+
+async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
+
+    println!("Server Starting...");
+
+    let cert = tokio::fs::read("tests/tls/server.pem").await?;
+    let key = tokio::fs::read("tests/tls/server.key").await?;
+    let server_identity = Identity::from_pem(cert, key);
+
+    let addr = "127.0.0.1:50056".parse().unwrap();
+    let server = SusuServer::default();
+
+    let tls = ServerTlsConfig::with_rustls()
+        .identity(server_identity).clone();
+
+ let fut = Server::builder()
         .tls_config(&tls)
-        .intercept_headers(|headers| {
-            headers.insert(
-                "authorization",
-                HeaderValue::from_static("Bearer some-secret-token"),
-            );
+        .interceptor_fn(move |svc, req| {
+            let auth_header = req.headers().get("authorization").clone();
+
+            let authed = if let Some(auth_header) = auth_header {
+                auth_header == "Bearer some-secret-token"
+            } else {
+                false
+            };
+
+            let fut = svc.call(req);
+
+            async move {
+                if authed {
+                    fut.await
+                } else {
+                    // Cancel the inner future since we never await it
+                    // the IO never gets registered.
+                    drop(fut);
+
+                    let res = http::Response::builder()
+                        .header("grpc-status", "16")
+                        .body(BoxBody::empty())
+                        .unwrap();
+                    Ok(res)
+                }
+            }
         })
-        .channel();
+        .clone()
+        .add_service(server::SusuServer::new(server))
+        .serve(addr);
 
-    let mut client = SusuClient::new(channel);
 
-    let registration = build_registration();
-    let request = tonic::Request::new(registration);
+    let server_result = fut.await.unwrap();
 
-    let response = client.register_chef(request).await?;
-
-    println!("RESPONSE={:?}", response);
+    println!("Result: {:?}", server_result);
 
     Ok(())
 }
@@ -78,13 +162,12 @@ pub fn build_registration() -> interfaces::api::SusuChefRegistration {
 
     let new_registration_status = 1;
 
-    registration::SusuChefRegistration {
+    let new_registration = SusuChefRegistration {
         chef: Some(new_chef),
         address: Some(new_address),
         status: new_registration_status,
     };
 
 
-    let read_back = new_registration.chef.unwrap().first_name;
-    assert_eq!(read_back, String::new());
+    new_registration.clone()
 }

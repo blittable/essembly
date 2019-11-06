@@ -48,5 +48,5 @@ fn test_chef_registration() {
     };
 
     let read_back = new_registration.chef.unwrap().first_name;
-    assert_eq!(read_back, String::new());
+    assert_ne!(read_back, String::new());
 }
