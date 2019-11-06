@@ -23,8 +23,9 @@
         10) Standard SDK for IoT/Cloud/Storage provided as a module
 
 
-DESIGN:
+## DESIGN:
 
+```
                                       3rd Party API
         
 PROTOCOL:                      GRPC         |       ?
@@ -35,9 +36,22 @@ APPLICATION:          client  <-------> API - N Servers <-------> ?
 
 TELEMETRY:                  Telemetry Router / Sink / Vector
 
+```
+
+### Elementary of the module
+
+  ![Elementary Module](https://github.com/xenirio/essembly/blob/master/assets/essembly-elementary-design.svg)
+
+  For every module there are 3 entry point.
+  1) `command` - the `CLI` to interact the module with command set.
+  2) `communication` - the `gRPC` protocal to describe funcational/interface of the module by `.proto` file.
+  3) `monitoring` - the `Log & Telemery` details in realtime & post-processing logs.
+  
+  In each module there is a router to be the main interaction of internal module via `gRPC` protocol.  
+  In each module can contains one or many module inside.
 
 
-Use Cases:
+## Use Cases:
 
 1) I have a restaurant and I want to track my sales (traditional POS)
 2) I have a restaurant and I want to offer delivery via a 3rd party service (Grab, Panda, etc.) 
@@ -52,13 +66,13 @@ Use Cases:
 11) Customer needs to know how long the order will take and when it will be ready.
 12) Customer can make a 'secret' surprise cake request directly to the kitchen.
 
-Design CI/CD Rules:
+## Design CI/CD Rules:
 
 1) Compile all business rules to wasm to use for in-place updates - distributed http updates?
 2)   
 
 
-### Blockchain
+## Blockchain
 
 1) If you have a shop, and someone wants to buy with Lite Coin or Ether, what if you could accept it, and charge a tiny free for the transaction?integration with crypto.com's platform (or something like it) could let us optionally offer that to users with near real-time transactions.In countries where it is still not legal, disable it. You are effectively making each merchant a crypto-broker.
 
@@ -75,20 +89,9 @@ A few of technologies at play:
 3. Blockchain consenus (Tendermint / Cosmos),
 4. The modality of the database: document, graph, rdbms
 
-Databases: 
-1. rqllite https://github.com/rqlite/rqlite
-2. 
+## Other Notes:
 
-### The logging story
-
-1 - A standalone POS or mobile POS needs some local logging functionality.
-2 - Cloud synchronized clients need to optionally share telemetry data.
-3 - Permissioned access to logs by org, etc. 
-
-
-### Other Notes:
-
-Primary Accounting Systems in ACPAC:
+## Accounting Systems:
 1) Express accounting software 
 2) QuickBooks accounting 
 3) ACCPAC Accounting System 
