@@ -18,6 +18,7 @@ Project Overview:
 - [x] separate test crate
 - [x] remove database refs from api 
 - [] log story 
+- [] cli client - time modules 
 - [] intgegrate permissions 
 - [] vector logging sync
 - [] research wasm/wasi integration - in-place updates?

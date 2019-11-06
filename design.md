@@ -100,3 +100,10 @@ A few of technologies at play:
 Misc Notes:
 1) Why can't an API (itself) be distributed via web assembly?
 2) Isn't food prep a program?  Why can't we write a language for food prep?  It dovetails with automation.
+
+
+Flow:
+
+requirement doc -> mock integration test -> core -> primitives (security / entity) -> module -> (optional api) ->   
+
+Question: Can any module ever run directly against the database?
