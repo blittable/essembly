@@ -5,7 +5,10 @@ use clap::arg_enum;
 use core::str::FromStr;
 use essembly_cli::importer::Parser;
 use essembly_cli::importer::XLBRParser;
+use essembly_config::config;
 use failure::Fallible;
+use std::env;
+use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
@@ -170,8 +173,23 @@ arg_enum! {
     }
 }
 
+fn get_config() -> PathBuf {
+    let path = env::current_dir().unwrap();
+
+    println!("Current Path: {:?}", path);
+
+    env::var_os("ESSEMBLY_CONFIG")
+        .unwrap_or_else(|| OsStr::new("config.toml").to_os_string())
+        .into()
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = &config::Config::new();
+
+    let primary_db = &config.db_config;
+    println!("Cli Config: {:?}", primary_db);
+
     Essembly::from_args().run().await?;
     Ok(())
 }

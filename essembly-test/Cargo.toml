@@ -42,7 +42,7 @@ tokio = { git = "https://github.com/tokio-rs/tokio.git" }
 tokio-test = { git = "https://github.com/tokio-rs/tokio.git" }
 
 [dev-dependencies]
-essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["logger"]}
+essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["logger", "interfaces"]}
 
 [test-dependencies]
 essembly = { path = "../essembly", version = "0.1.0-alpha.1" }

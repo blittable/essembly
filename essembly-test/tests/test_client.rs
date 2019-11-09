@@ -36,9 +36,9 @@ type Stream = VecDeque<Result<SusuResponse, Status>>;
 
 #[tonic::async_trait]
 impl server::Susu for SusuServer {
-    async fn register_chef(
+    async fn register_client(
         &self,
-        request: Request<SusuChefRegistration>,
+        request: Request<SusuClientRegistration>,
     ) -> SusuResult<SusuResponse> {
         let message = request.into_inner().address.unwrap();
 
@@ -130,7 +130,7 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub fn build_registration() -> interfaces::api::SusuChefRegistration {
+pub fn build_registration() -> interfaces::api::SusuClientRegistration {
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 
@@ -153,7 +153,7 @@ pub fn build_registration() -> interfaces::api::SusuChefRegistration {
         latlng: Some(new_latlng),
     };
 
-    let new_chef: interfaces::registration::Chef = interfaces::registration::Chef {
+    let new_client: interfaces::registration::Client = interfaces::registration::Client {
         first_name: "Sompat".to_string(),
         last_name: Some("Sonjai".to_string()),
         middle_name: Some(String::from("")),
@@ -162,8 +162,8 @@ pub fn build_registration() -> interfaces::api::SusuChefRegistration {
 
     let new_registration_status = 1;
 
-    let new_registration = SusuChefRegistration {
-        chef: Some(new_chef),
+    let new_registration = SusuClientRegistration {
+        client: Some(new_client),
         address: Some(new_address),
         status: new_registration_status,
     };

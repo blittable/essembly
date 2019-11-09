@@ -1,11 +1,14 @@
-/// Susu. Chef Registration
+/// Susu. Client Registration
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SusuChefRegistration {
+pub struct SusuClientRegistration {
     #[prost(message, optional, tag = "1")]
-    pub chef: ::std::option::Option<super::registration::Chef>,
+    pub client: ::std::option::Option<super::registration::Client>,
     #[prost(message, optional, tag = "2")]
     pub address: ::std::option::Option<super::registration::Address>,
-    #[prost(enumeration = "super::registration::ChefRegistrationStatus", tag = "3")]
+    #[prost(
+        enumeration = "super::registration::ClientRegistrationStatus",
+        tag = "3"
+    )]
     pub status: i32,
 }
 /// SusuRequest is the request for echo.
@@ -30,12 +33,13 @@ pub mod client {
     }
     impl SusuClient<tonic::transport::Channel> {
         #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
-        pub fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
             D: std::convert::TryInto<tonic::transport::Endpoint>,
             D::Error: Into<StdError>,
         {
-            tonic::transport::Endpoint::new(dst).map(|c| Self::new(c.channel()))
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
         }
     }
     impl<T> SusuClient<T>
@@ -59,13 +63,13 @@ pub mod client {
                 )
             })
         }
-        pub async fn register_chef(
+        pub async fn register_client(
             &mut self,
-            request: impl tonic::IntoRequest<super::SusuChefRegistration>,
+            request: impl tonic::IntoRequest<super::SusuClientRegistration>,
         ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
             self.ready().await?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/api.Susu/RegisterChef");
+            let path = http::uri::PathAndQuery::from_static("/api.Susu/RegisterClient");
             self.inner.unary(request.into_request(), path, codec).await
         }
         #[doc = " UnarySusu is unary echo."]
@@ -132,9 +136,9 @@ pub mod server {
     #[doc = "Generated trait containing gRPC methods that should be implemented for use with SusuServer."]
     #[async_trait]
     pub trait Susu: Send + Sync + 'static {
-        async fn register_chef(
+        async fn register_client(
             &self,
-            request: tonic::Request<super::SusuChefRegistration>,
+            request: tonic::Request<super::SusuClientRegistration>,
         ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
@@ -148,6 +152,7 @@ pub mod server {
         #[doc = "Server streaming response type for the ServerStreamingSusu method."]
         type ServerStreamingSusuStream: Stream<Item = Result<super::SusuResponse, tonic::Status>>
             + Send
+            + Sync
             + 'static;
         #[doc = " ServerStreamingSusu is server side streaming."]
         async fn server_streaming_susu(
@@ -166,6 +171,7 @@ pub mod server {
         #[doc = "Server streaming response type for the BidirectionalStreamingSusu method."]
         type BidirectionalStreamingSusuStream: Stream<Item = Result<super::SusuResponse, tonic::Status>>
             + Send
+            + Sync
             + 'static;
         #[doc = " BidirectionalStreamingSusu is bidirectional streaming."]
         async fn bidirectional_streaming_susu(
@@ -198,23 +204,23 @@ pub mod server {
         fn call(&mut self, req: http::Request<HyperBody>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/api.Susu/RegisterChef" => {
-                    struct RegisterChefSvc<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::UnaryService<super::SusuChefRegistration> for RegisterChefSvc<T> {
+                "/api.Susu/RegisterClient" => {
+                    struct RegisterClientSvc<T: Susu>(pub Arc<T>);
+                    impl<T: Susu> tonic::server::UnaryService<super::SusuClientRegistration> for RegisterClientSvc<T> {
                         type Response = super::SusuResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::SusuChefRegistration>,
+                            request: tonic::Request<super::SusuClientRegistration>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { inner.register_chef(request).await };
+                            let fut = async move { inner.register_client(request).await };
                             Box::pin(fut)
                         }
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = RegisterChefSvc(inner);
+                        let method = RegisterClientSvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.unary(method, req).await;

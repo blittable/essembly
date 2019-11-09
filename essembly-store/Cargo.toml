@@ -49,6 +49,10 @@ version = "0.1.0-alpha.1"
 path = "../essembly-interfaces"
 version = "0.1.0-alpha.1"
 
+[dependencies.essembly-config]
+path = "../essembly-config"
+version = "0.1.0-alpha.1"
+
 [build-dependencies]
 essembly-interfaces = { path = "../essembly-interfaces" } 
 log = "0.4.8"

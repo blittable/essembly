@@ -54,9 +54,9 @@ pub struct SusuServer;
 
 #[tonic::async_trait]
 impl api::server::Susu for SusuServer {
-    async fn register_chef(
+    async fn register_client(
         &self,
-        request: Request<api::SusuChefRegistration>,
+        request: Request<api::SusuClientRegistration>,
     ) -> SusuResult<SusuResponse> {
         let message = request.into_inner().address.unwrap();
 

@@ -11,7 +11,8 @@ Most code is tested in the .rs files themselves.  The generated code (from the p
 Integration tests are in the `essembly-test` project.  
 
 #### Running Unit Tests
-From the root directory, `cargo test`
+
+From the root directory, `cargo test --all`
 
 Note: This does not run the integration tests in the essembly-test crate
 
@@ -21,7 +22,8 @@ From the essembly-test directory, `cargo test`
 
 ### Development Testing
 
-The reference client is the essembly-cli  (try) `cargo run --bin essembly-cli --help` 
+The reference client is the essembly-cli:   `cargo run --bin essembly-cli --help` 
+The cli, and other crates, references the one (and only config file).  The supporting crate is essembly-config 
 
 Starting it does the following:
 

@@ -37,14 +37,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let registration = build_registration();
     let request = tonic::Request::new(registration);
 
-    let response = client.register_chef(request).await?;
+    let response = client.register_client(request).await?;
 
     println!("RESPONSE={:?}", response);
 
     Ok(())
 }
 
-pub fn build_registration() -> api::SusuChefRegistration {
+pub fn build_registration() -> api::SusuClientRegistration {
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 
@@ -67,7 +67,7 @@ pub fn build_registration() -> api::SusuChefRegistration {
         latlng: Some(new_latlng),
     };
 
-    let new_chef: api::Chef = api::Chef {
+    let new_client: api::Client = api::Client {
         first_name: "Sompat".to_string(),
         last_name: Some("Sonjai".to_string()),
         middle_name: Some(String::from("")),
@@ -76,8 +76,8 @@ pub fn build_registration() -> api::SusuChefRegistration {
 
     let new_registration_status = 1;
 
-    api::SusuChefRegistration {
-        chef: Some(new_chef),
+    api::SusuClientRegistration {
+        client: Some(new_client),
         address: Some(new_address),
         status: new_registration_status,
     }

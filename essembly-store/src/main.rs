@@ -6,8 +6,6 @@ pub use serde_derive::{Deserialize, Serialize};
 use essembly_interfaces::api::*;
 use essembly_interfaces::registration::*;
 
-mod config;
-
 use tokio;
 
 #[allow(dead_code)]
@@ -15,6 +13,7 @@ static DATABASE_NAME: &str = "susu.db";
 
 use sled::Db;
 
+use essembly_config::config;
 use std::collections::VecDeque;
 use std::str;
 use tonic::transport::{Identity, Server, ServerTlsConfig};
@@ -63,9 +62,9 @@ pub struct SusuServer;
 
 #[tonic::async_trait]
 impl server::Susu for SusuServer {
-    async fn register_chef(
+    async fn register_client(
         &self,
-        request: Request<SusuChefRegistration>,
+        request: Request<SusuClientRegistration>,
     ) -> SusuResult<SusuResponse> {
         let message = request.into_inner().address.unwrap();
 

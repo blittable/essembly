@@ -8,7 +8,7 @@ trait MyTrait {
 
 #[cfg(test)]
 mod test {
-#![allow(unused_imports)]
+    #![allow(unused_imports)]
     use super::*;
     use crate::prelude::*;
     #[test]

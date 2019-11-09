@@ -1,13 +1,13 @@
 #[test]
-fn test_chef_registration_status() {
+fn test_client_registration_status() {
     use essembly::interfaces::*;
 
-    let status: registration::ChefRegistrationStatus = registration::ChefRegistrationStatus::Unknown;
-    assert_eq!(status, registration::ChefRegistrationStatus::Unknown);
+    let status: registration::ClientRegistrationStatus = registration::ClientRegistrationStatus::Unknown;
+    assert_eq!(status, registration::ClientRegistrationStatus::Unknown);
 }
 
 #[test]
-fn test_chef_registration() {
+fn test_client_registration() {
     use essembly::interfaces::*;
 
     let address_line_1: String = "12/1 Some Soi".to_string();
@@ -32,7 +32,7 @@ fn test_chef_registration() {
         latlng: Some(new_latlng),
     };
 
-    let new_chef: registration::Chef = registration::Chef {
+    let new_client: registration::Client = registration::Client {
         first_name: "Sompat".to_string(),
         last_name: Some("Sonjai".to_string()),
         middle_name: Some(String::from("")),
@@ -41,12 +41,12 @@ fn test_chef_registration() {
 
     let new_registration_status = 1;
 
-    let new_registration = api::SusuChefRegistration {
-        chef: Some(new_chef),
+    let new_registration = api::SusuClientRegistration {
+        client: Some(new_client),
         address: Some(new_address),
         status: new_registration_status,
     };
 
-    let read_back = new_registration.chef.unwrap().first_name;
+    let read_back = new_registration.client.unwrap().first_name;
     assert_ne!(read_back, String::new());
 }

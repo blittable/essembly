@@ -38,6 +38,7 @@ tracing-futures = "0.0.1-alpha.1"
 
 essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
 essembly-cli = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cli" }
+essembly-config = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-config" }
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 
 [package.metadata.docs.rs]

@@ -5,8 +5,6 @@ name = "accounts"
 version = "0.1.0-alpha.1"
 dependencies = [
  "chrono 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)",
- "essembly-core 0.1.0-alpha.1",
- "mockall 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "uuid 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
@@ -362,6 +360,8 @@ name = "essembly-cli"
 version = "0.1.0-alpha.1"
 dependencies = [
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "essembly-config 0.1.0-alpha.1",
+ "essembly-core 0.1.0-alpha.1",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-core-preview 0.3.0-alpha.19 (registry+https://github.com/rust-lang/crates.io-index)",
  "roxmltree 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -369,6 +369,24 @@ dependencies = [
  "structopt 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "structopt-derive 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "essembly-config"
+version = "0.1.0-alpha.1"
+dependencies = [
+ "dirs 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "essembly-core 0.1.0-alpha.1",
+ "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "fallible 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lazy_static 1.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "regex 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_derive 1.0.102 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_json 1.0.41 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde_regex 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tempfile 3.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "toml 0.5.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -404,6 +422,8 @@ dependencies = [
  "datetime 0.4.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "dirs 2.0.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "env_logger 0.7.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "essembly-config 0.1.0-alpha.1",
+ "essembly-core 0.1.0-alpha.1",
  "essembly-interfaces 0.1.0-alpha.1",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "failure_derive 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
