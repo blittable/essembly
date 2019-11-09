@@ -75,8 +75,8 @@ impl fmt::Debug for Error {
 #[allow(dead_code)]
 pub enum ErrorCode {
     Io(io::Error),
-    Serialization(String),
-    Lockness(String),
-    DBFileAccess(String),
-    MessageFormat(String),
+    Serialization(&'static str),
+    Lockness(&'static str),
+    DBFileAccess(&'static str),
+    MessageFormat(&'static str),
 }

@@ -18,3 +18,16 @@ Note: This does not run the integration tests in the essembly-test crate
 #### Running Essembly Integration Tests
 From the essembly-test directory, `cargo test`
 
+
+### Development Testing
+
+The reference client is the essembly-cli  (try) `cargo run --bin essembly-cli --help` 
+
+Starting it does the following:
+
+(e.g. `cargo run --bin essembly-cli acct post {"x", "y"} 
+
+1) Reads the .config file at the root of the project (there is 1 .config file for the entire project)
+2) Used the libraries in core (e.g. account) to validate the data,
+3) Connects to the API,
+4) Uses the API to commit to database  

@@ -5,7 +5,7 @@ use clap::arg_enum;
 use core::str::FromStr;
 use essembly_cli::importer::Parser;
 use essembly_cli::importer::XLBRParser;
-use failure::{Fallible};
+use failure::Fallible;
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
@@ -94,8 +94,8 @@ impl Essembly {
                 ref operation,
                 ref data,
             } => {
-                    println!("{:?}", "acct");
-                    Ok(())
+                println!("{:?}", "acct");
+                Ok(())
             }
             Essembly::InitializeLocal {} => {
                 println!("{:?}", "init local");

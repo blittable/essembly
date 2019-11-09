@@ -76,9 +76,7 @@ impl EventQue {
     }
 }
 
-fn main() {
-
-}
+fn main() {}
 
 #[tokio::main]
 async fn event_que_immediate_delay() {

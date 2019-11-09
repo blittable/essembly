@@ -45,5 +45,5 @@ all-features = false
 
 [[test]]
 name = "integrations"
-path = "../tests/integrations/mod.rs"
+path = "../essembly-test/src/lib.rs"
 required-features = ["protos"]

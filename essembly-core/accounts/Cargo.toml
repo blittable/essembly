@@ -6,11 +6,12 @@ edition = "2018"
 
 [dependencies]
 chrono = "0.4.9"
-mockall = "0.5.1"
 uuid = { version = "0.8.1", features = ["serde", "v5"] }
+mockall = "0.5.2"
 
-essembly-core = { version = "0.1.0-alpha.1", path = ".." }
+[test-dependencies]
+mockall = "0.5.2"
 
 [dev-dependencies]
-mockall = "0.5.1"
+mockall = "0.5.2"
 uuid = { version = "0.8.1", features = ["serde", "v5"] }

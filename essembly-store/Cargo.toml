@@ -39,7 +39,15 @@ bytes = "0.4"
 tower = "0.3.0-alpha.2"
 regex = "1.0"
 
-essembly-interfaces = { path = "../essembly-interfaces" } 
+# essembly-core = { version = "=0.1.0-alpha.1", path = "../essembly", default-features = false, features = ["core"]} 
+
+[dependencies.essembly-core]
+path = "../essembly-core"
+version = "0.1.0-alpha.1"
+
+[dependencies.essembly-interfaces]
+path = "../essembly-interfaces"
+version = "0.1.0-alpha.1"
 
 [build-dependencies]
 essembly-interfaces = { path = "../essembly-interfaces" } 

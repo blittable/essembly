@@ -1,4 +1,4 @@
-use super::error;
+use essembly_core::error;
 
 #[allow(dead_code)]
 struct Sled {}

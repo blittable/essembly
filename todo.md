@@ -18,6 +18,7 @@ Project Overview:
 - [x] separate test crate
 - [x] remove database refs from api 
 - [] cli loads config 
+
 - [] log story 
 - [] cli client - time modules 
 - [] intgegrate permissions 
