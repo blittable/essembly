@@ -9,33 +9,33 @@ package api;
 import "registration/registration.proto";
 import "google/protobuf/wrappers.proto";
 
- // Susu. Client Registration
- message SusuClientRegistration {
+ // Essembly. Client Registration
+ message EssemblyClientRegistration {
    registration.Client client = 1;
    registration.Address address = 2;
    registration.ClientRegistrationStatus status = 3;
  }
 
- // SusuRequest is the request for echo.
- message SusuRequest {
+ // EssemblyRequest is the request for echo.
+ message EssemblyRequest {
    string message = 1;
  }
 
- // SusuResponse is the response for echo.
- message SusuResponse {
+ // EssemblyResponse is the response for echo.
+ message EssemblyResponse {
    string message = 1;
  }
 
 
- // Susu is the echo service.
- service Susu {
-   rpc RegisterClient(SusuClientRegistration) returns (SusuResponse) {}
-   // UnarySusu is unary echo.
-   rpc UnarySusu(SusuRequest) returns (SusuResponse) {}
-   // ServerStreamingSusu is server side streaming.
-   rpc ServerStreamingSusu(SusuRequest) returns (stream SusuResponse) {}
-   // ClientStreamingSusu is client side streaming.
-   rpc ClientStreamingSusu(stream SusuRequest) returns (SusuResponse) {}
-   // BidirectionalStreamingSusu is bidirectional streaming.
-   rpc BidirectionalStreamingSusu(stream SusuRequest) returns (stream SusuResponse) {}
+ // Essembly is the echo service.
+ service Essembly {
+   rpc RegisterClient(EssemblyClientRegistration) returns (EssemblyResponse) {}
+   // UnaryEssembly is unary echo.
+   rpc UnaryEssembly(EssemblyRequest) returns (EssemblyResponse) {}
+   // ServerStreamingEssembly is server side streaming.
+   rpc ServerStreamingEssembly(EssemblyRequest) returns (stream EssemblyResponse) {}
+   // ClientStreamingEssembly is client side streaming.
+   rpc ClientStreamingEssembly(stream EssemblyRequest) returns (EssemblyResponse) {}
+   // BidirectionalStreamingEssembly is bidirectional streaming.
+   rpc BidirectionalStreamingEssembly(stream EssemblyRequest) returns (stream EssemblyResponse) {}
  }

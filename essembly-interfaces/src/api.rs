@@ -1,6 +1,6 @@
-/// Susu. Client Registration
+/// Essembly. Client Registration
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SusuClientRegistration {
+pub struct EssemblyClientRegistration {
     #[prost(message, optional, tag = "1")]
     pub client: ::std::option::Option<super::registration::Client>,
     #[prost(message, optional, tag = "2")]
@@ -11,15 +11,15 @@ pub struct SusuClientRegistration {
     )]
     pub status: i32,
 }
-/// SusuRequest is the request for echo.
+/// EssemblyRequest is the request for echo.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SusuRequest {
+pub struct EssemblyRequest {
     #[prost(string, tag = "1")]
     pub message: std::string::String,
 }
-/// SusuResponse is the response for echo.
+/// EssemblyResponse is the response for echo.
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct SusuResponse {
+pub struct EssemblyResponse {
     #[prost(string, tag = "1")]
     pub message: std::string::String,
 }
@@ -27,22 +27,21 @@ pub struct SusuResponse {
 pub mod client {
     #![allow(unused_variables, dead_code, missing_docs)]
     use tonic::codegen::*;
-    #[doc = " Susu is the echo service."]
-    pub struct SusuClient<T> {
+    #[doc = " Essembly is the echo service."]
+    pub struct EssemblyClient<T> {
         inner: tonic::client::Grpc<T>,
     }
-    impl SusuClient<tonic::transport::Channel> {
+    impl EssemblyClient<tonic::transport::Channel> {
         #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        pub fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
             D: std::convert::TryInto<tonic::transport::Endpoint>,
             D::Error: Into<StdError>,
         {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
+            tonic::transport::Endpoint::new(dst).map(|c| Self::new(c.channel()))
         }
     }
-    impl<T> SusuClient<T>
+    impl<T> EssemblyClient<T>
     where
         T: tonic::client::GrpcService<tonic::body::BoxBody>,
         T::ResponseBody: Body + HttpBody + Send + 'static,
@@ -65,63 +64,67 @@ pub mod client {
         }
         pub async fn register_client(
             &mut self,
-            request: impl tonic::IntoRequest<super::SusuClientRegistration>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
+            request: impl tonic::IntoRequest<super::EssemblyClientRegistration>,
+        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             self.ready().await?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/api.Susu/RegisterClient");
+            let path = http::uri::PathAndQuery::from_static("/api.Essembly/RegisterClient");
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = " UnarySusu is unary echo."]
-        pub async fn unary_susu(
+        #[doc = " UnaryEssembly is unary echo."]
+        pub async fn unary_essembly(
             &mut self,
-            request: impl tonic::IntoRequest<super::SusuRequest>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
+            request: impl tonic::IntoRequest<super::EssemblyRequest>,
+        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             self.ready().await?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/api.Susu/UnarySusu");
+            let path = http::uri::PathAndQuery::from_static("/api.Essembly/UnaryEssembly");
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = " ServerStreamingSusu is server side streaming."]
-        pub async fn server_streaming_susu(
+        #[doc = " ServerStreamingEssembly is server side streaming."]
+        pub async fn server_streaming_essembly(
             &mut self,
-            request: impl tonic::IntoRequest<super::SusuRequest>,
-        ) -> Result<tonic::Response<tonic::codec::Streaming<super::SusuResponse>>, tonic::Status>
+            request: impl tonic::IntoRequest<super::EssemblyRequest>,
+        ) -> Result<tonic::Response<tonic::codec::Streaming<super::EssemblyResponse>>, tonic::Status>
         {
             self.ready().await?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/api.Susu/ServerStreamingSusu");
+            let path =
+                http::uri::PathAndQuery::from_static("/api.Essembly/ServerStreamingEssembly");
             self.inner
                 .server_streaming(request.into_request(), path, codec)
                 .await
         }
-        #[doc = " ClientStreamingSusu is client side streaming."]
-        pub async fn client_streaming_susu(
+        #[doc = " ClientStreamingEssembly is client side streaming."]
+        pub async fn client_streaming_essembly(
             &mut self,
-            request: impl tonic::IntoStreamingRequest<Message = super::SusuRequest>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
+            request: impl tonic::IntoStreamingRequest<Message = super::EssemblyRequest>,
+        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             self.ready().await?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/api.Susu/ClientStreamingSusu");
+            let path =
+                http::uri::PathAndQuery::from_static("/api.Essembly/ClientStreamingEssembly");
             self.inner
                 .client_streaming(request.into_streaming_request(), path, codec)
                 .await
         }
-        #[doc = " BidirectionalStreamingSusu is bidirectional streaming."]
-        pub async fn bidirectional_streaming_susu(
+        #[doc = " BidirectionalStreamingEssembly is bidirectional streaming."]
+        pub async fn bidirectional_streaming_essembly(
             &mut self,
-            request: impl tonic::IntoStreamingRequest<Message = super::SusuRequest>,
-        ) -> Result<tonic::Response<tonic::codec::Streaming<super::SusuResponse>>, tonic::Status>
+            request: impl tonic::IntoStreamingRequest<Message = super::EssemblyRequest>,
+        ) -> Result<tonic::Response<tonic::codec::Streaming<super::EssemblyResponse>>, tonic::Status>
         {
             self.ready().await?;
             let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static("/api.Susu/BidirectionalStreamingSusu");
+            let path = http::uri::PathAndQuery::from_static(
+                "/api.Essembly/BidirectionalStreamingEssembly",
+            );
             self.inner
                 .streaming(request.into_streaming_request(), path, codec)
                 .await
         }
     }
-    impl<T: Clone> Clone for SusuClient<T> {
+    impl<T: Clone> Clone for EssemblyClient<T> {
         fn clone(&self) -> Self {
             Self {
                 inner: self.inner.clone(),
@@ -133,68 +136,66 @@ pub mod client {
 pub mod server {
     #![allow(unused_variables, dead_code, missing_docs)]
     use tonic::codegen::*;
-    #[doc = "Generated trait containing gRPC methods that should be implemented for use with SusuServer."]
+    #[doc = "Generated trait containing gRPC methods that should be implemented for use with EssemblyServer."]
     #[async_trait]
-    pub trait Susu: Send + Sync + 'static {
+    pub trait Essembly: Send + Sync + 'static {
         async fn register_client(
             &self,
-            request: tonic::Request<super::SusuClientRegistration>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
+            request: tonic::Request<super::EssemblyClientRegistration>,
+        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
-        #[doc = " UnarySusu is unary echo."]
-        async fn unary_susu(
+        #[doc = " UnaryEssembly is unary echo."]
+        async fn unary_essembly(
             &self,
-            request: tonic::Request<super::SusuRequest>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
+            request: tonic::Request<super::EssemblyRequest>,
+        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
-        #[doc = "Server streaming response type for the ServerStreamingSusu method."]
-        type ServerStreamingSusuStream: Stream<Item = Result<super::SusuResponse, tonic::Status>>
+        #[doc = "Server streaming response type for the ServerStreamingEssembly method."]
+        type ServerStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
             + Send
-            + Sync
             + 'static;
-        #[doc = " ServerStreamingSusu is server side streaming."]
-        async fn server_streaming_susu(
+        #[doc = " ServerStreamingEssembly is server side streaming."]
+        async fn server_streaming_essembly(
             &self,
-            request: tonic::Request<super::SusuRequest>,
-        ) -> Result<tonic::Response<Self::ServerStreamingSusuStream>, tonic::Status> {
+            request: tonic::Request<super::EssemblyRequest>,
+        ) -> Result<tonic::Response<Self::ServerStreamingEssemblyStream>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
-        #[doc = " ClientStreamingSusu is client side streaming."]
-        async fn client_streaming_susu(
+        #[doc = " ClientStreamingEssembly is client side streaming."]
+        async fn client_streaming_essembly(
             &self,
-            request: tonic::Request<tonic::Streaming<super::SusuRequest>>,
-        ) -> Result<tonic::Response<super::SusuResponse>, tonic::Status> {
+            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
+        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
-        #[doc = "Server streaming response type for the BidirectionalStreamingSusu method."]
-        type BidirectionalStreamingSusuStream: Stream<Item = Result<super::SusuResponse, tonic::Status>>
+        #[doc = "Server streaming response type for the BidirectionalStreamingEssembly method."]
+        type BidirectionalStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
             + Send
-            + Sync
             + 'static;
-        #[doc = " BidirectionalStreamingSusu is bidirectional streaming."]
-        async fn bidirectional_streaming_susu(
+        #[doc = " BidirectionalStreamingEssembly is bidirectional streaming."]
+        async fn bidirectional_streaming_essembly(
             &self,
-            request: tonic::Request<tonic::Streaming<super::SusuRequest>>,
-        ) -> Result<tonic::Response<Self::BidirectionalStreamingSusuStream>, tonic::Status>
+            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
+        ) -> Result<tonic::Response<Self::BidirectionalStreamingEssemblyStream>, tonic::Status>
         {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
     }
-    #[doc = " Susu is the echo service."]
+    #[doc = " Essembly is the echo service."]
     #[derive(Debug)]
     #[doc(hidden)]
-    pub struct SusuServer<T: Susu> {
+    pub struct EssemblyServer<T: Essembly> {
         inner: Arc<T>,
     }
-    impl<T: Susu> SusuServer<T> {
+    impl<T: Essembly> EssemblyServer<T> {
         pub fn new(inner: T) -> Self {
             let inner = Arc::new(inner);
             Self { inner }
         }
     }
-    impl<T: Susu> Service<http::Request<HyperBody>> for SusuServer<T> {
+    impl<T: Essembly> Service<http::Request<HyperBody>> for EssemblyServer<T> {
         type Response = http::Response<tonic::body::BoxBody>;
         type Error = Never;
         type Future = BoxFuture<Self::Response, Self::Error>;
@@ -204,14 +205,16 @@ pub mod server {
         fn call(&mut self, req: http::Request<HyperBody>) -> Self::Future {
             let inner = self.inner.clone();
             match req.uri().path() {
-                "/api.Susu/RegisterClient" => {
-                    struct RegisterClientSvc<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::UnaryService<super::SusuClientRegistration> for RegisterClientSvc<T> {
-                        type Response = super::SusuResponse;
+                "/api.Essembly/RegisterClient" => {
+                    struct RegisterClientSvc<T: Essembly>(pub Arc<T>);
+                    impl<T: Essembly> tonic::server::UnaryService<super::EssemblyClientRegistration>
+                        for RegisterClientSvc<T>
+                    {
+                        type Response = super::EssemblyResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::SusuClientRegistration>,
+                            request: tonic::Request<super::EssemblyClientRegistration>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
                             let fut = async move { inner.register_client(request).await };
@@ -228,23 +231,23 @@ pub mod server {
                     };
                     Box::pin(fut)
                 }
-                "/api.Susu/UnarySusu" => {
-                    struct UnarySusuSvc<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::UnaryService<super::SusuRequest> for UnarySusuSvc<T> {
-                        type Response = super::SusuResponse;
+                "/api.Essembly/UnaryEssembly" => {
+                    struct UnaryEssemblySvc<T: Essembly>(pub Arc<T>);
+                    impl<T: Essembly> tonic::server::UnaryService<super::EssemblyRequest> for UnaryEssemblySvc<T> {
+                        type Response = super::EssemblyResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::SusuRequest>,
+                            request: tonic::Request<super::EssemblyRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { inner.unary_susu(request).await };
+                            let fut = async move { inner.unary_essembly(request).await };
                             Box::pin(fut)
                         }
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = UnarySusuSvc(inner);
+                        let method = UnaryEssemblySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.unary(method, req).await;
@@ -252,27 +255,27 @@ pub mod server {
                     };
                     Box::pin(fut)
                 }
-                "/api.Susu/ServerStreamingSusu" => {
-                    struct ServerStreamingSusuSvc<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::ServerStreamingService<super::SusuRequest>
-                        for ServerStreamingSusuSvc<T>
+                "/api.Essembly/ServerStreamingEssembly" => {
+                    struct ServerStreamingEssemblySvc<T: Essembly>(pub Arc<T>);
+                    impl<T: Essembly> tonic::server::ServerStreamingService<super::EssemblyRequest>
+                        for ServerStreamingEssemblySvc<T>
                     {
-                        type Response = super::SusuResponse;
-                        type ResponseStream = T::ServerStreamingSusuStream;
+                        type Response = super::EssemblyResponse;
+                        type ResponseStream = T::ServerStreamingEssemblyStream;
                         type Future =
                             BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<super::SusuRequest>,
+                            request: tonic::Request<super::EssemblyRequest>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { inner.server_streaming_susu(request).await };
+                            let fut = async move { inner.server_streaming_essembly(request).await };
                             Box::pin(fut)
                         }
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = ServerStreamingSusuSvc(inner);
+                        let method = ServerStreamingEssemblySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.server_streaming(method, req).await;
@@ -280,25 +283,25 @@ pub mod server {
                     };
                     Box::pin(fut)
                 }
-                "/api.Susu/ClientStreamingSusu" => {
-                    struct ClientStreamingSusuSvc<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::ClientStreamingService<super::SusuRequest>
-                        for ClientStreamingSusuSvc<T>
+                "/api.Essembly/ClientStreamingEssembly" => {
+                    struct ClientStreamingEssemblySvc<T: Essembly>(pub Arc<T>);
+                    impl<T: Essembly> tonic::server::ClientStreamingService<super::EssemblyRequest>
+                        for ClientStreamingEssemblySvc<T>
                     {
-                        type Response = super::SusuResponse;
+                        type Response = super::EssemblyResponse;
                         type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<tonic::Streaming<super::SusuRequest>>,
+                            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut = async move { inner.client_streaming_susu(request).await };
+                            let fut = async move { inner.client_streaming_essembly(request).await };
                             Box::pin(fut)
                         }
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = ClientStreamingSusuSvc(inner);
+                        let method = ClientStreamingEssemblySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.client_streaming(method, req).await;
@@ -306,28 +309,29 @@ pub mod server {
                     };
                     Box::pin(fut)
                 }
-                "/api.Susu/BidirectionalStreamingSusu" => {
-                    struct BidirectionalStreamingSusuSvc<T: Susu>(pub Arc<T>);
-                    impl<T: Susu> tonic::server::StreamingService<super::SusuRequest>
-                        for BidirectionalStreamingSusuSvc<T>
+                "/api.Essembly/BidirectionalStreamingEssembly" => {
+                    struct BidirectionalStreamingEssemblySvc<T: Essembly>(pub Arc<T>);
+                    impl<T: Essembly> tonic::server::StreamingService<super::EssemblyRequest>
+                        for BidirectionalStreamingEssemblySvc<T>
                     {
-                        type Response = super::SusuResponse;
-                        type ResponseStream = T::BidirectionalStreamingSusuStream;
+                        type Response = super::EssemblyResponse;
+                        type ResponseStream = T::BidirectionalStreamingEssemblyStream;
                         type Future =
                             BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
                         fn call(
                             &mut self,
-                            request: tonic::Request<tonic::Streaming<super::SusuRequest>>,
+                            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
                         ) -> Self::Future {
                             let inner = self.0.clone();
-                            let fut =
-                                async move { inner.bidirectional_streaming_susu(request).await };
+                            let fut = async move {
+                                inner.bidirectional_streaming_essembly(request).await
+                            };
                             Box::pin(fut)
                         }
                     }
                     let inner = self.inner.clone();
                     let fut = async move {
-                        let method = BidirectionalStreamingSusuSvc(inner);
+                        let method = BidirectionalStreamingEssemblySvc(inner);
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.streaming(method, req).await;
@@ -345,13 +349,13 @@ pub mod server {
             }
         }
     }
-    impl<T: Susu> Clone for SusuServer<T> {
+    impl<T: Essembly> Clone for EssemblyServer<T> {
         fn clone(&self) -> Self {
             let inner = self.inner.clone();
             Self { inner }
         }
     }
-    impl<T: Susu> tonic::transport::ServiceName for SusuServer<T> {
-        const NAME: &'static str = "api.Susu";
+    impl<T: Essembly> tonic::transport::ServiceName for EssemblyServer<T> {
+        const NAME: &'static str = "api.Essembly";
     }
 }

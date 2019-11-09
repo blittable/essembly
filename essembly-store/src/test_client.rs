@@ -8,7 +8,7 @@ pub mod api {
 
 use tokio;
 
-use api::client::SusuClient;
+use api::client::EssemblyClient;
 use http::header::HeaderValue;
 use tonic::transport::{Certificate, Channel, ClientTlsConfig};
 
@@ -32,7 +32,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         })
         .channel();
 
-    let mut client = SusuClient::new(channel);
+    let mut client = EssemblyClient::new(channel);
 
     let registration = build_registration();
     let request = tonic::Request::new(registration);
@@ -44,7 +44,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub fn build_registration() -> api::SusuClientRegistration {
+pub fn build_registration() -> api::EssemblyClientRegistration {
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 
@@ -76,7 +76,7 @@ pub fn build_registration() -> api::SusuClientRegistration {
 
     let new_registration_status = 1;
 
-    api::SusuClientRegistration {
+    api::EssemblyClientRegistration {
         client: Some(new_client),
         address: Some(new_address),
         status: new_registration_status,

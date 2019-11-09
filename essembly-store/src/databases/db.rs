@@ -20,7 +20,7 @@ impl DB for Sled {
     }
 }
 
-// impl SusuDB {
+// impl EssemblyDB {
 //     #[allow(dead_code)]
 //     pub(crate) async fn open(path: String) -> Result<File> {
 //         configure_tracing();

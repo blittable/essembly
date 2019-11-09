@@ -9,7 +9,7 @@ use essembly_interfaces::registration::*;
 use tokio;
 
 #[allow(dead_code)]
-static DATABASE_NAME: &str = "susu.db";
+static DATABASE_NAME: &str = "essembly.db";
 
 use sled::Db;
 
@@ -20,8 +20,8 @@ use tonic::transport::{Identity, Server, ServerTlsConfig};
 use tonic::{body::BoxBody, Request, Response, Status, Streaming};
 use tower::Service;
 
-type SusuResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<SusuResponse, Status>>;
+type EssemblyResult<T> = Result<Response<T>, Status>;
+type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
@@ -58,14 +58,14 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[derive(Default)]
-pub struct SusuServer;
+pub struct EssemblyServer;
 
 #[tonic::async_trait]
-impl server::Susu for SusuServer {
+impl server::Essembly for EssemblyServer {
     async fn register_client(
         &self,
-        request: Request<SusuClientRegistration>,
-    ) -> SusuResult<SusuResponse> {
+        request: Request<EssemblyClientRegistration>,
+    ) -> EssemblyResult<EssemblyResponse> {
         let message = request.into_inner().address.unwrap();
 
         println!("received message: {:?}", message);
@@ -75,29 +75,24 @@ impl server::Susu for SusuServer {
             Err(err) => eprintln!("Error saving to the database. {:?}", err),
         }
 
-        Ok(Response::new(SusuResponse {
+        Ok(Response::new(EssemblyResponse {
             message: "Received Registration".to_string(),
         }))
     }
 
-    type ServerStreamingSusuStream = Stream;
+    type ServerStreamingEssemblyStream = Stream;
 
-    async fn client_streaming_susu(
+    type BidirectionalStreamingEssemblyStream = Stream;
+
+    async fn bidirectional_streaming_essembly(
         &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<SusuResponse> {
-        Err(Status::unimplemented("not implemented"))
-    }
-
-    type BidirectionalStreamingSusuStream = Stream;
-
-    async fn bidirectional_streaming_susu(
-        &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<Self::BidirectionalStreamingSusuStream> {
+        _: Request<Streaming<EssemblyRequest>>,
+    ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
         Err(Status::unimplemented("not implemented"))
     }
 }
+
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -124,7 +119,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let addr = "127.0.0.1:50051".parse().unwrap();
 
-    let server = SusuServer::default();
+    let server = EssemblyServer::default();
 
     Server::builder()
         .tls_config(ServerTlsConfig::with_rustls().identity(identity))
@@ -156,7 +151,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         })
         .clone()
-        .add_service(server::SusuServer::new(server))
+        .add_service(server::EssemblyServer::new(server))
         .serve(addr)
         .await?;
 

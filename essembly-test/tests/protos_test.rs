@@ -41,7 +41,7 @@ fn test_client_registration() {
 
     let new_registration_status = 1;
 
-    let new_registration = api::SusuClientRegistration {
+    let new_registration = api::EssemblyClientRegistration {
         client: Some(new_client),
         address: Some(new_address),
         status: new_registration_status,

@@ -13,15 +13,15 @@ use essembly::core::*;
 use essembly::logging;
 
 #[allow(dead_code)]
-static DATABASE_NAME: &str = "susu.db";
+static DATABASE_NAME: &str = "essembly.db";
 
-use essembly::interfaces::api::{SusuRequest, SusuResponse};
+use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse};
 use std::collections::VecDeque;
 use std::str;
 use tonic::{Request, Response, Status, Streaming};
 
-type SusuResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<SusuResponse, Status>>;
+type EssemblyResult<T> = Result<Response<T>, Status>;
+type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::Error>> {
     debug!("started");
@@ -50,14 +50,14 @@ fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::
 }
 
 #[derive(Default)]
-pub struct SusuServer;
+pub struct EssemblyServer;
 
 #[tonic::async_trait]
-impl api::server::Susu for SusuServer {
+impl api::server::Essembly for EssemblyServer {
     async fn register_client(
         &self,
-        request: Request<api::SusuClientRegistration>,
-    ) -> SusuResult<SusuResponse> {
+        request: Request<api::EssemblyClientRegistration>,
+    ) -> EssemblyResult<EssemblyResponse> {
         let message = request.into_inner().address.unwrap();
 
         println!("received message: {:?}", message);
@@ -67,26 +67,26 @@ impl api::server::Susu for SusuServer {
             Err(err) => eprintln!("Error saving to the database. {:?}", err),
         }
 
-        Ok(Response::new(SusuResponse {
+        Ok(Response::new(EssemblyResponse {
             message: "Received Registration".to_string(),
         }))
     }
 
-    type ServerStreamingSusuStream = Stream;
+    type ServerStreamingEssemblyStream = Stream;
 
-    async fn client_streaming_susu(
+    async fn client_streaming_essembly(
         &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<SusuResponse> {
+        _: Request<Streaming<EssemblyRequest>>,
+    ) -> EssemblyResult<EssemblyResponse> {
         Err(Status::unimplemented("not implemented"))
     }
 
-    type BidirectionalStreamingSusuStream = Stream;
+    type BidirectionalStreamingEssemblyStream = Stream;
 
-    async fn bidirectional_streaming_susu(
+    async fn bidirectional_streaming_essembly(
         &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<Self::BidirectionalStreamingSusuStream> {
+        _: Request<Streaming<EssemblyRequest>>,
+    ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
         Err(Status::unimplemented("not implemented"))
     }
 }
@@ -107,7 +107,7 @@ impl api::server::Susu for SusuServer {
 //     let identity = Identity::from_pem(cert, key);
 
 //     let addr = "127.0.0.1:50051".parse().unwrap();
-//     let server = SusuServer::default();
+//     let server = EssemblyServer::default();
 
 //     // let subscriber = FmtSubscriber::builder()
 //     //     .with_max_level(Level::TRACE)
@@ -142,7 +142,7 @@ impl api::server::Susu for SusuServer {
 //             }
 //         })
 //         .clone()
-//         .add_service(api::server::SusuServer::new(server))
+//         .add_service(api::server::EssemblyServer::new(server))
 //         .serve(addr)
 //         .await?;
 //     Ok(())

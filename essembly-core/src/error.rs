@@ -18,7 +18,7 @@ pub(crate) enum ErrorType {
     MessageFormat,
 }
 
-/// SusuDB struct Error enum wrapper
+/// EssemblyDB struct Error enum wrapper
 pub struct Error {
     err_code: ErrorCode,
 }
