@@ -1,5 +1,4 @@
 use roxmltree;
-use std::fs;
 
 pub trait Parser {
     fn new() -> Self;
@@ -27,12 +26,11 @@ impl Parser for XLBRParser {
 
         for node in doc.descendants() {
             if node.is_element() {
-
                 match node.tag_name().name().as_ref() {
                     "accountingEntries" => println!("Entries"),
                     "entryHeader" => println!("Header"),
                     "entryDetail" => println!("Detail"),
-                    _ => () 
+                    _ => (),
                 }
 
                 // println!("Type: {:#?}", node.node_type());

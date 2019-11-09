@@ -17,6 +17,7 @@ Project Overview:
 - [x] protos should compile to their own crate 
 - [x] separate test crate
 - [x] remove database refs from api 
+- [] cli loads config 
 - [] log story 
 - [] cli client - time modules 
 - [] intgegrate permissions 
@@ -31,4 +32,5 @@ Project Overview:
 
 Todo Tests:
 [x] Unit test to check missing config.toml is handled correctly fo API 
+
 

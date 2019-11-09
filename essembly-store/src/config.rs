@@ -1,4 +1,3 @@
-
 #![allow(non_camel_case_types)]
 
 pub use serde_derive::{Deserialize, Serialize};
@@ -24,7 +23,7 @@ impl Config {
         let db_details: DB_Details = DB_Details {
             db: String::new(),
             ip: String::new(),
-            protocol: String::new(), 
+            protocol: String::new(),
         };
 
         let db = DBConfig {
@@ -78,20 +77,20 @@ pub struct DB_Details {
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
 pub struct primary_db {
-    primary_db: DB_Details 
+    primary_db: DB_Details,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
 pub struct remote_db {
-    remote_db: DB_Details 
+    remote_db: DB_Details,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
 pub struct DBConfig {
-    pub primary_db:  DB_Details,
-    pub remote_db:  DB_Details,
+    pub primary_db: DB_Details,
+    pub remote_db: DB_Details,
 }
 
 #[cfg(test)]

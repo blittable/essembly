@@ -44,8 +44,8 @@ TELEMETRY:                  Telemetry Router / Sink / Vector
 
   For every module there are 3 entry point.
   1) `command` - the `CLI` to interact the module with command set.
-  2) `communication` - the `gRPC` protocal to describe funcational/interface of the module by `.proto` file.
-  3) `monitoring` - the `Log & Telemery` details in realtime & post-processing logs.
+  2) `communication` - the `gRPC` protocol to describe the interface of the module from the `.proto` file.
+  3) `monitoring` - the `Log & Telemetry` details in realtime & post-processing logs.
   
   In each module there is a router to be the main interaction of internal module via `gRPC` protocol.  
   In each module can contains one or many module inside.
@@ -65,11 +65,13 @@ TELEMETRY:                  Telemetry Router / Sink / Vector
 10) Customer can order on their phone via a QR code.
 11) Customer needs to know how long the order will take and when it will be ready.
 12) Customer can make a 'secret' surprise cake request directly to the kitchen.
+13) A customer wants to pay with BitCoin.
+14) A customr wants to pay with LiteCoin.
+
 
 ## Design CI/CD Rules:
 
 1) Compile all business rules to wasm to use for in-place updates - distributed http updates?
-2)   
 
 
 ## Blockchain
@@ -88,6 +90,12 @@ A few of technologies at play:
 2. Raft consensus (with transactional and otherwise),
 3. Blockchain consenus (Tendermint / Cosmos),
 4. The modality of the database: document, graph, rdbms
+
+### The development story
+
+1. What's the best release cycle?
+2. How do we enforce code reviews and unit testing?
+
 
 ## Other Notes:
 

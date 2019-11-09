@@ -3,31 +3,27 @@
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
-use tokio;
-use tracing;
 use essembly::interfaces::*;
+use tracing;
 
 #[allow(unused_imports)]
-use tracing::{debug, error, info, event, warn, span, Level};
+use tracing::{debug, error, event, info, span, warn, Level};
 
-use essembly::logging;
 use essembly::core::*;
+use essembly::logging;
 
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "susu.db";
 
+use essembly::interfaces::api::{SusuRequest, SusuResponse};
 use std::collections::VecDeque;
 use std::str;
-use essembly::interfaces::api::{SusuRequest, SusuResponse};
-use tonic::transport::{ Server, ServerTlsConfig};
 use tonic::{Request, Response, Status, Streaming};
-use essembly::core;
 
 type SusuResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<SusuResponse, Status>>;
 
 fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::Error>> {
-
     debug!("started");
     warn!("started");
     info!("started");
@@ -35,16 +31,19 @@ fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::
     event!(Level::INFO, "Dogs and Cats");
 
     // #[cfg(debug)] {
-    //     println!("Data file loaded at: {:?}", path); 
+    //     println!("Data file loaded at: {:?}", path);
     // }
 
     // #[cfg(debug)] {
-    //     println!("Data file loaded at: {:?}", path); 
+    //     println!("Data file loaded at: {:?}", path);
     // }
 
-
     let location = message.latlng.unwrap();
+    #[allow(dead_code)]
+    #[allow(unused_variables)]
     let latitude = location.latitude.to_string();
+    #[allow(dead_code)]
+    #[allow(unused_variables)]
     let longitude = location.longitude.to_string();
 
     Ok(())
@@ -110,10 +109,9 @@ impl api::server::Susu for SusuServer {
 //     let addr = "127.0.0.1:50051".parse().unwrap();
 //     let server = SusuServer::default();
 
-//     // let subscriber = FmtSubscriber::builder() 
+//     // let subscriber = FmtSubscriber::builder()
 //     //     .with_max_level(Level::TRACE)
 //     //     .finish();
-
 
 //     Server::builder()
 //         .tls_config(ServerTlsConfig::with_rustls().identity(identity))

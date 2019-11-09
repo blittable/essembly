@@ -1,7 +1,9 @@
 use super::error;
 
+#[allow(dead_code)]
 struct Sled {}
 
+#[allow(dead_code)]
 struct Record {}
 
 trait DB {
@@ -9,10 +11,11 @@ trait DB {
     fn save_record(r: Record) -> Result<(), error::Error>;
 }
 
+#[warn(unused_variables)]
 impl DB for Sled {
     type Format = Record;
 
-    fn save_record(r: Record) -> Result<(), error::Error> {
+    fn save_record(_r: Record) -> Result<(), error::Error> {
         Ok(())
     }
 }

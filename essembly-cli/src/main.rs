@@ -1,13 +1,14 @@
-use essembly_cli::importer::Parser;
-use essembly_cli::importer::XLBRParser;
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use clap::arg_enum;
 use core::str::FromStr;
-use failure::{bail, Error, Fallible};
+use essembly_cli::importer::Parser;
+use essembly_cli::importer::XLBRParser;
+use failure::{Fallible};
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
-use tokio::fs::File;
-use tokio::prelude::{AsyncRead, Future};
 
 mod importer;
 
@@ -93,12 +94,8 @@ impl Essembly {
                 ref operation,
                 ref data,
             } => {
-                if let operation = operation {
                     println!("{:?}", "acct");
                     Ok(())
-                } else {
-                    bail!("error in acct {}", "foo");
-                }
             }
             Essembly::InitializeLocal {} => {
                 println!("{:?}", "init local");
