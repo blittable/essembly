@@ -8,6 +8,8 @@ use essembly_cli::importer::XLBRParser;
 use essembly_config::Config;
 use failure::Fallible;
 use std::env;
+use std::thread;
+use std::time::Duration;
 use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::string::String;
@@ -193,3 +195,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Essembly::from_args().run().await?;
     Ok(())
 }
+
+
+// fn main() -> Result<(), Box<dyn std::error::Error>> {
+//     let config = &Config::new();
+
+//     let primary_db = &config.db.primary;
+//     println!("Cli Config: {:?}", primary_db);
+
+//     loop {
+//         thread::sleep(Duration::from_secs(2));
+//         println!("Cli Config: {:?}", primary_db);
+
+//     }
+
+//     //Essembly::from_args().run().await?;
+//     Ok(())
+// }

@@ -6,6 +6,10 @@ edition = "2018"
 
 [workspace]
 
+[[bin]]
+name = "client_send"
+path = "tests/test_client_packet.rs"
+
 [lib]
 
 #Separate the tests into features mostly so we can scope their dependencies and feature-gate
@@ -38,8 +42,11 @@ serde_derive = "1.0"
 serde_regex = "0.4.0"
 tempfile = "3.0.0"
 dirs = "2.0.2"
-tokio = { git = "https://github.com/tokio-rs/tokio.git" }
+tokio = "=0.2.0-alpha.6"
 tokio-test = { git = "https://github.com/tokio-rs/tokio.git" }
+
+# This is a regular dependency to support send real packets
+essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["logger", "interfaces"]}
 
 [dev-dependencies]
 essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["logger", "interfaces"]}

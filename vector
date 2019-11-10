@@ -1,0 +1,7 @@
+Cli Config: DbDetails { db_type: "", ip: "", port: "", logging: "" }
+error: Found argument '-m' which wasn't expected, or isn't valid in this context
+
+USAGE:
+    essembly-cli <SUBCOMMAND>
+
+For more information try --help
