@@ -16,12 +16,12 @@ import "google/protobuf/wrappers.proto";
    registration.ClientRegistrationStatus status = 3;
  }
 
- // EssemblyRequest is the request for echo.
+ // EssemblyRequest is the request for essembly.
  message EssemblyRequest {
    string message = 1;
  }
 
- // EssemblyResponse is the response for echo.
+ // EssemblyResponse is the response for essembly.
  message EssemblyResponse {
    string message = 1;
  }
@@ -30,12 +30,8 @@ import "google/protobuf/wrappers.proto";
  // Essembly is the echo service.
  service Essembly {
    rpc RegisterClient(EssemblyClientRegistration) returns (EssemblyResponse) {}
-   // UnaryEssembly is unary echo.
    rpc UnaryEssembly(EssemblyRequest) returns (EssemblyResponse) {}
-   // ServerStreamingEssembly is server side streaming.
    rpc ServerStreamingEssembly(EssemblyRequest) returns (stream EssemblyResponse) {}
-   // ClientStreamingEssembly is client side streaming.
    rpc ClientStreamingEssembly(stream EssemblyRequest) returns (EssemblyResponse) {}
-   // BidirectionalStreamingEssembly is bidirectional streaming.
    rpc BidirectionalStreamingEssembly(stream EssemblyRequest) returns (stream EssemblyResponse) {}
  }

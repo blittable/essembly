@@ -14,9 +14,11 @@ default = [
 "account",
 "interfaces",
 "cli",
+"config",
 "store",
 ]
 
+config = ["essembly-config"]
 core = ["essembly-core"]
 logger = ["logging"]
 account = ["accounts"]
@@ -25,21 +27,21 @@ cli = ["essembly-cli"]
 store = ["essembly-store"]
 
 [dependencies]
-essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
 accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/accounts" }
 time = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/time" }
 inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/inventory" }
+
+essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
+essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
+essembly-cli = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cli" }
+essembly-config = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-config" }
+essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 
 logging = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/logging", features = ["subscriber"]}
 tracing = "0.1.9"
 tracing-subscriber = "0.1.4"
 tracing-attributes = "0.1.4"
 tracing-futures = "0.0.1-alpha.1"
-
-essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
-essembly-cli = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cli" }
-essembly-config = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-config" }
-essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
 
 [package.metadata.docs.rs]
 all-features = false 

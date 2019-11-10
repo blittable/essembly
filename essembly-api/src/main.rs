@@ -8,6 +8,7 @@ use tracing;
 
 #[allow(unused_imports)]
 use tracing::{debug, error, event, info, span, warn, Level};
+use tokio::prelude::Future;
 
 use essembly::core::*;
 use essembly::logging;
@@ -15,10 +16,13 @@ use essembly::logging;
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "essembly.db";
 
-use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse};
+use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse };
+use essembly::config::{Config};
+
 use std::collections::VecDeque;
 use std::str;
-use tonic::{Request, Response, Status, Streaming};
+use std::fs::File;
+use tonic::{transport::{Server, Identity, Certificate, ServerTlsConfig},  Request, Response, Status, Streaming };
 
 type EssemblyResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<EssemblyResponse, Status>>;
@@ -54,25 +58,24 @@ pub struct EssemblyServer;
 
 #[tonic::async_trait]
 impl api::server::Essembly for EssemblyServer {
-    async fn register_client(
-        &self,
-        request: Request<api::EssemblyClientRegistration>,
-    ) -> EssemblyResult<EssemblyResponse> {
-        let message = request.into_inner().address.unwrap();
+    // async fn register_client(
+    //     &self,
+    //     request: Request<api::EssemblyClientRegistration>,
+    // ) -> EssemblyResult<EssemblyResponse> {
+    //     let message = request.into_inner().address.unwrap();
 
-        println!("received message: {:?}", message);
+    //     println!("received message: {:?}", message);
 
-        match save_to_db(message.clone()) {
-            Ok(result) => println!("Message save to DB {:?}", result),
-            Err(err) => eprintln!("Error saving to the database. {:?}", err),
-        }
+    //     match save_to_db(message.clone()) {
+    //         Ok(result) => println!("Message save to DB {:?}", result),
+    //         Err(err) => eprintln!("Error saving to the database. {:?}", err),
+    //     }
 
-        Ok(Response::new(EssemblyResponse {
-            message: "Received Registration".to_string(),
-        }))
-    }
+    //     Ok(Response::new(EssemblyResponse {
+    //         message: "Received Registration".to_string(),
+    //     }))
+    // }
 
-    type ServerStreamingEssemblyStream = Stream;
 
     async fn client_streaming_essembly(
         &self,
@@ -81,7 +84,6 @@ impl api::server::Essembly for EssemblyServer {
         Err(Status::unimplemented("not implemented"))
     }
 
-    type BidirectionalStreamingEssemblyStream = Stream;
 
     async fn bidirectional_streaming_essembly(
         &self,
@@ -89,66 +91,82 @@ impl api::server::Essembly for EssemblyServer {
     ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
         Err(Status::unimplemented("not implemented"))
     }
+
+    type BidirectionalStreamingEssemblyStream = Stream;
+    type ServerStreamingEssemblyStream = Stream;
 }
 
-// #[tokio::main]
-// async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 
-//     let subscriber = SloggishSubscriber::new(2);
-//     tracing::subscriber::set_global_default(subscriber).unwrap();
+     //Read config file
+    let config: Config = Config::new().load();
 
-//     debug!("started");
-//     warn!("started");
-//     info!("started");
+    // println!(
+    //     "loaded Config with local db: {:?}",
+    //     config.db_config.primary_db
+    // );
 
-//     let cert = tokio::fs::read("tls/server.pem").await?;
-//     let key = tokio::fs::read("tls/server.key").await?;
+    // println!(
+    //     "loaded Config with remote db: {:?}",
+    //     config.db_config.remote_db
+    // );
 
-//     let identity = Identity::from_pem(cert, key);
+    //  let cert = File::open("essembly-api/tls/server.pem")?;
+    // println!(
+    //     "loaded Cert with remote db: {:?}",
+    //     config.db_config.remote_db
+    // );
 
-//     let addr = "127.0.0.1:50051".parse().unwrap();
-//     let server = EssemblyServer::default();
+    //  let key = File::open("essembly-api/tls/server.key")?;
+    // println!(
+    //     "loaded Cert with remote db: {:?}",
+    //     config.db_config.remote_db
+    // );
 
-//     // let subscriber = FmtSubscriber::builder()
-//     //     .with_max_level(Level::TRACE)
-//     //     .finish();
+    //let cert = tokio::fs::read("essembly-api/tls/server.pem").await?;
+    //let key = tokio::fs::read("essembly-api/tls/server.key").await?;
+    let pem = std::fs::read("essembly-api/tls/server.pem")?;
+    let key = &std::fs::read("essembly-api/tls/server.key")?;
+    // .map(|data| {
+    //     // do something with the contents of the file ...
+    //     println!("foo.txt contains {} bytes", data.len());
+    // }).map_err(|e| {
+    //     // handle errors
+    //     eprintln!("IO error: {:?}", e);
+    // });
 
-//     Server::builder()
-//         .tls_config(ServerTlsConfig::with_rustls().identity(identity))
-//         .interceptor_fn(move |svc, req| {
-//             let auth_header = req.headers().get("authorization").clone();
 
-//             let authed = if let Some(auth_header) = auth_header {
-//                 auth_header == "Bearer some-secret-token"
-//             } else {
-//                 false
-//             };
+    let identity = Identity::from_pem(pem, key);
 
-//             let fut = svc.call(req);
 
-//             async move {
-//                 if authed {
-//                     fut.await
-//                 } else {
-//                     // Cancel the inner future since we never await it
-//                     // the IO never gets registered.
-//                     drop(fut);
-//                     let res = http::Response::builder()
-//                         .header("grpc-status", "16")
-//                         .body(BoxBody::empty())
-//                         .unwrap();
-//                     Ok(res)
-//                 }
-//             }
-//         })
-//         .clone()
-//         .add_service(api::server::EssemblyServer::new(server))
-//         .serve(addr)
-//         .await?;
-//     Ok(())
-// }
+    // // let subscriber = FmtSubscriber::builder()
+    // //     .with_max_level(Level::TRACE)
+    // //     .finish();
 
-fn main() {
+    let client_ca_cert = tokio::fs::read("essembly-api/tls/client_ca.pem").await?;
+    let client_ca_cert = Certificate::from_pem(client_ca_cert);
+
+    let tls = ServerTlsConfig::with_rustls()
+        .identity(identity)
+        .client_ca_root(client_ca_cert)
+        .clone();
+
+
+    let addr = "127.0.0.1:50051".parse().unwrap();
+    let server = EssemblyServer::default();
+
+        Server::builder()
+        .tls_config(&tls)
+        .clone()
+        .add_service(api::server::EssemblyServer::new(server))
+        .serve(addr)
+        .await?;
+
+    Ok(())
+}
+
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     logging::subscriber::set_global_default(logging::EssemblySubscriber::new(2)).unwrap();
 
     let app_span = span!(Level::TRACE, "", version = %5.0);
@@ -179,4 +197,8 @@ fn main() {
     });
     warn!("internal error");
     info!("exit");
+
+    run_server().await?;
+
+    Ok(())
 }

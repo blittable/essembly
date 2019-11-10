@@ -10,7 +10,7 @@ failure = "0.1.5"
 lazy_static = "1.4.0"
 http = "0.1"
 tracing = "0.1"
-tokio = { git = "https://github.com/tokio-rs/tokio.git" }
+tokio = { version = "0.2.0-alpha.6" }
 failure_derive = "=0.1.5"
 tonic = { git = "https://github.com/hyperium/tonic", features = ["rustls"] }
 
@@ -21,8 +21,7 @@ tower = "0.3.0-alpha.2"
 path = "../essembly"
 version = "0.1.0-alpha.1"
 default-features = false 
-features = ["logger"]
-
+features = ["logger", "interfaces", "config"]
 
 # The development profile, used for `cargo build`
 [profile.dev]

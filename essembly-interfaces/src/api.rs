@@ -11,13 +11,13 @@ pub struct EssemblyClientRegistration {
     )]
     pub status: i32,
 }
-/// EssemblyRequest is the request for echo.
+/// EssemblyRequest is the request for essembly.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EssemblyRequest {
     #[prost(string, tag = "1")]
     pub message: std::string::String,
 }
-/// EssemblyResponse is the response for echo.
+/// EssemblyResponse is the response for essembly.
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct EssemblyResponse {
     #[prost(string, tag = "1")]
@@ -71,7 +71,6 @@ pub mod client {
             let path = http::uri::PathAndQuery::from_static("/api.Essembly/RegisterClient");
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = " UnaryEssembly is unary echo."]
         pub async fn unary_essembly(
             &mut self,
             request: impl tonic::IntoRequest<super::EssemblyRequest>,
@@ -81,7 +80,6 @@ pub mod client {
             let path = http::uri::PathAndQuery::from_static("/api.Essembly/UnaryEssembly");
             self.inner.unary(request.into_request(), path, codec).await
         }
-        #[doc = " ServerStreamingEssembly is server side streaming."]
         pub async fn server_streaming_essembly(
             &mut self,
             request: impl tonic::IntoRequest<super::EssemblyRequest>,
@@ -95,7 +93,6 @@ pub mod client {
                 .server_streaming(request.into_request(), path, codec)
                 .await
         }
-        #[doc = " ClientStreamingEssembly is client side streaming."]
         pub async fn client_streaming_essembly(
             &mut self,
             request: impl tonic::IntoStreamingRequest<Message = super::EssemblyRequest>,
@@ -108,7 +105,6 @@ pub mod client {
                 .client_streaming(request.into_streaming_request(), path, codec)
                 .await
         }
-        #[doc = " BidirectionalStreamingEssembly is bidirectional streaming."]
         pub async fn bidirectional_streaming_essembly(
             &mut self,
             request: impl tonic::IntoStreamingRequest<Message = super::EssemblyRequest>,
@@ -145,7 +141,6 @@ pub mod server {
         ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
-        #[doc = " UnaryEssembly is unary echo."]
         async fn unary_essembly(
             &self,
             request: tonic::Request<super::EssemblyRequest>,
@@ -156,14 +151,12 @@ pub mod server {
         type ServerStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
             + Send
             + 'static;
-        #[doc = " ServerStreamingEssembly is server side streaming."]
         async fn server_streaming_essembly(
             &self,
             request: tonic::Request<super::EssemblyRequest>,
         ) -> Result<tonic::Response<Self::ServerStreamingEssemblyStream>, tonic::Status> {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
-        #[doc = " ClientStreamingEssembly is client side streaming."]
         async fn client_streaming_essembly(
             &self,
             request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
@@ -174,7 +167,6 @@ pub mod server {
         type BidirectionalStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
             + Send
             + 'static;
-        #[doc = " BidirectionalStreamingEssembly is bidirectional streaming."]
         async fn bidirectional_streaming_essembly(
             &self,
             request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,

@@ -5,7 +5,7 @@ use clap::arg_enum;
 use core::str::FromStr;
 use essembly_cli::importer::Parser;
 use essembly_cli::importer::XLBRParser;
-use essembly_config::config;
+use essembly_config::Config;
 use failure::Fallible;
 use std::env;
 use std::ffi::OsStr;
@@ -185,7 +185,7 @@ fn get_config() -> PathBuf {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let config = &config::Config::new();
+    let config = &Config::new();
 
     let primary_db = &config.db_config;
     println!("Cli Config: {:?}", primary_db);

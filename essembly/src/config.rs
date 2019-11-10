@@ -1,4 +1,5 @@
 //!
 //!
 //!
-pub use essembly_config;
+#[cfg(feature = "config")]
+pub use essembly_config::*;
