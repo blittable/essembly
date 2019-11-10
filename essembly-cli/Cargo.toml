@@ -7,7 +7,7 @@ keywords = ["cli", "erp", "essembly"]
 categories = ["erp", "business", "accounting"]
 
 [dependencies]
-tokio = { version = "0.2.0-alpha.5" }
+tokio = { version = "0.2.0-alpha.6" }
 tracing = { version = "0.1.5", optional = true }
 structopt = "0.3.2"
 structopt-derive = "0.3.2"
@@ -16,6 +16,14 @@ futures-core-preview = "=0.3.0-alpha.19"
 serde = "1.0"
 roxmltree = "0.7.1"
 failure = "0.1.5"
+
+[dependencies.essembly-core]
+path = "../essembly-core"
+version = "0.1.0-alpha.1"
+
+[dependencies.essembly-config]
+path = "../essembly-config"
+version = "0.1.0-alpha.1"
 
 [dev-dependencies]
 rand = "0.7"

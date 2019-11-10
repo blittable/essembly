@@ -1,8 +1,0 @@
-[server-config]
-state = 'running'
-
-[db-config]
-primary = { type = "sled", "ip = "localhost:2343", protocol = "grpc" }
-
-# traffc cops are the coordinators for distributed database systems
-traffic_cop = { ip = ["localhost:2343", "123.123.123.1:2342" }

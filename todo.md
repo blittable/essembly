@@ -16,18 +16,22 @@ Project Overview:
 - [x] proto-factory should generate to proto directory
 - [x] protos should compile to their own crate 
 - [x] separate test crate
-- [] remove database refs from api 
+- [x] remove database refs from api 
+- [] cli loads config 
+
 - [] log story 
+- [] cli client - time modules 
 - [] intgegrate permissions 
 - [] vector logging sync
 - [] research wasm/wasi integration - in-place updates?
 
-
 - [] Kubernetes or docker-compose:
-1) Start the DB Service
-2) Start the API Service
-3) Run a test client ?
+
+1. Start the DB Service
+2. Start the API Service
+3. Run a test client ?
 
 Todo Tests:
 [x] Unit test to check missing config.toml is handled correctly fo API 
+
 

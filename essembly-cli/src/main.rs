@@ -1,13 +1,17 @@
-use essembly_cli::importer::Parser;
-use essembly_cli::importer::XLBRParser;
+#![allow(dead_code)]
+#![allow(unused_variables)]
+
 use clap::arg_enum;
 use core::str::FromStr;
-use failure::{bail, Error, Fallible};
+use essembly_cli::importer::Parser;
+use essembly_cli::importer::XLBRParser;
+use essembly_config::Config;
+use failure::Fallible;
+use std::env;
+use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
-use tokio::fs::File;
-use tokio::prelude::{AsyncRead, Future};
 
 mod importer;
 
@@ -93,12 +97,8 @@ impl Essembly {
                 ref operation,
                 ref data,
             } => {
-                if let operation = operation {
-                    println!("{:?}", "acct");
-                    Ok(())
-                } else {
-                    bail!("error in acct {}", "foo");
-                }
+                println!("{:?}", "acct");
+                Ok(())
             }
             Essembly::InitializeLocal {} => {
                 println!("{:?}", "init local");
@@ -173,8 +173,23 @@ arg_enum! {
     }
 }
 
+fn get_config() -> PathBuf {
+    let path = env::current_dir().unwrap();
+
+    println!("Current Path: {:?}", path);
+
+    env::var_os("ESSEMBLY_CONFIG")
+        .unwrap_or_else(|| OsStr::new("config.toml").to_os_string())
+        .into()
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let config = &Config::new();
+
+    let primary_db = &config.db.primary;
+    println!("Cli Config: {:?}", primary_db);
+
     Essembly::from_args().run().await?;
     Ok(())
 }

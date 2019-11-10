@@ -1,180 +1,166 @@
+#![deny(rust_2018_idioms)]
 #[allow(dead_code)]
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
-use tokio;
-use tracing::instrument;
-use tracing::subscriber; 
-use tracing_log;
+use essembly::interfaces::*;
 use tracing;
-use essembly_interfaces::*;
-use tracing::{debug, error, info, warn, span, Level};
-use tracing_subscriber::FmtSubscriber;
 
-mod essembly_subscriber;
-use self::essembly_subscriber::SloggishSubscriber;
+use tokio::prelude::Future;
+#[allow(unused_imports)]
+use tracing::{debug, error, event, info, span, warn, Level};
+
+use essembly::core::*;
+use essembly::logging;
 
 #[allow(dead_code)]
-static DATABASE_NAME: &str = "susu.db";
+static DATABASE_NAME: &str = "essembly.db";
 
-use sled::Db;
+use essembly::config::Config;
+use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse};
 
 use std::collections::VecDeque;
+use std::fs::File;
 use std::str;
-use api::{SusuRequest, SusuResponse};
-use tonic::transport::{Identity, Server, ServerTlsConfig};
-use tonic::{body::BoxBody, Request, Response, Status, Streaming};
-use tower::Service;
+use tonic::{
+    transport::{Certificate, Identity, Server, ServerTlsConfig},
+    Request, Response, Status, Streaming,
+};
 
-type SusuResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<SusuResponse, Status>>;
+type EssemblyResult<T> = Result<Response<T>, Status>;
+type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::Error>> {
-
     debug!("started");
     warn!("started");
     info!("started");
 
-    #[cfg(debug)] {
-        println!("Data file loaded at: {:?}", path); 
-    }
+    event!(Level::INFO, "Dogs and Cats");
 
-    let path = "./foo.db";
-    let tree = Db::open(path)?;
+    // #[cfg(debug)] {
+    //     println!("Data file loaded at: {:?}", path);
+    // }
 
-    let options = tree.open_tree("options")?;
-    let locations = tree.open_tree("locations")?;
-
-    options.insert(b"save", "doo")?;
-
-    #[cfg(debug)] {
-        println!("Data file loaded at: {:?}", path); 
-    }
-
+    // #[cfg(debug)] {
+    //     println!("Data file loaded at: {:?}", path);
+    // }
 
     let location = message.latlng.unwrap();
+    #[allow(dead_code)]
+    #[allow(unused_variables)]
     let latitude = location.latitude.to_string();
+    #[allow(dead_code)]
+    #[allow(unused_variables)]
     let longitude = location.longitude.to_string();
-
-    locations.insert(b"goo_lng", longitude.as_bytes())?;
-    locations.insert(b"goo_lat", longitude.as_bytes())?;
-
-    for node in &tree.tree_names() {
-        println!("tree: {:?}", str::from_utf8(&node));
-    }
-
-    for x in locations.into_iter() {
-        match x {
-            Ok(e) => {
-                println!("key: {:?}", str::from_utf8(&e.0));
-                println!("value: {:?}", str::from_utf8(&e.1));
-            }
-            Err(_) => (),
-        }
-    }
-
-    tree.flush()?;
 
     Ok(())
 }
 
 #[derive(Default)]
-pub struct SusuServer;
+pub struct EssemblyServer;
 
 #[tonic::async_trait]
-impl api::server::Susu for SusuServer {
-    async fn register_chef(
+impl api::server::Essembly for EssemblyServer {
+    // async fn register_client(
+    //     &self,
+    //     request: Request<api::EssemblyClientRegistration>,
+    // ) -> EssemblyResult<EssemblyResponse> {
+    //     let message = request.into_inner().address.unwrap();
+
+    //     println!("received message: {:?}", message);
+
+    //     match save_to_db(message.clone()) {
+    //         Ok(result) => println!("Message save to DB {:?}", result),
+    //         Err(err) => eprintln!("Error saving to the database. {:?}", err),
+    //     }
+
+    //     Ok(Response::new(EssemblyResponse {
+    //         message: "Received Registration".to_string(),
+    //     }))
+    // }
+
+    async fn client_streaming_essembly(
         &self,
-        request: Request<api::SusuChefRegistration>,
-    ) -> SusuResult<SusuResponse> {
-        let message = request.into_inner().address.unwrap();
-
-        println!("received message: {:?}", message);
-
-        match save_to_db(message.clone()) {
-            Ok(result) => println!("Message save to DB {:?}", result),
-            Err(err) => eprintln!("Error saving to the database. {:?}", err),
-        }
-
-        Ok(Response::new(SusuResponse {
-            message: "Received Registration".to_string(),
-        }))
-    }
-
-    type ServerStreamingSusuStream = Stream;
-
-    async fn client_streaming_susu(
-        &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<SusuResponse> {
+        _: Request<Streaming<EssemblyRequest>>,
+    ) -> EssemblyResult<EssemblyResponse> {
         Err(Status::unimplemented("not implemented"))
     }
 
-    type BidirectionalStreamingSusuStream = Stream;
-
-    async fn bidirectional_streaming_susu(
+    async fn bidirectional_streaming_essembly(
         &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<Self::BidirectionalStreamingSusuStream> {
+        _: Request<Streaming<EssemblyRequest>>,
+    ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
         Err(Status::unimplemented("not implemented"))
     }
+
+    type BidirectionalStreamingEssemblyStream = Stream;
+    type ServerStreamingEssemblyStream = Stream;
+}
+
+async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
+    //Read config file
+    let config: Config = Config::new().load();
+
+    let pem = std::fs::read("essembly-api/tls/server.pem")?;
+    let key = &std::fs::read("essembly-api/tls/server.key")?;
+
+    let identity = Identity::from_pem(pem, key);
+
+    let client_ca_cert = tokio::fs::read("essembly-api/tls/client_ca.pem").await?;
+    let client_ca_cert = Certificate::from_pem(client_ca_cert);
+
+    let tls = ServerTlsConfig::with_rustls()
+        .identity(identity)
+        .client_ca_root(client_ca_cert)
+        .clone();
+
+    let addr = "127.0.0.1:50051".parse().unwrap();
+    let server = EssemblyServer::default();
+
+    Server::builder()
+        .tls_config(&tls)
+        .clone()
+        .add_service(api::server::EssemblyServer::new(server))
+        .serve(addr)
+        .await?;
+
+    Ok(())
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    logging::subscriber::set_global_default(logging::EssemblySubscriber::new(2)).unwrap();
 
-    let subscriber = SloggishSubscriber::new(2);
-    tracing::subscriber::set_global_default(subscriber).unwrap();
+    let app_span = span!(Level::TRACE, "", version = %5.0);
+    let _e = app_span.enter();
 
-    debug!("started");
-    warn!("started");
-    info!("started");
+    let server_span = span!(Level::TRACE, "server", host = "localhost", port = 8080);
+    let _e2 = server_span.enter();
+    info!("starting");
+    info!("listening");
+    let peer1 = span!(Level::TRACE, "conn", peer_addr = "82.9.9.9", port = 42381);
+    peer1.in_scope(|| {
+        debug!("connected");
+        debug!(length = 2, "message received");
+    });
+    let peer2 = span!(Level::TRACE, "conn", peer_addr = "8.8.8.8", port = 18230);
+    peer2.in_scope(|| {
+        debug!("connected");
+    });
+    peer1.in_scope(|| {
+        warn!(algo = "xor", "weak encryption requested");
+        debug!(length = 8, "response sent");
+        debug!("disconnected");
+    });
+    peer2.in_scope(|| {
+        debug!(length = 5, "message received");
+        debug!(length = 8, "response sent");
+        debug!("disconnected");
+    });
+    warn!("internal error");
+    info!("exit");
 
-    let cert = tokio::fs::read("tls/server.pem").await?;
-    let key = tokio::fs::read("tls/server.key").await?;
-
-    let identity = Identity::from_pem(cert, key);
-
-    let addr = "127.0.0.1:50051".parse().unwrap();
-    let server = SusuServer::default();
-
-    let subscriber = FmtSubscriber::builder() 
-        .with_max_level(Level::TRACE)
-        .finish();
-
-
-    Server::builder()
-        .tls_config(ServerTlsConfig::with_rustls().identity(identity))
-        .interceptor_fn(move |svc, req| {
-            let auth_header = req.headers().get("authorization").clone();
-
-            let authed = if let Some(auth_header) = auth_header {
-                auth_header == "Bearer some-secret-token"
-            } else {
-                false
-            };
-
-            let fut = svc.call(req);
-
-            async move {
-                if authed {
-                    fut.await
-                } else {
-                    // Cancel the inner future since we never await it
-                    // the IO never gets registered.
-                    drop(fut);
-                    let res = http::Response::builder()
-                        .header("grpc-status", "16")
-                        .body(BoxBody::empty())
-                        .unwrap();
-                    Ok(res)
-                }
-            }
-        })
-        .clone()
-        .add_service(api::server::SusuServer::new(server))
-        .serve(addr)
-        .await?;
+    run_server().await?;
 
     Ok(())
 }

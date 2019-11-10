@@ -2,4 +2,3 @@
 #[allow(unused_imports)]
 pub mod prelude;
 pub mod size;
-pub mod store;

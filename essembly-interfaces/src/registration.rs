@@ -1,5 +1,5 @@
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Chef {
+pub struct Client {
     #[prost(string, tag = "1")]
     pub first_name: std::string::String,
     #[prost(message, optional, tag = "2")]
@@ -40,10 +40,10 @@ pub struct LatLng {
     #[prost(double, tag = "2")]
     pub longitude: f64,
 }
-/// Status of a chef.
+/// Status of a client.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord, ::prost::Enumeration)]
 #[repr(i32)]
-pub enum ChefRegistrationStatus {
+pub enum ClientRegistrationStatus {
     Unknown = 0,
     RegistrationInProgress = 1,
     RegistrationCompleted = 2,

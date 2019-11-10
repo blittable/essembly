@@ -9,7 +9,7 @@ package registration;
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 
-message Chef {
+message Client {
   string first_name = 1;
   google.protobuf.StringValue middle_name = 2;
   google.protobuf.StringValue last_name = 3;
@@ -41,8 +41,8 @@ message LatLng {
 }
 
 
-  // Status of a chef.
-  enum ChefRegistrationStatus {
+  // Status of a client.
+  enum ClientRegistrationStatus {
     UNKNOWN = 0;
     REGISTRATION_IN_PROGRESS = 1;
     REGISTRATION_COMPLETED = 2;

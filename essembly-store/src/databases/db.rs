@@ -1,7 +1,9 @@
-use super::error;
+use essembly_core::error;
 
+#[allow(dead_code)]
 struct Sled {}
 
+#[allow(dead_code)]
 struct Record {}
 
 trait DB {
@@ -9,15 +11,16 @@ trait DB {
     fn save_record(r: Record) -> Result<(), error::Error>;
 }
 
+#[warn(unused_variables)]
 impl DB for Sled {
     type Format = Record;
 
-    fn save_record(r: Record) -> Result<(), error::Error> {
+    fn save_record(_r: Record) -> Result<(), error::Error> {
         Ok(())
     }
 }
 
-// impl SusuDB {
+// impl EssemblyDB {
 //     #[allow(dead_code)]
 //     pub(crate) async fn open(path: String) -> Result<File> {
 //         configure_tracing();

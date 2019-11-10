@@ -3,18 +3,15 @@
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
-use tracing::{debug, instrument, log, Subscriber};
-use tracing_attributes;
-
+use essembly_config::*;
 use essembly_interfaces::api::*;
 use essembly_interfaces::registration::*;
-
-mod config;
+use std::fs::File;
 
 use tokio;
 
 #[allow(dead_code)]
-static DATABASE_NAME: &str = "susu.db";
+static DATABASE_NAME: &str = "essembly.db";
 
 use sled::Db;
 
@@ -24,8 +21,8 @@ use tonic::transport::{Identity, Server, ServerTlsConfig};
 use tonic::{body::BoxBody, Request, Response, Status, Streaming};
 use tower::Service;
 
-type SusuResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<SusuResponse, Status>>;
+type EssemblyResult<T> = Result<Response<T>, Status>;
+type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
@@ -62,14 +59,14 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[derive(Default)]
-pub struct SusuServer;
+pub struct EssemblyServer;
 
 #[tonic::async_trait]
-impl server::Susu for SusuServer {
-    async fn register_chef(
+impl server::Essembly for EssemblyServer {
+    async fn register_client(
         &self,
-        request: Request<SusuChefRegistration>,
-    ) -> SusuResult<SusuResponse> {
+        request: Request<EssemblyClientRegistration>,
+    ) -> EssemblyResult<EssemblyResponse> {
         let message = request.into_inner().address.unwrap();
 
         println!("received message: {:?}", message);
@@ -79,26 +76,19 @@ impl server::Susu for SusuServer {
             Err(err) => eprintln!("Error saving to the database. {:?}", err),
         }
 
-        Ok(Response::new(SusuResponse {
+        Ok(Response::new(EssemblyResponse {
             message: "Received Registration".to_string(),
         }))
     }
 
-    type ServerStreamingSusuStream = Stream;
+    type ServerStreamingEssemblyStream = Stream;
 
-    async fn client_streaming_susu(
+    type BidirectionalStreamingEssemblyStream = Stream;
+
+    async fn bidirectional_streaming_essembly(
         &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<SusuResponse> {
-        Err(Status::unimplemented("not implemented"))
-    }
-
-    type BidirectionalStreamingSusuStream = Stream;
-
-    async fn bidirectional_streaming_susu(
-        &self,
-        _: Request<Streaming<SusuRequest>>,
-    ) -> SusuResult<Self::BidirectionalStreamingSusuStream> {
+        _: Request<Streaming<EssemblyRequest>>,
+    ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
         Err(Status::unimplemented("not implemented"))
     }
 }
@@ -106,15 +96,14 @@ impl server::Susu for SusuServer {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
-    let config: config::Config = config::Config::new().load();
-
-    println!("loaded Config with local db: {:?}", config.db_config.primary_db);
-    println!("loaded Config with remote db: {:?}", config.db_config.remote_db);
+    let config: Config = Config::new().load();
 
     //let config_string = tokio::fs::read(config).await?;
     //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();
 
     //Initialize DB
+    let mut cert_a = File::open("essembly-store/tls/server.pem")?;
+
     let cert = tokio::fs::read("tls/server.pem").await?;
     let key = tokio::fs::read("tls/server.key").await?;
 
@@ -122,7 +111,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let addr = "127.0.0.1:50051".parse().unwrap();
 
-    let server = SusuServer::default();
+    let server = EssemblyServer::default();
 
     Server::builder()
         .tls_config(ServerTlsConfig::with_rustls().identity(identity))
@@ -154,7 +143,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         })
         .clone()
-        .add_service(server::SusuServer::new(server))
+        .add_service(server::EssemblyServer::new(server))
         .serve(addr)
         .await?;
 
