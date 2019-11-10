@@ -13,12 +13,11 @@ pub struct Config {
     pub traffic_cop: TrafficCop,
     pub cli: CLI,
     pub db: DB,
-    pub api: API
+    pub api: API,
 }
 
 impl Config {
-    pub fn new() -> Config  {
-
+    pub fn new() -> Config {
         //Traffic Cop
         let traffic_cop_primary: TrafficCopDetails = TrafficCopDetails {
             ip: String::new(),
@@ -34,7 +33,7 @@ impl Config {
             primary: traffic_cop_primary,
             secondary: traffic_cop_secondary,
         };
-        
+
         //CLI
         let cli_primary: CliDetails = CliDetails {
             ip: String::new(),
@@ -48,7 +47,7 @@ impl Config {
             logging: String::new(),
         };
 
-        let _cli: CLI= CLI {
+        let _cli: CLI = CLI {
             primary: cli_primary,
             secondary: cli_secondary,
         };
@@ -71,7 +70,6 @@ impl Config {
             secondary: api_secondary,
         };
 
-
         //DB
         let db_primary: DbDetails = DbDetails {
             db_type: String::new(),
@@ -87,7 +85,7 @@ impl Config {
             logging: String::new(),
         };
 
-        let _db: DB= DB {
+        let _db: DB = DB {
             primary: db_primary,
             secondary: db_secondary,
         };
@@ -116,7 +114,6 @@ impl Config {
         toml_config
     }
     pub fn load_from_file(self, file: String) -> Self {
-
         let p = PathBuf::from(file);
 
         let mut f = File::open(p).unwrap();
@@ -126,11 +123,10 @@ impl Config {
         let toml_config: Config = toml::from_str(&buffer).unwrap();
 
         toml_config
-}
+    }
 }
 
 pub fn get_default_config_file() -> PathBuf {
-    
     let env = env::var_os("ESSEMBLY_CONFIG");
     dbg!("GETTING");
     dbg!(env);
@@ -142,12 +138,12 @@ pub fn get_default_config_file() -> PathBuf {
 
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct TrafficCop{
+pub struct TrafficCop {
     pub primary: TrafficCopDetails,
     pub secondary: TrafficCopDetails,
 }
 
-     //= TrafficCop_Details { ip = String::new(), port = String::new() },
+//= TrafficCop_Details { ip = String::new(), port = String::new() },
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "kebab-case")]
@@ -158,7 +154,7 @@ pub struct TrafficCopDetails {
 
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct API{
+pub struct API {
     pub primary: ApiDetails,
     pub secondary: ApiDetails,
 }
@@ -173,7 +169,7 @@ pub struct ApiDetails {
 
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct DB{
+pub struct DB {
     pub primary: DbDetails,
     pub secondary: DbDetails,
 }
@@ -189,7 +185,7 @@ pub struct DbDetails {
 
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
-pub struct CLI{
+pub struct CLI {
     pub primary: CliDetails,
     pub secondary: CliDetails,
 }
@@ -227,41 +223,44 @@ mod tests {
         );
 
         let test_config: Config = toml::from_str(&config).unwrap();
-        assert_ne!(test_config.traffic_cop.primary, test_config.traffic_cop.secondary);
+        assert_ne!(
+            test_config.traffic_cop.primary,
+            test_config.traffic_cop.secondary
+        );
         assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
-
 
     #[test]
     fn test_config_load() {
-
         let path = env::current_dir().unwrap();
 
-        dbg!("The current directory is:"); 
+        dbg!("The current directory is:");
         dbg!(path.display());
 
-        let test_config: Config = Config::new().load_from_file("src/config/test_config.toml".to_string());
+        let test_config: Config =
+            Config::new().load_from_file("src/config/test_config.toml".to_string());
         dbg!("Loaded:");
         dbg!(&test_config);
 
-        assert_ne!(test_config.traffic_cop.primary, test_config.traffic_cop.secondary);
+        assert_ne!(
+            test_config.traffic_cop.primary,
+            test_config.traffic_cop.secondary
+        );
         assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
 
-
     #[test]
     fn test_config_env_variable() {
-
         let path = env::current_dir().unwrap();
 
         let env_config_key = "ESSEMBLY_CONFIG";
         env::set_var(env_config_key, "../config.toml");
 
-        let test_config: Config = Config::new().load(); 
+        let test_config: Config = Config::new().load();
 
         dbg!(&test_config);
 
-    let test_config: Config = Config::new().load(); 
+        let test_config: Config = Config::new().load();
 
         // let config = concat!(
         //     "[traffic-cop]\n",
@@ -280,7 +279,10 @@ mod tests {
         //     "primary = { ip = \"localhost\", port = \"2234\"}\n",
         // );
 
-        assert_ne!(test_config.traffic_cop.primary, test_config.traffic_cop.secondary);
+        assert_ne!(
+            test_config.traffic_cop.primary,
+            test_config.traffic_cop.secondary
+        );
         assert_ne!(test_config.db.primary, test_config.db.secondary);
-}
+    }
 }

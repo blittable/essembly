@@ -33,13 +33,12 @@ pub mod client {
     }
     impl EssemblyClient<tonic::transport::Channel> {
         #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
-        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        pub fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
             D: std::convert::TryInto<tonic::transport::Endpoint>,
             D::Error: Into<StdError>,
         {
-            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
-            Ok(Self::new(conn))
+            tonic::transport::Endpoint::new(dst).map(|c| Self::new(c.channel()))
         }
     }
     impl<T> EssemblyClient<T>
@@ -151,7 +150,6 @@ pub mod server {
         #[doc = "Server streaming response type for the ServerStreamingEssembly method."]
         type ServerStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
             + Send
-            + Sync
             + 'static;
         async fn server_streaming_essembly(
             &self,
@@ -168,7 +166,6 @@ pub mod server {
         #[doc = "Server streaming response type for the BidirectionalStreamingEssembly method."]
         type BidirectionalStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
             + Send
-            + Sync
             + 'static;
         async fn bidirectional_streaming_essembly(
             &self,
