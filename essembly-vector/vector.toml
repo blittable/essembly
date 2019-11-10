@@ -1,0 +1,32 @@
+data_dir = "/var/lib/vector"
+
+# Input data. Change me to a valid input source.
+[sources.in]
+  type = "stdin"
+  host_key = "host"
+
+# Output data
+[sinks.out]
+  inputs   = ["in", "add_fields_transform"]
+  type     = "file"
+  path = "/var/lib/vector/essembly.log"
+  encoding = "text"
+
+[transforms.add_fields_transform]
+  type = "add_fields"
+  inputs = ["in"]
+
+  [transforms.add_fields_transform.fields]
+    # A key/value pair representing the new log fields to be added. Accepts all
+    # supported types. Use `.` for adding nested fields.
+    # 
+    # * required
+    # * no default
+    my_string_field = "DEBUG"
+    my_env_var_field = "${ESSEMBLY_CONFIG}"
+    my_int_field = 1
+    my_float_field = 1.2
+    my_bool_field = true
+    my_timestamp_field = 1979-05-27T00:32:00Z
+    my_nested_fields = {key1 = "value1", key2 = "value2"}
+    my_list = ["first", "second", "third"]
