@@ -1,14 +1,19 @@
-target_dir = "/tmp/target"
-file_size_bytes = 5
+[traffic-cop]
+primary = { ip = "localhost", port = "2888" }
+secondary = { ip = "222.222.222.2", port = "2888" }
 
-[report_config]
-output_dir = "/tmp/reports"
+[cli]
+primary = { ip = "localhost", port = "2234", logging = "trace" }
 
-[[tests]]
-test = "async"
-target_dir = "/tmp/target"
-iterations = 1
+[api]
+primary = { ip = "localhost", port = "2234", logging = "trace" }
+seondary = { ip = "localhost", port = "2234", logging = "trace" }
 
-[[tests]]
-test = "bsync"
-target_dir = "/tmp/target"
+[db]
+primary = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace" }
+secondary = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace" }
+
+[logger]
+primary = { ip = "localhost", port = "2234" }
+
+

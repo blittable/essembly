@@ -3,9 +3,9 @@
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
+use essembly_config::*;
 use essembly_interfaces::api::*;
 use essembly_interfaces::registration::*;
-use essembly_config::*;
 use std::fs::File;
 
 use tokio;
@@ -93,31 +93,16 @@ impl server::Essembly for EssemblyServer {
     }
 }
 
-
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
     let config: Config = Config::new().load();
 
-    println!(
-        "loaded Config with local db: {:?}",
-        config.db_config.primary_db
-    );
-    println!(
-        "loaded Config with remote db: {:?}",
-        config.db_config.remote_db
-    );
-
     //let config_string = tokio::fs::read(config).await?;
     //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();
 
     //Initialize DB
-     let mut cert_a = File::open("essembly-store/tls/server.pem")?;
-    println!(
-        "loaded Cert with remote db: {:?}",
-        config.db_config.remote_db
-    );
+    let mut cert_a = File::open("essembly-store/tls/server.pem")?;
 
     let cert = tokio::fs::read("tls/server.pem").await?;
     let key = tokio::fs::read("tls/server.key").await?;

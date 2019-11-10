@@ -187,7 +187,7 @@ fn get_config() -> PathBuf {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = &Config::new();
 
-    let primary_db = &config.db_config;
+    let primary_db = &config.db.primary;
     println!("Cli Config: {:?}", primary_db);
 
     Essembly::from_args().run().await?;

@@ -1,13 +1,18 @@
-[server-config]
-state = 'running'
+[traffic-cop]
+primary = { ip = "localhost", port = "2888" }
+secondary = { ip = "222.222.222.2", port = "2888" }
 
-[api-config]
-primary-api = { ip = "localhost", protocol = "grpc" }
+[cli]
+primary = { ip = "localhost", port = "2234", logging = "trace" }
 
-[db-config]
-primary-db = { db = "sled", ip = "localhost", protocol = "grpc" }
-remote-db = { db = "sled", ip = "localhost", protocol = "grpc" }
+[api]
+primary = { ip = "localhost", port = "2234", logging = "trace" }
 
-[topology-config]
-# traffic cops are the coordinators for distributed systems
-traffic-cop = { ip = ["localhost", "123.123.123.1:2342"] }
+[db]
+primary = {db = "sled",  ip = "localhost", port = "2234", logging = "trace" }
+secondary = {db = "sled",  ip = "localhost", port = "2234", logging = "trace" }
+
+[logger]
+primary = { ip = "localhost", port = "2234" }
+
+

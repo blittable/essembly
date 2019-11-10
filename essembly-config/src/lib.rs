@@ -10,30 +10,93 @@ use std::path::PathBuf;
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct Config {
-    pub server_config: ServerConfig,
-    pub db_config: DBConfig,
+    pub traffic_cop: TrafficCop,
+    pub cli: CLI,
+    pub db: DB,
+    pub api: API
 }
 
 impl Config {
-    pub fn new() -> Config {
-        let server = ServerConfig {
-            state: String::new(),
-        };
+    pub fn new() -> Config  {
 
-        let db_details: DB_Details = DB_Details {
-            db: String::new(),
+        //Traffic Cop
+        let traffic_cop_primary: TrafficCopDetails = TrafficCopDetails {
             ip: String::new(),
-            protocol: String::new(),
+            port: String::new(),
         };
 
-        let db = DBConfig {
-            primary_db: db_details.clone(),
-            remote_db: db_details.clone(),
+        let traffic_cop_secondary: TrafficCopDetails = TrafficCopDetails {
+            ip: String::new(),
+            port: String::new(),
+        };
+
+        let _traffic_cop: TrafficCop = TrafficCop {
+            primary: traffic_cop_primary,
+            secondary: traffic_cop_secondary,
+        };
+        
+        //CLI
+        let cli_primary: CliDetails = CliDetails {
+            ip: String::new(),
+            port: String::new(),
+            logging: String::new(),
+        };
+
+        let cli_secondary: CliDetails = CliDetails {
+            ip: String::new(),
+            port: String::new(),
+            logging: String::new(),
+        };
+
+        let _cli: CLI= CLI {
+            primary: cli_primary,
+            secondary: cli_secondary,
+        };
+
+        //API
+        let api_primary: ApiDetails = ApiDetails {
+            ip: String::new(),
+            port: String::new(),
+            logging: String::new(),
+        };
+
+        let api_secondary: ApiDetails = ApiDetails {
+            ip: String::new(),
+            port: String::new(),
+            logging: String::new(),
+        };
+
+        let _api: API = API {
+            primary: api_primary,
+            secondary: api_secondary,
+        };
+
+
+        //DB
+        let db_primary: DbDetails = DbDetails {
+            db_type: String::new(),
+            ip: String::new(),
+            port: String::new(),
+            logging: String::new(),
+        };
+
+        let db_secondary: DbDetails = DbDetails {
+            db_type: String::new(),
+            ip: String::new(),
+            port: String::new(),
+            logging: String::new(),
+        };
+
+        let _db: DB= DB {
+            primary: db_primary,
+            secondary: db_secondary,
         };
 
         Config {
-            server_config: server,
-            db_config: db,
+            traffic_cop: _traffic_cop,
+            cli: _cli,
+            db: _db,
+            api: _api,
         }
     }
 
@@ -60,37 +123,67 @@ pub fn default_config_file() -> PathBuf {
         .into()
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+
 #[serde(rename_all = "kebab-case")]
-pub struct ServerConfig {
-    pub state: String,
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct TrafficCop{
+    pub primary: TrafficCopDetails,
+    pub secondary: TrafficCopDetails,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+     //= TrafficCop_Details { ip = String::new(), port = String::new() },
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "kebab-case")]
-pub struct DB_Details {
-    pub db: String,
+pub struct TrafficCopDetails {
     pub ip: String,
-    pub protocol: String,
+    pub port: String,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
-pub struct primary_db {
-    primary_db: DB_Details,
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct API{
+    pub primary: ApiDetails,
+    pub secondary: ApiDetails,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "kebab-case")]
-pub struct remote_db {
-    remote_db: DB_Details,
+pub struct ApiDetails {
+    pub ip: String,
+    pub port: String,
+    pub logging: String,
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
-pub struct DBConfig {
-    pub primary_db: DB_Details,
-    pub remote_db: DB_Details,
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct DB{
+    pub primary: DbDetails,
+    pub secondary: DbDetails,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+pub struct DbDetails {
+    pub db_type: String,
+    pub ip: String,
+    pub port: String,
+    pub logging: String,
+}
+
+#[serde(rename_all = "kebab-case")]
+#[derive(Clone, Serialize, Deserialize, Debug)]
+pub struct CLI{
+    pub primary: CliDetails,
+    pub secondary: CliDetails,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+pub struct CliDetails {
+    pub ip: String,
+    pub port: String,
+    pub logging: String,
 }
 
 #[cfg(test)]
@@ -100,14 +193,23 @@ mod tests {
     #[test]
     fn test_config() {
         let config = concat!(
-            "[server-config]\n",
-            "state = \"grpc\"\n",
-            "[db-config]\n",
-            "primary-db = { db = \"sled\", ip = \"localhost\", protocol = \"grpc\" }\n",
-            "remote-db = { db = \"sled\", ip = \"localhost\", protocol = \"grpc\" }",
+            "[traffic-cop]\n",
+            "primary = { ip = \"localhost\", port = \"2888\" } \n",
+            "secondary = { ip = \"222.222.222.2\", port = \"2888\" } \n",
+            "[cli]\n",
+            "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "[api]\n",
+            "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "[db]\n",
+            "primary = { db-type = \"sled\", ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "secondary = { db-type = \"sled\", ip = \"222.222.222.2\", port = \"2234\", logging = \"trace\" }\n",
+            "[logger]\n",
+            "primary = { ip = \"localhost\", port = \"2234\"}\n",
         );
 
-        let list: Config = toml::from_str(&config).unwrap();
-        assert_ne!(list.db_config.primary_db.db, String::new());
+        let test_config: Config = toml::from_str(&config).unwrap();
+        //assert_ne!(test_config.traffic_cop.primary, String::new());
     }
 }
