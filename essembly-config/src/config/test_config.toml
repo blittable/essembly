@@ -4,14 +4,15 @@ secondary = { ip = "222.222.222.2", port = "2888" }
 
 [cli]
 primary = { ip = "localhost", port = "2234", logging = "trace" }
+secondary = { ip = "localhost", port = "2235", logging = "trace" }
 
 [api]
 primary = { ip = "localhost", port = "2234", logging = "trace" }
-seondary = { ip = "localhost", port = "2234", logging = "trace" }
+secondary = { ip = "localhost", port = "2234", logging = "trace" }
 
 [db]
 primary = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace" }
-secondary = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace" }
+secondary = {db-type = "sled",  ip = "localhost", port = "2236", logging = "trace" }
 
 [logger]
 primary = { ip = "localhost", port = "2234" }

@@ -7,7 +7,7 @@ use std::fs::File;
 use std::io::Read;
 use std::path::PathBuf;
 
-#[derive(Clone, Serialize, Deserialize)]
+#[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
 pub struct Config {
     pub traffic_cop: TrafficCop,
@@ -101,8 +101,12 @@ impl Config {
     }
 
     pub fn load(self) -> Self {
-        let config_source = default_config_file();
-        let mut f = File::open(config_source).unwrap();
+        let config_source = get_default_config_file();
+
+        dbg!("CONFIG SRC");
+        dbg!(&config_source);
+
+        let mut f = File::open(&config_source).unwrap();
 
         let mut buffer = String::new();
 
@@ -111,18 +115,30 @@ impl Config {
 
         toml_config
     }
+    pub fn load_from_file(self, file: String) -> Self {
+
+        let p = PathBuf::from(file);
+
+        let mut f = File::open(p).unwrap();
+        let mut buffer = String::new();
+
+        f.read_to_string(&mut buffer).unwrap();
+        let toml_config: Config = toml::from_str(&buffer).unwrap();
+
+        toml_config
+}
 }
 
-pub fn default_config_file() -> PathBuf {
-    let path = env::current_dir().unwrap();
+pub fn get_default_config_file() -> PathBuf {
+    
+    let env = env::var_os("ESSEMBLY_CONFIG");
+    dbg!("GETTING");
+    dbg!(env);
 
-    println!("Current Path: {:?}", path);
-
-    env::var_os("SUSUDB_CONFIG")
-        .unwrap_or_else(|| OsStr::new("./config.toml").to_os_string())
+    env::var_os("ESSEMBLY_CONFIG")
+        .unwrap_or_else(|| OsStr::new("config.toml").to_os_string())
         .into()
 }
-
 
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
@@ -189,9 +205,10 @@ pub struct CliDetails {
 #[cfg(test)]
 mod tests {
     use super::Config;
+    use std::env;
 
     #[test]
-    fn test_config() {
+    fn test_config_parse() {
         let config = concat!(
             "[traffic-cop]\n",
             "primary = { ip = \"localhost\", port = \"2888\" } \n",
@@ -210,6 +227,60 @@ mod tests {
         );
 
         let test_config: Config = toml::from_str(&config).unwrap();
-        //assert_ne!(test_config.traffic_cop.primary, String::new());
+        assert_ne!(test_config.traffic_cop.primary, test_config.traffic_cop.secondary);
+        assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
+
+
+    #[test]
+    fn test_config_load() {
+
+        let path = env::current_dir().unwrap();
+
+        dbg!("The current directory is:"); 
+        dbg!(path.display());
+
+        let test_config: Config = Config::new().load_from_file("src/config/test_config.toml".to_string());
+        dbg!("Loaded:");
+        dbg!(&test_config);
+
+        assert_ne!(test_config.traffic_cop.primary, test_config.traffic_cop.secondary);
+        assert_ne!(test_config.db.primary, test_config.db.secondary);
+    }
+
+
+    #[test]
+    fn test_config_env_variable() {
+
+        let path = env::current_dir().unwrap();
+
+        let env_config_key = "ESSEMBLY_CONFIG";
+        env::set_var(env_config_key, "../config.toml");
+
+        let test_config: Config = Config::new().load(); 
+
+        dbg!(&test_config);
+
+    let test_config: Config = Config::new().load(); 
+
+        // let config = concat!(
+        //     "[traffic-cop]\n",
+        //     "primary = { ip = \"localhost\", port = \"2888\" } \n",
+        //     "secondary = { ip = \"222.222.222.2\", port = \"2888\" } \n",
+        //     "[cli]\n",
+        //     "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+        //     "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+        //     "[api]\n",
+        //     "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+        //     "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+        //     "[db]\n",
+        //     "primary = { db-type = \"sled\", ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+        //     "secondary = { db-type = \"sled\", ip = \"222.222.222.2\", port = \"2234\", logging = \"trace\" }\n",
+        //     "[logger]\n",
+        //     "primary = { ip = \"localhost\", port = \"2234\"}\n",
+        // );
+
+        assert_ne!(test_config.traffic_cop.primary, test_config.traffic_cop.secondary);
+        assert_ne!(test_config.db.primary, test_config.db.secondary);
+}
 }

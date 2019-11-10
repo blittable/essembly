@@ -101,9 +101,6 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
     let config: Config = Config::new().load();
 
-
-
-
     let pem = std::fs::read("essembly-api/tls/server.pem")?;
     let key = &std::fs::read("essembly-api/tls/server.key")?;
 
