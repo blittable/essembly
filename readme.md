@@ -4,6 +4,18 @@
 
 ![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.svg)
 
+Dependencies:
+
+         Cli
+          |
+
+       Essembly
+          |
+
+Interfaces, Core, Logging, API 
+
+
+   
 ### Testing
 
 Most code is tested in the .rs files themselves.  The generated code (from the protobufs) is tested in the essembly-test project (not a release assembly).  

@@ -5,7 +5,6 @@ data_dir = "/var/lib/vector"
   type = "stdin"
   host_key = "host"
 
-
 # Output data
 [sinks.out]
   inputs   = ["add_fields_transform"]

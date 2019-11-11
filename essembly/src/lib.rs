@@ -24,7 +24,7 @@ pub mod core;
 pub mod interfaces;
 #[cfg(feature = "inventory")]
 pub mod inventory;
-#[cfg(feature = "logger")]
+#[cfg(feature = "logging")]
 pub mod logging;
 #[cfg(feature = "store")]
 pub mod store;

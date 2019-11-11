@@ -12,7 +12,6 @@ There are 3 major sections to focus
 
     * ### Developer Team
         **Code Review**
-
         **Coding Standard**
 
     * ### Follow-up
@@ -21,6 +20,7 @@ There are 3 major sections to focus
         Fixed time
     
 * ## Development Process
+
     * ### Milestone
         **Task**
 
