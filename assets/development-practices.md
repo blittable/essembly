@@ -5,39 +5,45 @@ There are 3 major sections to focus
 
 * ## Team Collaboration
     * ### Stakeholder & Product Owner
-        **User Story**
+        * #### User Story
 
     * ### Product Owner & Developer
-        **Tasks**
+        * #### Tasks
 
     * ### Developer Team
-        **Code Review**
+        * #### Code Review
 
-        **Coding Standard**
+        * #### Coding Standard
+
+        * #### Source Control  
+            * **Pull Request/Merge Request**  
+                Developer need to create the new branch corresponding to the task # and tiny description. The merge process will accept by lead developer.
 
     * ### Follow-up
-        **Relationship of User Story x Time**  
-        Fixed scope  
-        Fixed time
+        * #### Relationship of User Story x Time 
+            * **Fixed scope**  
+            * **Fixed time**
     
 * ## Development Process
     * ### Milestone
-        **Task**
+        * #### Task
 
     * ### Development
-        **Framework Agreement**  
-            Payload/Input  
-            Response/Output  
+        * #### Framework Agreement
+            * **Payload/Input** 
+            * **Response/Output**
 
-        **Transparency**  
-            Process Timeline  
-            Module Interaction  
+        * #### Transparency
+            * **Process Timeline**
+            * **Module Interaction**
 
-        **Logging**  
-            Activity Archive
+        * #### Logging
+            * **Activity Archive**
     
     * ### Deployment
-        **Release Cycle**  
-            Versioning
+        * ### Release Cycle
+            * **Versioning**
     
 * ## Business As Usual
+    * ### Storage
+        * **Backup**
