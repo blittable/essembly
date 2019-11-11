@@ -1,2 +1,3 @@
 ## Overview
-essembly-cli is the reference client application for essembly.  It sends requests over grpc to the api.  It depends on client generated stubs from the protobuf files and the essembly-core library for business-logic dependencies.
+essembly-config is the configuration crate.  
+It is normally used to read, parse, and create Config's for other crates. 

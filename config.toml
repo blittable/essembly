@@ -15,6 +15,7 @@ primary = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace"
 secondary = {db-type = "sled",  ip = "localhost", port = "2334", logging = "trace" }
 
 [logger]
-primary = { ip = "localhost", port = "2234" }
+local = { directory = "/var/lib/vector" }
+remote = { ip = "123.333.333.23", port = "2234" }
 
 

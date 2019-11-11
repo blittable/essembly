@@ -27,6 +27,8 @@ use tonic::{
     Request, Response, Status, Streaming,
 };
 
+use tracing::instrument;
+
 type EssemblyResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
@@ -61,23 +63,23 @@ pub struct EssemblyServer;
 
 #[tonic::async_trait]
 impl api::server::Essembly for EssemblyServer {
-    // async fn register_client(
-    //     &self,
-    //     request: Request<api::EssemblyClientRegistration>,
-    // ) -> EssemblyResult<EssemblyResponse> {
-    //     let message = request.into_inner().address.unwrap();
+    async fn register_client(
+        &self,
+        request: Request<api::EssemblyClientRegistration>,
+    ) -> EssemblyResult<EssemblyResponse> {
+        let message = request.into_inner().address.unwrap();
 
-    //     println!("received message: {:?}", message);
+        println!("received message: {:?}", message);
 
-    //     match save_to_db(message.clone()) {
-    //         Ok(result) => println!("Message save to DB {:?}", result),
-    //         Err(err) => eprintln!("Error saving to the database. {:?}", err),
-    //     }
+        match save_to_db(message.clone()) {
+            Ok(result) => println!("Message save to DB {:?}", result),
+            Err(err) => eprintln!("Error saving to the database. {:?}", err),
+        }
 
-    //     Ok(Response::new(EssemblyResponse {
-    //         message: "Received Registration".to_string(),
-    //     }))
-    // }
+        Ok(Response::new(EssemblyResponse {
+            message: "Received Registration".to_string(),
+        }))
+    }
 
     async fn client_streaming_essembly(
         &self,
@@ -97,29 +99,29 @@ impl api::server::Essembly for EssemblyServer {
     type ServerStreamingEssemblyStream = Stream;
 }
 
+#[instrument]
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
     let config: Config = Config::new().load();
 
     let pem = std::fs::read("essembly-api/tls/server.pem")?;
-    let key = &std::fs::read("essembly-api/tls/server.key")?;
+    let key = std::fs::read("essembly-api/tls/server.key")?;
 
     let identity = Identity::from_pem(pem, key);
 
-    let client_ca_cert = tokio::fs::read("essembly-api/tls/client_ca.pem").await?;
-    let client_ca_cert = Certificate::from_pem(client_ca_cert);
+    let client_ca_cert_file = tokio::fs::read("essembly-api/tls/client_ca.pem").await?;
+    let client_ca_cert = Certificate::from_pem(client_ca_cert_file);
 
     let tls = ServerTlsConfig::with_rustls()
         .identity(identity)
         .client_ca_root(client_ca_cert)
         .clone();
 
-    let addr = "127.0.0.1:50051".parse().unwrap();
+    let addr = "[::1]:50051".parse().unwrap();
     let server = EssemblyServer::default();
 
     Server::builder()
         .tls_config(&tls)
-        .clone()
         .add_service(api::server::EssemblyServer::new(server))
         .serve(addr)
         .await?;
@@ -140,25 +142,25 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info!("listening");
     let peer1 = span!(Level::TRACE, "conn", peer_addr = "82.9.9.9", port = 42381);
     peer1.in_scope(|| {
-        debug!("connected");
-        debug!(length = 2, "message received");
+    debug!("connected");
+    debug!(length = 2, "message received");
     });
-    let peer2 = span!(Level::TRACE, "conn", peer_addr = "8.8.8.8", port = 18230);
-    peer2.in_scope(|| {
-        debug!("connected");
-    });
-    peer1.in_scope(|| {
-        warn!(algo = "xor", "weak encryption requested");
-        debug!(length = 8, "response sent");
-        debug!("disconnected");
-    });
-    peer2.in_scope(|| {
-        debug!(length = 5, "message received");
-        debug!(length = 8, "response sent");
-        debug!("disconnected");
-    });
-    warn!("internal error");
-    info!("exit");
+    // let peer2 = span!(Level::TRACE, "conn", peer_addr = "8.8.8.8", port = 18230);
+    // peer2.in_scope(|| {
+    //     debug!("connected");
+    // });
+    // peer1.in_scope(|| {
+    //     warn!(algo = "xor", "weak encryption requested");
+    //     debug!(length = 8, "response sent");
+    //     debug!("disconnected");
+    // });
+    // peer2.in_scope(|| {
+    //     debug!(length = 5, "message received");
+    //     debug!(length = 8, "response sent");
+    //     debug!("disconnected");
+    // });
+    // warn!("internal error");
+    info!("Starting up essembly api server...");
 
     run_server().await?;
 
