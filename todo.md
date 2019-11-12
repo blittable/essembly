@@ -20,10 +20,15 @@ Project Overview:
 - [] cli loads config 
 
 - [] log story 
+
+    - secondary cli X
+    - 
 - [] cli client - time modules 
 - [] intgegrate permissions 
 - [] vector logging sync
 - [] research wasm/wasi integration - in-place updates?
+- [] research embedded business rules - Lua integration?
+- [] research fuzzing for reverse-engineering. 
 
 - [] Kubernetes or docker-compose:
 

@@ -10,7 +10,7 @@ There are 3 major sections to focus
 
             * **Process Timeline**  
                 To visualize set of processes and comsuming time as timeline.
-
+                
             * **Module Interaction**  
                 To visualize interaction of modules in the process into graph form.
             
@@ -31,7 +31,6 @@ There are 3 major sections to focus
                 {
                     public static string ASC = "asc";
                     public static string DESC = "desc";
-
                     public string by { get; set; }
                     public string order { get; set; }
                 }
@@ -173,7 +172,6 @@ There are 3 major sections to focus
             * **Fixed time**
                 To determine what the set of features that we can release with specific period.
     
-* ## Business As Usual
     * ### Storage
         * **Backup**
             To store changes of database, server, versions, etc...

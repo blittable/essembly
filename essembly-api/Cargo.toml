@@ -17,7 +17,7 @@ futures-preview = { version = "=0.3.0-alpha.19", default-features = false, featu
 tower = "0.3.0-alpha.2"
 http = "0.1"
 
-
+# logging = { path = "../essembly-core/logging" }
 tracing = "0.1.5"
 tracing-subscriber = { version = "0.1", path = "../../tracing/tracing-subscriber", features = ["json"] }
 tracing-futures = { path = "../../tracing/tracing-futures", default-features = false, features = ["std-future"] }
@@ -27,7 +27,7 @@ tracing-attributes = { path = "../../tracing/tracing-attributes" }
 path = "../essembly"
 version = "0.1.0-alpha.1"
 default-features = false 
-features = ["logger", "interfaces", "config"]
+features = ["logger", "interfaces", "config", "simple"]
 
 # The development profile, used for `cargo build`
 [profile.dev]

@@ -60,7 +60,6 @@ pub struct EssemblySubscriber {
     current: CurrentSpanPerThread,
     indent_amount: usize,
     stderr: io::Stderr,
-    stdout: io::Stdout,
     stack: Mutex<Vec<Id>>,
     spans: Mutex<HashMap<Id, Span>>,
     ids: AtomicUsize,
@@ -145,7 +144,6 @@ impl EssemblySubscriber {
             current: CurrentSpanPerThread::new(),
             indent_amount,
             stderr: io::stderr(),
-            stdout: io::stdout(),
             stack: Mutex::new(vec![]),
             spans: Mutex::new(HashMap::new()),
             ids: AtomicUsize::new(1),
@@ -214,7 +212,6 @@ impl Subscriber for EssemblySubscriber {
     fn enter(&self, span_id: &tracing::Id) {
         self.current.enter(span_id.clone());
         let mut stderr = self.stderr.lock();
-        let mut stdout = self.stdout.lock();
         let mut stack = self.stack.lock().unwrap();
         let spans = self.spans.lock().unwrap();
         let data = spans.get(span_id);
@@ -240,27 +237,16 @@ impl Subscriber for EssemblySubscriber {
                 self.print_kvs(&mut stderr, data.kvs.iter().map(|(k, v)| (k, v)), "")
                     .unwrap();
             }
-            write!(&mut stdout, "\n").unwrap();
             write!(&mut stderr, "\n").unwrap();
         }
     }
 
     fn event(&self, event: &tracing::Event<'_>) {
         let mut stderr = self.stderr.lock();
-        let mut stdout = self.stdout.lock();
         let indent = self.stack.lock().unwrap().len();
         self.print_indent(&mut stderr, indent).unwrap();
-        self.print_indent(&mut stdout, indent).unwrap();
         write!(
             &mut stderr,
-            "{timestamp} {level} {target}",
-            timestamp = humantime::format_rfc3339_seconds(SystemTime::now()),
-            level = ColorLevel(event.metadata().level()),
-            target = &event.metadata().target(),
-        )
-        .unwrap();
-        write!(
-            &mut stdout,
             "{timestamp} {level} {target}",
             timestamp = humantime::format_rfc3339_seconds(SystemTime::now()),
             level = ColorLevel(event.metadata().level()),

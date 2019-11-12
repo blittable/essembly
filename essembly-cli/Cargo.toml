@@ -17,13 +17,13 @@ serde = "1.0"
 roxmltree = "0.7.1"
 failure = "0.1.5"
 
-[dependencies.essembly-core]
-path = "../essembly-core"
+# The Client Apps use the re-exported crates.  They should not be directly imported
+[dependencies.essembly]
+path = "../essembly"
 version = "0.1.0-alpha.1"
+default-features = false
+features = [ "logger", "core", "config" ]
 
-[dependencies.essembly-config]
-path = "../essembly-config"
-version = "0.1.0-alpha.1"
 
 [dev-dependencies]
 rand = "0.7"

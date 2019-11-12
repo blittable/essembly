@@ -91,7 +91,6 @@ impl Config {
             secondary: db_secondary,
         };
 
-
         //Logger
         let _local: LoggerLocal = LoggerLocal {
             directory: String::new(),
@@ -102,14 +101,10 @@ impl Config {
             port: String::new(),
         };
 
-        let _logger: Logger= Logger {
+        let _logger: Logger = Logger {
             local: _local,
             remote: _remote,
         };
-
-
-
-
 
         Config {
             traffic_cop: _traffic_cop,
@@ -123,8 +118,8 @@ impl Config {
     pub fn load(self) -> Self {
         let config_source = get_default_config_file();
 
-        dbg!("CONFIG SRC");
-        dbg!(&config_source);
+        println!("\n");
+        println!("Loading configuration file from {:?}", &config_source);
 
         let mut f = File::open(&config_source).unwrap();
 
@@ -135,6 +130,7 @@ impl Config {
 
         toml_config
     }
+
     pub fn load_from_file(self, file: String) -> Self {
         let p = PathBuf::from(file);
 
@@ -149,10 +145,6 @@ impl Config {
 }
 
 pub fn get_default_config_file() -> PathBuf {
-    let env = env::var_os("ESSEMBLY_CONFIG");
-    dbg!("GETTING");
-    dbg!(env);
-
     env::var_os("ESSEMBLY_CONFIG")
         .unwrap_or_else(|| OsStr::new("config.toml").to_os_string())
         .into()
@@ -240,8 +232,6 @@ pub struct LoggerRemote {
     pub port: String,
 }
 
-
-
 #[cfg(test)]
 mod tests {
     use super::Config;
@@ -294,22 +284,19 @@ mod tests {
         assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
 
-
     #[test]
     fn test_config_logger() {
-
         let test_config: Config =
             Config::new().load_from_file("src/config/test_config.toml".to_string());
 
-        let test_local_logger_empty = super::LoggerLocal { directory: String::new() };
+        let test_local_logger_empty = super::LoggerLocal {
+            directory: String::new(),
+        };
 
-        assert_ne!(
-            test_config.logger.local, test_local_logger_empty
-        );
+        assert_ne!(test_config.logger.local, test_local_logger_empty);
 
         assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
-
 
     #[test]
     fn test_config_env_variable() {

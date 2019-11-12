@@ -3,13 +3,12 @@
 
 use clap::arg_enum;
 use core::str::FromStr;
-use essembly_cli::importer::Parser;
-use essembly_cli::importer::XLBRParser;
-use essembly_config::Config;
+use self::importer::Parser;
+use self::importer::XLBRParser;
+use essembly::config::Config;
+use essembly::logging::*;
 use failure::Fallible;
 use std::env;
-use std::thread;
-use std::time::Duration;
 use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::string::String;
@@ -175,23 +174,16 @@ arg_enum! {
     }
 }
 
-fn get_config() -> PathBuf {
-    let path = env::current_dir().unwrap();
-
-    println!("Current Path: {:?}", path);
-
-    env::var_os("ESSEMBLY_CONFIG")
-        .unwrap_or_else(|| OsStr::new("config.toml").to_os_string())
-        .into()
-}
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let config = &Config::new();
 
-    let primary_db = &config.db.primary;
-    println!("Cli Config: {:?}", primary_db);
+    //Initialize the client with its configuration
+    let config = &Config::new().load();
+    let primary = &config.cli.primary;
+    println!("Cli Config: {:?}", primary);
 
+    //If we are logging, then pass the configuration logging value to essembly::logger
+    
     Essembly::from_args().run().await?;
     Ok(())
 }

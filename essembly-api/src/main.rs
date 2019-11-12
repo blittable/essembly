@@ -4,14 +4,11 @@
 pub use serde_derive::{Deserialize, Serialize};
 
 use essembly::interfaces::*;
-use tracing;
+use essembly::logging::*;
 
-use tokio::prelude::Future;
 #[allow(unused_imports)]
 use tracing::{debug, error, event, info, span, warn, Level};
-
-use essembly::core::*;
-use essembly::logging;
+use tracing::subscriber;
 
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "essembly.db";
@@ -20,25 +17,16 @@ use essembly::config::Config;
 use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse};
 
 use std::collections::VecDeque;
-use std::fs::File;
 use std::str;
 use tonic::{
     transport::{Certificate, Identity, Server, ServerTlsConfig},
     Request, Response, Status, Streaming,
 };
 
-use tracing::instrument;
-
 type EssemblyResult<T> = Result<Response<T>, Status>;
 type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::Error>> {
-    debug!("started");
-    warn!("started");
-    info!("started");
-
-    event!(Level::INFO, "Dogs and Cats");
-
     // #[cfg(debug)] {
     //     println!("Data file loaded at: {:?}", path);
     // }
@@ -67,12 +55,20 @@ impl api::server::Essembly for EssemblyServer {
         &self,
         request: Request<api::EssemblyClientRegistration>,
     ) -> EssemblyResult<EssemblyResponse> {
-        let message = request.into_inner().address.unwrap();
 
-        println!("received message: {:?}", message);
+    event!(Level::INFO, "Server request received.");
+
+    let message = request.into_inner().address.unwrap();
+    let peer = span!(Level::INFO, "request", peer_addr = "82.9.9.9", port = 42381);
+
+    peer.in_scope(|| {
+    debug!("connected");
+    debug!(length = 2, "message received");
+    info!("received message: {:?}", message);
+    });
 
         match save_to_db(message.clone()) {
-            Ok(result) => println!("Message save to DB {:?}", result),
+            Ok(result) => info!("Message save to DB {:?}", result),
             Err(err) => eprintln!("Error saving to the database. {:?}", err),
         }
 
@@ -99,8 +95,10 @@ impl api::server::Essembly for EssemblyServer {
     type ServerStreamingEssemblyStream = Stream;
 }
 
-#[instrument]
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
+
+    //subscriber::set_global_default(essembly::logging::trace::EssemblySubscriber::new(2)).unwrap();
+    info!("Starting up essembly api server...");
     //Read config file
     let config: Config = Config::new().load();
 
@@ -131,36 +129,16 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    logging::subscriber::set_global_default(logging::EssemblySubscriber::new(2)).unwrap();
 
-    let app_span = span!(Level::TRACE, "", version = %5.0);
-    let _e = app_span.enter();
+    let config = Config::new().load();
 
-    let server_span = span!(Level::TRACE, "server", host = "localhost", port = 8080);
-    let _e2 = server_span.enter();
-    info!("starting");
-    info!("listening");
-    let peer1 = span!(Level::TRACE, "conn", peer_addr = "82.9.9.9", port = 42381);
-    peer1.in_scope(|| {
-    debug!("connected");
-    debug!(length = 2, "message received");
-    });
-    // let peer2 = span!(Level::TRACE, "conn", peer_addr = "8.8.8.8", port = 18230);
-    // peer2.in_scope(|| {
-    //     debug!("connected");
-    // });
-    // peer1.in_scope(|| {
-    //     warn!(algo = "xor", "weak encryption requested");
-    //     debug!(length = 8, "response sent");
-    //     debug!("disconnected");
-    // });
-    // peer2.in_scope(|| {
-    //     debug!(length = 5, "message received");
-    //     debug!(length = 8, "response sent");
-    //     debug!("disconnected");
-    // });
-    // warn!("internal error");
-    info!("Starting up essembly api server...");
+    println!("API configuration: {:?}", config.api);
+    println!("API logging configuration: {:?}", config.logger);
+
+    let logger = &mut essembly::logging::simple::SimpleLogger::new();
+    logger.initialize(essembly::logging::Level::DEBUG);
+
+    logger.log(essembly::logging::Level::DEBUG, "foo".to_string());
 
     run_server().await?;
 
