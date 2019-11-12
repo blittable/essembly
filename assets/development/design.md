@@ -115,3 +115,5 @@ Flow:
 requirement doc -> mock integration test -> core -> primitives (security / entity) -> module -> (optional api) ->   
 
 Question: Can any module ever run directly against the database?
+
+

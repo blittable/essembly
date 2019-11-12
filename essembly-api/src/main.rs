@@ -15,6 +15,7 @@ static DATABASE_NAME: &str = "essembly.db";
 
 use essembly::config::Config;
 use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse};
+use essembly::logging::trace::EssemblySubscriber;
 
 use std::collections::VecDeque;
 use std::str;
@@ -136,9 +137,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("API logging configuration: {:?}", config.logger);
 
     let logger = &mut essembly::logging::simple::SimpleLogger::new();
+
     logger.initialize(essembly::logging::Level::DEBUG);
 
     logger.log(essembly::logging::Level::DEBUG, "foo".to_string());
+
+    let subscriber = tracing_subscriber::fmt::Subscriber::builder()
+        .finish();
+    tracing::subscriber::set_global_default(subscriber).unwrap();
+     info!("server started");
+
+
+
+
+
 
     run_server().await?;
 

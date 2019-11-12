@@ -53,3 +53,26 @@ All crates rely on a single configuration file, `config.toml`.  The location of 
 
 There are 4 levels
 trace (everything), debug(almost everything), error (big problems), , warn (little problems), info (direct messages)
+
+#### Logging
+
+Currently, the logging is using the tokio-trace library (`subscriber` below).  There is also a toy simple logger that does *not* yet implement the std::log trait.
+
+(essembly-api sample)
+
+```rust
+ let config = Config::new().load();
+ println!("API configuration: {:?}", config.api);
+ println!("API logging configuration: {:?}", config.logger);
+
+ let logger = &mut essembly::logging::simple::SimpleLogger::new();
+ logger.initialize(essembly::logging::Level::DEBUG);
+ logger.log(essembly::logging::Level::DEBUG, "foo".to_string());
+
+ let subscriber = tracing_subscriber::fmt::Subscriber::builder()
+        .finish();
+    tracing::subscriber::set_global_default(subscriber).unwrap();
+
+ info!("server started");
+```
+

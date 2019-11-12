@@ -7,5 +7,4 @@ members = ["essembly",
 "essembly-api", 
 "essembly-cli", 
 "essembly-interfaces",
-"essembly-vector",
 ]

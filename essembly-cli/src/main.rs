@@ -7,6 +7,8 @@ use self::importer::Parser;
 use self::importer::XLBRParser;
 use essembly::config::Config;
 use essembly::logging::*;
+use tracing::*;
+use tracing::subscriber;
 use failure::Fallible;
 use std::env;
 use std::ffi::OsStr;
@@ -180,7 +182,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Initialize the client with its configuration
     let config = &Config::new().load();
     let primary = &config.cli.primary;
-    println!("Cli Config: {:?}", primary);
+    println!("cli config: {:?}", primary);
+
+    let subscriber = tracing_subscriber::fmt::Subscriber::builder()
+        .finish();
+    tracing::subscriber::set_global_default(subscriber).unwrap();
+     info!("cli runtime started");
 
     //If we are logging, then pass the configuration logging value to essembly::logger
     
@@ -188,19 +195,3 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-
-// fn main() -> Result<(), Box<dyn std::error::Error>> {
-//     let config = &Config::new();
-
-//     let primary_db = &config.db.primary;
-//     println!("Cli Config: {:?}", primary_db);
-
-//     loop {
-//         thread::sleep(Duration::from_secs(2));
-//         println!("Cli Config: {:?}", primary_db);
-
-//     }
-
-//     //Essembly::from_args().run().await?;
-//     Ok(())
-// }
