@@ -189,6 +189,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing::subscriber::set_global_default(subscriber).unwrap();
      info!("cli runtime started");
 
+     debug!("config: {:?}", config);
+
     //If we are logging, then pass the configuration logging value to essembly::logger
     
     Essembly::from_args().run().await?;

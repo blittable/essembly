@@ -7,7 +7,7 @@ use essembly::interfaces::*;
 use essembly::logging::*;
 
 #[allow(unused_imports)]
-use tracing::{debug, error, event, info, span, warn, Level};
+use tracing::{debug, error, trace, event, info, span, warn, Level};
 use tracing::subscriber;
 
 #[allow(dead_code)]
@@ -131,10 +131,7 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-    let config = Config::new().load();
-
-    println!("API configuration: {:?}", config.api);
-    println!("API logging configuration: {:?}", config.logger);
+    let config = &Config::new().load();
 
     let logger = &mut essembly::logging::simple::SimpleLogger::new();
 
@@ -144,14 +141,31 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let subscriber = tracing_subscriber::fmt::Subscriber::builder()
         .finish();
+
     tracing::subscriber::set_global_default(subscriber).unwrap();
-     info!("server started");
+
+    info!("server started");
+    trace!("tracing...");
+    warn!("tracing...");
+
+     let span = span!(
+        Level::DEBUG,
+        "starting",
+        ip = ?config.cli.primary.ip,
+        port = ?config.cli.primary.port,
+        log_level = ?config.cli.primary.logging,
+    );
 
 
 
 
+    debug!("API configuration: {:?}", config.api);
+    debug!("API logging configuration: {:?}", config.logger);
+    tracing::debug!("API db configuration: {:?}", config.db);
 
+    event!(Level::DEBUG, "something happened");
 
+    let _enter = span.enter();
     run_server().await?;
 
     Ok(())

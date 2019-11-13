@@ -31,7 +31,7 @@ use essembly::logging::*;
 
 
 #[tokio::main]
-#[instrument]
+#[tracing_attributes::instrument]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Calling client packet send...");
     run_client().await?;

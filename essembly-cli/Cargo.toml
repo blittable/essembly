@@ -21,15 +21,12 @@ tracing-subscriber = { version = "0.1", path = "../../tracing/tracing-subscriber
 tracing-futures = { path = "../../tracing/tracing-futures", default-features = false, features = ["std-future"] }
 tracing-attributes = { path = "../../tracing/tracing-attributes" }
 
-# The Client Apps use the re-exported crates.  They should not be directly imported
+# The Client Apps use the re-exported crates.  They should not be directly imported 
 [dependencies.essembly]
 path = "../essembly"
 version = "0.1.0-alpha.1"
 default-features = false
 features = [ "logger", "core", "config" ]
 
-
-[dev-dependencies]
-rand = "0.7"
 
 

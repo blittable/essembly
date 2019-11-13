@@ -17,24 +17,23 @@ Project Overview:
 - [x] protos should compile to their own crate 
 - [x] separate test crate
 - [x] remove database refs from api 
-- [] cli loads config 
+- [x] cli loads config 
 
-- [] log story 
-
-    - secondary cli X
-    - 
-- [] cli client - time modules 
+- [x] log story 
 - [] intgegrate permissions 
-- [] vector logging sync
-- [] research wasm/wasi integration - in-place updates?
+- [x] vector logging sync
+- [x] research wasm/wasi integration - in-place updates?
 - [] research embedded business rules - Lua integration?
 - [] research fuzzing for reverse-engineering. 
+- [] Kubernetes or docker-compose
+- [] Mock test
 
-- [] Kubernetes or docker-compose:
+Concrete:
+- [] Logging Simple vs. Trace
+- [] Real localization 
+- [] Logging level based on config file reading  - https://github.com/tokio-rs/tracing/blob/bec40bc9624bcf4d26d3a5c622fdbefe4b853854/nightly-examples/examples/proxy_server.rs#L161
+- [] Message to Store - format?  
 
-1. Start the DB Service
-2. Start the API Service
-3. Run a test client ?
 
 Todo Tests:
 [x] Unit test to check missing config.toml is handled correctly fo API 

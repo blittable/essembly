@@ -31,7 +31,7 @@ features = ["logger", "interfaces", "config", "simple"]
 
 # The development profile, used for `cargo build`
 [profile.dev]
-opt-level = 3  
+opt-level = 4  
 debug = true   
 
 
