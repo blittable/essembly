@@ -14,10 +14,14 @@ ID	Description	Story
 13	Loyalty Program	Users can create a loyalty program or integrate with 3rd party loyalty programs
 14	Employee Time Tracking and Reports	A system can track employees hours as well as sales (for commission)
 15	Reports	A user can run multiple reports 
+16  Tiered pricing  Based on a customer or product profile, items can be priced differently.
+17  Delivery system integration.    Users can receive orders from 3rd parties via an API.
+18  
+
 	Supported sync between POS Sessions Shop && Retaurant (table, floor, event change orders, event change order lines ..)	
 	Multi Branch/Store Applied for POS Orders, POS Sessions, Delivery Orders, POS Payment, Account Entries, Account Invoice, Account Bank Statement.	
 	Each Cashiers,Users have assigned Branch, only see datas of Branch Assgined (POS Sessions, Delivery Orders, POS Payment, Account Entries, Account Invoice, Account Bank Statement)	
-	Responsive tablet and mobile web app. Responsive mobile odoo EE app	
+	Responsive tablet and mobile web app. Responsive mobile 
 	Supported large datas up to 3,000,000 each table products, customers, pos orders and invoices	
 	Light theme and dark theme	
 	Daily report sale total by day, month	
@@ -26,7 +30,7 @@ ID	Description	Story
 	Auto suggestion lot name with product selected	
 	Quickly add partners, products and payment order	
 	Sale suggestion for cashiers fast selling products	
-	Re-directly odoo login of cashiers, waiters to POS screen	
+	Re-directly login of cashiers, waiters to POS screen	
 	POS order note	
 	POS order lines note	
 	Rounding amount total	
@@ -47,7 +51,7 @@ ID	Description	Story
 	Allow pos admin set limit of amount discount so cashier can set	
 	Allow pos admin set many global discounts, and cashiers only choose discount	
 	Multi currency payment order	
-	POS user login odoo and auto direct to POS session, without backend sceen	
+	POS user login and auto direct to POS session, without backend sceen	
 	Print Voucher card to customer, scan voucher card	
 	Customers credit member card	
 	Customers wallet card	
@@ -59,7 +63,7 @@ ID	Description	Story
 	Promotions program, allow cashiers can define many promotion for give gift ... to customers	
 	Auto complete search filter when pos sessions input at search box	
 	Allow pos admin re-config permissions rule of pos clients (hide/or dishide some function element pos screen)	
-	Allow sync realtime between backend odoo with pos sessions (when backend change information of customers, products, invoices, pos orders, booking orders. pos sessions data will change the same)	
+	Allow sync realtime between backend with pos sessions (when backend change information of customers, products, invoices, pos orders, booking orders. pos sessions data will change the same)	
 	Allow customers/cashiers can signature on receipt	
 	Allow pos sessions (sellers) can return products via scanner or manual choose	
 	Cross selling	
