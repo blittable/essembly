@@ -17,12 +17,6 @@ use sled::Db;
 
 use std::collections::VecDeque;
 use std::str;
-use tonic::transport::{Identity, Server, ServerTlsConfig};
-use tonic::{body::BoxBody, Request, Response, Status, Streaming};
-use tower::Service;
-
-type EssemblyResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
@@ -61,37 +55,6 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
 #[derive(Default)]
 pub struct EssemblyServer;
 
-#[tonic::async_trait]
-impl server::Essembly for EssemblyServer {
-    async fn register_client(
-        &self,
-        request: Request<EssemblyClientRegistration>,
-    ) -> EssemblyResult<EssemblyResponse> {
-        let message = request.into_inner().address.unwrap();
-
-        println!("received message: {:?}", message);
-
-        match save_to_db(message.clone()) {
-            Ok(result) => println!("Message save to DB {:?}", result),
-            Err(err) => eprintln!("Error saving to the database. {:?}", err),
-        }
-
-        Ok(Response::new(EssemblyResponse {
-            message: "Received Registration".to_string(),
-        }))
-    }
-
-    type ServerStreamingEssemblyStream = Stream;
-
-    type BidirectionalStreamingEssemblyStream = Stream;
-
-    async fn bidirectional_streaming_essembly(
-        &self,
-        _: Request<Streaming<EssemblyRequest>>,
-    ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
-        Err(Status::unimplemented("not implemented"))
-    }
-}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -107,45 +70,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cert = tokio::fs::read("tls/server.pem").await?;
     let key = tokio::fs::read("tls/server.key").await?;
 
-    let identity = Identity::from_pem(cert, key);
 
-    let addr = "127.0.0.1:50051".parse().unwrap();
 
-    let server = EssemblyServer::default();
 
-    Server::builder()
-        .tls_config(ServerTlsConfig::with_rustls().identity(identity))
-        .interceptor_fn(move |svc, req| {
-            let auth_header = req.headers().get("authorization").clone();
-
-            let authed = if let Some(auth_header) = auth_header {
-                auth_header == "Bearer some-secret-token"
-            } else {
-                false
-            };
-
-            let fut = svc.call(req);
-
-            async move {
-                if authed {
-                    fut.await
-                } else {
-                    // Cancel the inner future since we never await it
-                    // the IO never gets registered.
-                    drop(fut);
-
-                    let res = http::Response::builder()
-                        .header("grpc-status", "16")
-                        .body(BoxBody::empty())
-                        .unwrap();
-                    Ok(res)
-                }
-            }
-        })
-        .clone()
-        .add_service(server::EssemblyServer::new(server))
-        .serve(addr)
-        .await?;
 
     Ok(())
 }

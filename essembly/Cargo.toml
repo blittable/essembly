@@ -41,9 +41,6 @@ logging = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-cor
 
 tracing = "0.1.9"
 
-[package.metadata.docs.rs]
-all-features = false 
-
 [[test]]
 name = "integrations"
 path = "../essembly-test/src/lib.rs"
