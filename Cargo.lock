@@ -37,12 +37,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "arc-swap"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f1a1eca3195b729bbd64e292ef2f5fff6b1c28504fed762ce2b1013dde4d8e92"
-
-[[package]]
 name = "arrayref"
 version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -217,7 +211,7 @@ dependencies = [
  "libc",
  "num-integer",
  "num-traits 0.2.8",
- "time 0.1.42",
+ "time",
 ]
 
 [[package]]
@@ -401,7 +395,6 @@ dependencies = [
  "essembly-store",
  "inventory",
  "logging",
- "time 0.1.0-alpha.1",
  "tracing",
 ]
 
@@ -418,7 +411,7 @@ dependencies = [
  "lazy_static",
  "prost",
  "serde_derive",
- "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio 0.2.0-alpha.6",
  "tonic",
  "tower",
  "tracing",
@@ -438,7 +431,7 @@ dependencies = [
  "serde",
  "structopt",
  "structopt-derive",
- "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio 0.2.0-alpha.6",
  "tracing",
  "tracing-subscriber 0.1.5",
 ]
@@ -495,7 +488,7 @@ dependencies = [
  "rand 0.7.2",
  "serde",
  "serde_json",
- "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio 0.2.0-alpha.6",
  "tonic",
  "tonic-build",
  "tower",
@@ -531,7 +524,7 @@ dependencies = [
  "serde_regex",
  "sled",
  "tempfile",
- "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio 0.2.0-alpha.6",
  "toml",
  "tonic",
  "tower",
@@ -743,7 +736,6 @@ checksum = "75236e88bd9fe88e5e8bfcd175b665d0528fe03ca4c5207fabc028c8f9d93e98"
 dependencies = [
  "futures-core-preview",
  "futures-util-preview",
- "num_cpus",
 ]
 
 [[package]]
@@ -751,18 +743,6 @@ name = "futures-io-preview"
 version = "0.3.0-alpha.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4914ae450db1921a56c91bde97a27846287d062087d4a652efc09bb3a01ebda"
-
-[[package]]
-name = "futures-join-macro-preview"
-version = "0.3.0-alpha.19"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59e260e6b48ce7d99936c40a7088d782a499a67bef41da5481d21b439454bcea"
-dependencies = [
- "proc-macro-hack",
- "proc-macro2 1.0.4",
- "quote 1.0.2",
- "syn 1.0.5",
-]
 
 [[package]]
 name = "futures-preview"
@@ -779,18 +759,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "futures-select-macro-preview"
-version = "0.3.0-alpha.19"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df2ae43560eb10b5e50604c53bead6c9c75eade7081390cd3cce66e1582958f7"
-dependencies = [
- "proc-macro-hack",
- "proc-macro2 1.0.4",
- "quote 1.0.2",
- "syn 1.0.5",
-]
-
-[[package]]
 name = "futures-sink-preview"
 version = "0.3.0-alpha.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -804,14 +772,8 @@ checksum = "5ce968633c17e5f97936bd2797b6e38fb56cf16a7422319f7ec2e30d3c470e8d"
 dependencies = [
  "futures-channel-preview",
  "futures-core-preview",
- "futures-io-preview",
- "futures-join-macro-preview",
- "futures-select-macro-preview",
  "futures-sink-preview",
- "memchr",
  "pin-utils",
- "proc-macro-hack",
- "proc-macro-nested",
  "slab",
 ]
 
@@ -920,8 +882,8 @@ dependencies = [
  "log",
  "net2",
  "pin-project",
- "time 0.1.42",
- "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time",
+ "tokio 0.2.0-alpha.6",
  "tokio-executor 0.2.0-alpha.6",
  "tokio-io 0.2.0-alpha.6",
  "tokio-net",
@@ -1133,22 +1095,10 @@ dependencies = [
  "kernel32-sys",
  "libc",
  "log",
- "miow 0.2.1",
+ "miow",
  "net2",
  "slab",
  "winapi 0.2.8",
-]
-
-[[package]]
-name = "mio-named-pipes"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f5e374eff525ce1c5b7687c4cef63943e7686524a387933ad27ca7ec43779cb3"
-dependencies = [
- "log",
- "mio",
- "miow 0.3.3",
- "winapi 0.3.8",
 ]
 
 [[package]]
@@ -1172,16 +1122,6 @@ dependencies = [
  "net2",
  "winapi 0.2.8",
  "ws2_32-sys",
-]
-
-[[package]]
-name = "miow"
-version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "396aa0f2003d7df8395cb93e09871561ccc3e785f0acb369170e8cc74ddf9226"
-dependencies = [
- "socket2",
- "winapi 0.3.8",
 ]
 
 [[package]]
@@ -1475,12 +1415,6 @@ dependencies = [
  "quote 1.0.2",
  "syn 1.0.5",
 ]
-
-[[package]]
-name = "proc-macro-nested"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "369a6ed065f249a159e06c45752c780bda2fb53c995718f9e484d08daa9eb42e"
 
 [[package]]
 name = "proc-macro2"
@@ -1988,16 +1922,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2579985fda508104f7587689507983eadd6a6e84dd35d6d115361f530916fa0d"
 
 [[package]]
-name = "signal-hook-registry"
-version = "1.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1797d48f38f91643908bb14e35e79928f9f4b3cefb2420a564dde0991b4358dc"
-dependencies = [
- "arc-swap",
- "libc",
-]
-
-[[package]]
 name = "siphasher"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2033,18 +1957,6 @@ name = "smallvec"
 version = "0.6.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ab606a9c5e214920bb66c458cd7be8ef094f813f20fe77a54cc7dbfff220d4b7"
-
-[[package]]
-name = "socket2"
-version = "0.3.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8b74de517221a2cb01a53349cf54182acdc31a074727d3079068448c0676d85"
-dependencies = [
- "cfg-if",
- "libc",
- "redox_syscall",
- "winapi 0.3.8",
-]
 
 [[package]]
 name = "sourcefile"
@@ -2179,17 +2091,6 @@ dependencies = [
 
 [[package]]
 name = "time"
-version = "0.1.0-alpha.1"
-dependencies = [
- "essembly-core",
- "futures-core-preview",
- "futures-preview",
- "tokio 0.2.0-alpha.6 (git+https://github.com/tokio-rs/tokio)",
- "tokio-test",
-]
-
-[[package]]
-name = "time"
 version = "0.1.42"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db8dcfca086c1143c9270ac42a2bbd8a7ee477b78ac8e45b19abfb0cbede4b6f"
@@ -2232,31 +2133,6 @@ dependencies = [
 [[package]]
 name = "tokio"
 version = "0.2.0-alpha.6"
-source = "git+https://github.com/tokio-rs/tokio#0da23aad772afb22db8edf73ac0f034c5ada3bde"
-dependencies = [
- "bytes",
- "fnv",
- "futures-core-preview",
- "futures-sink-preview",
- "futures-util-preview",
- "iovec",
- "lazy_static",
- "libc",
- "memchr",
- "mio",
- "mio-named-pipes",
- "mio-uds",
- "num_cpus",
- "pin-project",
- "signal-hook-registry",
- "slab",
- "tokio-macros 0.2.0-alpha.6 (git+https://github.com/tokio-rs/tokio)",
- "winapi 0.3.8",
-]
-
-[[package]]
-name = "tokio"
-version = "0.2.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f17f5d6ab0f35c1506678b28fb1798bdf74fcb737e9843c7b17b73e426eba38"
 dependencies = [
@@ -2269,7 +2145,7 @@ dependencies = [
  "tokio-executor 0.2.0-alpha.6",
  "tokio-fs 0.2.0-alpha.6",
  "tokio-io 0.2.0-alpha.6",
- "tokio-macros 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio-macros",
  "tokio-net",
  "tokio-sync 0.2.0-alpha.6",
  "tokio-timer 0.3.0-alpha.6",
@@ -2391,15 +2267,6 @@ dependencies = [
 [[package]]
 name = "tokio-macros"
 version = "0.2.0-alpha.6"
-source = "git+https://github.com/tokio-rs/tokio#0da23aad772afb22db8edf73ac0f034c5ada3bde"
-dependencies = [
- "quote 1.0.2",
- "syn 1.0.5",
-]
-
-[[package]]
-name = "tokio-macros"
-version = "0.2.0-alpha.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "86b616374bcdadd95974e1f0dfca07dc913f1163c53840c0d664aca35114964e"
 dependencies = [
@@ -2499,16 +2366,6 @@ dependencies = [
  "mio",
  "tokio-io 0.1.12",
  "tokio-reactor",
-]
-
-[[package]]
-name = "tokio-test"
-version = "0.2.0-alpha.6"
-source = "git+https://github.com/tokio-rs/tokio#0da23aad772afb22db8edf73ac0f034c5ada3bde"
-dependencies = [
- "bytes",
- "futures-core-preview",
- "tokio 0.2.0-alpha.6 (git+https://github.com/tokio-rs/tokio)",
 ]
 
 [[package]]
@@ -2614,7 +2471,7 @@ dependencies = [
  "pin-project",
  "prost",
  "prost-derive",
- "tokio 0.2.0-alpha.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tokio 0.2.0-alpha.6",
  "tokio-codec 0.2.0-alpha.6",
  "tokio-rustls",
  "tower",

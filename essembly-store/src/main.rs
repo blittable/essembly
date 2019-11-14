@@ -18,6 +18,18 @@ use sled::Db;
 use std::collections::VecDeque;
 use std::str;
 
+//Initialize via the store trait
+fn initialize_store() {
+
+    //SQLite
+    //
+    //Sled
+    //
+    //Postgres
+
+}
+
+
 fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     let path = "./foo.db";
     let tree = Db::open(path)?;
@@ -60,15 +72,18 @@ pub struct EssemblyServer;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Read config file
     let config: Config = Config::new().load();
+    let db_type = config.db.primary.db_type;
+
+
 
     //let config_string = tokio::fs::read(config).await?;
     //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();
 
     //Initialize DB
-    let mut cert_a = File::open("essembly-store/tls/server.pem")?;
+    //let mut cert_a = File::open("essembly-store/tls/server.pem")?;
 
-    let cert = tokio::fs::read("tls/server.pem").await?;
-    let key = tokio::fs::read("tls/server.key").await?;
+    //let cert = tokio::fs::read("tls/server.pem").await?;
+    //let key = tokio::fs::read("tls/server.key").await?;
 
 
 

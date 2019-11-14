@@ -23,17 +23,18 @@ Project Overview:
 - [] intgegrate permissions 
 - [x] vector logging sync
 - [x] research wasm/wasi integration - in-place updates?
-- [] research embedded business rules - Lua integration?
+- [x] research embedded business rules - Lua integration?
 - [] research fuzzing for reverse-engineering. 
 - [] Kubernetes or docker-compose
-- [] Mock test
+- [x] Mock test
 
 Concrete:
 - [] Logging Simple vs. Trace
 - [] Real localization 
 - [] Logging level based on config file reading  - https://github.com/tokio-rs/tracing/blob/bec40bc9624bcf4d26d3a5c622fdbefe4b853854/nightly-examples/examples/proxy_server.rs#L161
 - [] Message to Store - format?  
-
+- [] Store trait
+- [] Extend stories 
 
 Todo Tests:
 [x] Unit test to check missing config.toml is handled correctly fo API 

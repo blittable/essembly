@@ -13,11 +13,10 @@ simple = []
 essembly-core = { version = "0.1.0-alpha.1", path = ".." }
 
 tracing = { version = "0.1", features = ["max_level_trace"] }
-tracing-core = { git = "https://github.com/tokio-rs/tracing", version = "0.1.7" }
-tracing-log = { git = "https://github.com/tokio-rs/tracing", version = "0.1.1" }
-tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", version = "0.1.5", optional = true }
-tracing-attributes = { git = "https://github.com/tokio-rs/tracing", version = "0.1.5", optional = true }
-
+tracing-core = { git = "https://github.com/tokio-rs/tracing" }
+tracing-log = { git = "https://github.com/tokio-rs/tracing" }
+tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", optional = true }
+tracing-attributes = { git = "https://github.com/tokio-rs/tracing", optional = true }
 
 lazy_static = "1.4.0"
 

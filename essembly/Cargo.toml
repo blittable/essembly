@@ -29,7 +29,6 @@ simple = []
 
 [dependencies]
 accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/accounts" }
-time = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/time" }
 inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/inventory" }
 
 essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
