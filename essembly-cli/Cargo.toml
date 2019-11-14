@@ -17,9 +17,9 @@ roxmltree = "0.7.1"
 failure = "0.1.5"
 
 tracing = { version = "0.1.5" }
-tracing-subscriber = { version = "0.1", path = "../../tracing/tracing-subscriber", features = ["json"] }
-tracing-futures = { path = "../../tracing/tracing-futures", default-features = false, features = ["std-future"] }
-tracing-attributes = { path = "../../tracing/tracing-attributes" }
+tracing-subscriber = { git = "https://github.com/tokio-rs/tracing" }
+# { git = "https://github.com/tokio-rs/tracing" }
+
 
 # The Client Apps use the re-exported crates.  They should not be directly imported 
 [dependencies.essembly]
