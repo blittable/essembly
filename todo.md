@@ -27,6 +27,7 @@ Project Overview:
 - [] research fuzzing for reverse-engineering. 
 - [] Kubernetes or docker-compose
 - [x] Mock test
+- [] Isolate permissions -> private 
 
 Concrete:
 - [] Logging Simple vs. Trace

@@ -157,7 +157,7 @@ impl Entity {
 
 #[test]
 fn build_user() {
-    //We have for variants of IDs to test:
+    //We have variants of IDs to test:
     //A) Internal - GUID
     //B) External - Any
     let ext_id = ExternalId {

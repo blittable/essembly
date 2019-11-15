@@ -4,14 +4,15 @@ extern crate lazy_static;
 use std::collections::HashMap;
 use std::fmt;
 
-///These represent essembly's logging levels. Logging levels
-///are inclusive of the other levels 'above' them, so `WARN`
-///includes `INFO` and `ERROR`
-///TRACE: Absolutely everything, including some system calls.
-///DEBUG: Normally used for trouble-shooting.
-///WARN: Indicates some state that may be problematic.
-///INFO: Used for generic status messages.
-///ERROR: Used to indicate something has gone wrong.
+// /* These represent essembly's logging levels. Logging levels
+// ///are inclusive of the other levels 'above' them, so `WARN`
+// ///includes `INFO` and `ERROR`
+// ///TRACE: Absolutely everything, including some system calls.
+// ///DEBUG: Normally used for trouble-shooting.
+// ///WARN: Indicates some state that may be problematic.
+// ///INFO: Used for generic status messages.
+// ///ERROR: Used to indicate something has gone wrong.
+// */
 #[derive(Copy, Clone, Debug, Hash, Eq, PartialEq)]
 pub enum Level {
     TRACE,

@@ -6,9 +6,9 @@ pub use serde_derive::{Deserialize, Serialize};
 use essembly::interfaces::*;
 use essembly::logging::*;
 
-#[allow(unused_imports)]
-use tracing::{debug, error, trace, event, info, span, warn, Level};
 use tracing::subscriber;
+#[allow(unused_imports)]
+use tracing::{debug, error, event, info, span, trace, warn, Level};
 
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "essembly.db";
@@ -56,17 +56,16 @@ impl api::server::Essembly for EssemblyServer {
         &self,
         request: Request<api::EssemblyClientRegistration>,
     ) -> EssemblyResult<EssemblyResponse> {
+        event!(Level::INFO, "Server request received.");
 
-    event!(Level::INFO, "Server request received.");
+        let message = request.into_inner().address.unwrap();
+        let peer = span!(Level::INFO, "request", peer_addr = "82.9.9.9", port = 42381);
 
-    let message = request.into_inner().address.unwrap();
-    let peer = span!(Level::INFO, "request", peer_addr = "82.9.9.9", port = 42381);
-
-    peer.in_scope(|| {
-    debug!("connected");
-    debug!(length = 2, "message received");
-    info!("received message: {:?}", message);
-    });
+        peer.in_scope(|| {
+            debug!("connected");
+            debug!(length = 2, "message received");
+            info!("received message: {:?}", message);
+        });
 
         match save_to_db(message.clone()) {
             Ok(result) => info!("Message save to DB {:?}", result),
@@ -97,7 +96,6 @@ impl api::server::Essembly for EssemblyServer {
 }
 
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
-
     //subscriber::set_global_default(essembly::logging::trace::EssemblySubscriber::new(2)).unwrap();
     info!("Starting up essembly api server...");
     //Read config file
@@ -130,7 +128,6 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     let config = &Config::new().load();
 
     let logger = &mut essembly::logging::simple::SimpleLogger::new();
@@ -139,8 +136,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     logger.log(essembly::logging::Level::DEBUG, "foo".to_string());
 
-    let subscriber = tracing_subscriber::fmt::Subscriber::builder()
-        .finish();
+    let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
 
     tracing::subscriber::set_global_default(subscriber).unwrap();
 
@@ -148,16 +144,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     trace!("tracing...");
     warn!("tracing...");
 
-     let span = span!(
+    let span = span!(
         Level::DEBUG,
         "starting",
         ip = ?config.cli.primary.ip,
         port = ?config.cli.primary.port,
         log_level = ?config.cli.primary.logging,
     );
-
-
-
 
     debug!("API configuration: {:?}", config.api);
     debug!("API logging configuration: {:?}", config.logger);

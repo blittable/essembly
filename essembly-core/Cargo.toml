@@ -11,7 +11,7 @@ path = "src/lib.rs"
 bitflags = "1.2.0"
 lazy_static = "1.4.0"
 mockall = "0.5.2"
-uuid = { version = "0.7", features = ["serde", "v4"] }
+uuid = { version = "0.7", features = ["serde", "v5"] }
 bytes = "0.4.12"
 
 fluent-bundle = "0.8.0"

@@ -1,20 +1,20 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
-use clap::arg_enum;
-use core::str::FromStr;
 use self::importer::Parser;
 use self::importer::XLBRParser;
+use clap::arg_enum;
+use core::str::FromStr;
 use essembly::config::Config;
 use essembly::logging::*;
-use tracing::*;
-use tracing::subscriber;
 use failure::Fallible;
 use std::env;
 use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
+use tracing::subscriber;
+use tracing::*;
 
 mod importer;
 
@@ -178,22 +178,19 @@ arg_enum! {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     //Initialize the client with its configuration
     let config = &Config::new().load();
     let primary = &config.cli.primary;
     println!("cli config: {:?}", primary);
 
-    let subscriber = tracing_subscriber::fmt::Subscriber::builder()
-        .finish();
+    let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
     tracing::subscriber::set_global_default(subscriber).unwrap();
-     info!("cli runtime started");
+    info!("cli runtime started");
 
-     debug!("config: {:?}", config);
+    debug!("config: {:?}", config);
 
     //If we are logging, then pass the configuration logging value to essembly::logger
-    
+
     Essembly::from_args().run().await?;
     Ok(())
 }
-
