@@ -48,10 +48,10 @@ dirs = "2.0.2"
 tokio-test = { git = "https://github.com/tokio-rs/tokio.git" }
 
 # This is a regular dependency to support send real packets
-essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["logger", "interfaces"]}
+essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["interfaces", "logging"]}
 
 [dev-dependencies]
-essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["logger", "interfaces"]}
+essembly = { path = "../essembly", version = "0.1.0-alpha.1", features = ["interfaces"]}
 
 [test-dependencies]
 essembly = { path = "../essembly", version = "0.1.0-alpha.1" }

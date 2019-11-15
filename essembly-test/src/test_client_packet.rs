@@ -1,33 +1,23 @@
 #![warn(rust_2018_idioms)]
 #[allow(warnings)]
+#[allow(dead_code)]
 pub use serde_derive::{Deserialize, Serialize};
 
 
 use essembly::interfaces;
-use essembly::interfaces::api::*;
-use essembly::interfaces::registration::*;
 use tracing_attributes;
 use tracing;
 
-use std::collections::VecDeque;
-
-use std::time::{Duration, Instant};
-
 use tokio;
-use tokio_test::block_on;
-use tokio_test::assert_ok;
-use tokio::timer::delay;
 
 use tonic::{
     transport::{Certificate, Channel, ClientTlsConfig, Identity},
-    Request, Response, Status, Streaming,
 };
 
 use essembly::interfaces::registration::Client;
 use essembly::interfaces::api::{ EssemblyClientRegistration };
 use essembly::interfaces::api::client::EssemblyClient;
 use essembly::logging::*;
-
 
 
 #[tokio::main]
@@ -39,6 +29,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
+
+    let mut logger = essembly::logging::simple::SimpleLogger::new();
+    logger.initialize(Level::DEBUG);
 
     println!("Loading Certificates...");
 
@@ -76,6 +69,8 @@ async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 pub fn build_registration() -> interfaces::api::EssemblyClientRegistration {
+
+
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 

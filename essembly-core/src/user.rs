@@ -123,11 +123,7 @@ fn build_user() {
 
 #[test]
 fn build_object_test() {
-    let innertype = Businesses::LLC;
-    let b = Object {
-        object_type: ObjectType::Business(innertype),
-    };
-    println!("Object Type: {:?}", b);
+    println!("Object Type: {:?}", "Not done");
 
     //println!("Object Type: {:?}", b.1);
     //assert_eq!(b.object_type, Businesses::LLC);

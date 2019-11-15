@@ -1,5 +1,5 @@
 [package]
-name = "logging"
+name = "essembly-logging"
 version = "0.1.0-alpha.1"
 authors = ["blittable <blittable-bits@gmail.com>"]
 edition = "2018"
@@ -7,10 +7,9 @@ edition = "2018"
 [features]
 subscriber = ["tracing-subscriber"]
 trace = ["tracing-subscriber", "tracing-attributes"]
-simple = []
 
 [dependencies]
-essembly-core = { version = "0.1.0-alpha.1", path = ".." }
+essembly-core = { version = "0.1.0-alpha.1", path = "../essembly-core" }
 
 tracing = { version = "0.1", features = ["max_level_trace"] }
 tracing-core = { git = "https://github.com/tokio-rs/tracing" }

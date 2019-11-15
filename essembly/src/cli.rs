@@ -1,6 +1,2 @@
-//!
-//!
-//!
-
-// #[cfg(feature = "cli")]
-// pub use essembly_cli::cli;
+#[cfg(feature = "cli")]
+pub use essembly_cli::cli;

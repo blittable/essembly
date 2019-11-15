@@ -3,8 +3,7 @@
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
 
-use essembly::interfaces::*;
-use essembly::logging::*;
+use essembly_interfaces::*;
 
 use tracing::subscriber;
 #[allow(unused_imports)]
@@ -13,9 +12,12 @@ use tracing::{debug, error, event, info, span, trace, warn, Level};
 #[allow(dead_code)]
 static DATABASE_NAME: &str = "essembly.db";
 
-use essembly::config::Config;
-use essembly::interfaces::api::{EssemblyRequest, EssemblyResponse};
-use essembly::logging::trace::EssemblySubscriber;
+use essembly_config::Config;
+use essembly_interfaces;
+use essembly_interfaces::api::{EssemblyRequest, EssemblyResponse} ;
+use essembly_core::*;
+use essembly_logging::{trace::EssemblySubscriber};
+use essembly_logging::*;
 
 use std::collections::VecDeque;
 use std::str;
@@ -51,7 +53,7 @@ fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::
 pub struct EssemblyServer;
 
 #[tonic::async_trait]
-impl api::server::Essembly for EssemblyServer {
+impl essembly_interfaces::api::server::Essembly for EssemblyServer {
     async fn register_client(
         &self,
         request: Request<api::EssemblyClientRegistration>,
@@ -67,33 +69,13 @@ impl api::server::Essembly for EssemblyServer {
             info!("received message: {:?}", message);
         });
 
-        match save_to_db(message.clone()) {
-            Ok(result) => info!("Message save to DB {:?}", result),
-            Err(err) => eprintln!("Error saving to the database. {:?}", err),
-        }
-
         Ok(Response::new(EssemblyResponse {
             message: "Received Registration".to_string(),
         }))
     }
 
-    async fn client_streaming_essembly(
-        &self,
-        _: Request<Streaming<EssemblyRequest>>,
-    ) -> EssemblyResult<EssemblyResponse> {
-        Err(Status::unimplemented("not implemented"))
-    }
-
-    async fn bidirectional_streaming_essembly(
-        &self,
-        _: Request<Streaming<EssemblyRequest>>,
-    ) -> EssemblyResult<Self::BidirectionalStreamingEssemblyStream> {
-        Err(Status::unimplemented("not implemented"))
-    }
-
-    type BidirectionalStreamingEssemblyStream = Stream;
-    type ServerStreamingEssemblyStream = Stream;
 }
+    type ServerStreamingEssemblyStream = Stream;
 
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
     //subscriber::set_global_default(essembly::logging::trace::EssemblySubscriber::new(2)).unwrap();
@@ -119,7 +101,7 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 
     Server::builder()
         .tls_config(&tls)
-        .add_service(api::server::EssemblyServer::new(server))
+        .add_service(essembly_interfaces::api::server::EssemblyServer::new(server))
         .serve(addr)
         .await?;
 
@@ -130,11 +112,11 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = &Config::new().load();
 
-    let logger = &mut essembly::logging::simple::SimpleLogger::new();
+    let mut logger: essembly_logging::simple::SimpleLogger = essembly_logging::simple::SimpleLogger::new();
 
-    logger.initialize(essembly::logging::Level::DEBUG);
+    logger.initialize(essembly_logging::Level::DEBUG);
 
-    logger.log(essembly::logging::Level::DEBUG, "foo".to_string());
+    logger.log(essembly_logging::Level::DEBUG, "foo".to_string());
 
     let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
 

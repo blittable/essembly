@@ -4,7 +4,7 @@ version = "0.1.0-alpha.1"
 authors = ["blittable <blittable-bits@gmail.com>"]
 edition = "2018"
 description = """
-A Point of Sales System
+A Business System for Sales 
 """
 categories = ["pos", "business", "food service", "distributed"]
 
@@ -15,28 +15,26 @@ default = [
 "interfaces",
 "config",
 "store",
-"logger",
-"simple"
+"logging"
 ]
 
 config = ["essembly-config"]
 core = ["essembly-core"]
-logger = ["logging"]
 account = ["accounts"]
 interfaces = ["essembly-interfaces"]
 store = ["essembly-store"]
-simple = []
+logging = ["essembly-logging"]
 
 [dependencies]
 accounts = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/accounts" }
 inventory = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/inventory" }
 
+essembly-api = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-api" }
 essembly-core = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core" }
 essembly-interfaces = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-interfaces" }
 essembly-config = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-config" }
+essembly-logging = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-logging" }
 essembly-store = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-store" }
-
-logging = { version = "=0.1.0-alpha.1", optional = true, path = "../essembly-core/logging", features = ["subscriber", "trace", "simple"]}
 
 tracing = "0.1.9"
 

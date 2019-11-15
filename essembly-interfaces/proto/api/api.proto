@@ -31,7 +31,4 @@ import "google/protobuf/wrappers.proto";
  service Essembly {
    rpc RegisterClient(EssemblyClientRegistration) returns (EssemblyResponse) {}
    rpc UnaryEssembly(EssemblyRequest) returns (EssemblyResponse) {}
-   rpc ServerStreamingEssembly(EssemblyRequest) returns (stream EssemblyResponse) {}
-   rpc ClientStreamingEssembly(stream EssemblyRequest) returns (EssemblyResponse) {}
-   rpc BidirectionalStreamingEssembly(stream EssemblyRequest) returns (stream EssemblyResponse) {}
  }

@@ -33,12 +33,13 @@ pub mod client {
     }
     impl EssemblyClient<tonic::transport::Channel> {
         #[doc = r" Attempt to create a new client by connecting to a given endpoint."]
-        pub fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
+        pub async fn connect<D>(dst: D) -> Result<Self, tonic::transport::Error>
         where
             D: std::convert::TryInto<tonic::transport::Endpoint>,
             D::Error: Into<StdError>,
         {
-            tonic::transport::Endpoint::new(dst).map(|c| Self::new(c.channel()))
+            let conn = tonic::transport::Endpoint::new(dst)?.connect().await?;
+            Ok(Self::new(conn))
         }
     }
     impl<T> EssemblyClient<T>
@@ -80,45 +81,6 @@ pub mod client {
             let path = http::uri::PathAndQuery::from_static("/api.Essembly/UnaryEssembly");
             self.inner.unary(request.into_request(), path, codec).await
         }
-        pub async fn server_streaming_essembly(
-            &mut self,
-            request: impl tonic::IntoRequest<super::EssemblyRequest>,
-        ) -> Result<tonic::Response<tonic::codec::Streaming<super::EssemblyResponse>>, tonic::Status>
-        {
-            self.ready().await?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path =
-                http::uri::PathAndQuery::from_static("/api.Essembly/ServerStreamingEssembly");
-            self.inner
-                .server_streaming(request.into_request(), path, codec)
-                .await
-        }
-        pub async fn client_streaming_essembly(
-            &mut self,
-            request: impl tonic::IntoStreamingRequest<Message = super::EssemblyRequest>,
-        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
-            self.ready().await?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path =
-                http::uri::PathAndQuery::from_static("/api.Essembly/ClientStreamingEssembly");
-            self.inner
-                .client_streaming(request.into_streaming_request(), path, codec)
-                .await
-        }
-        pub async fn bidirectional_streaming_essembly(
-            &mut self,
-            request: impl tonic::IntoStreamingRequest<Message = super::EssemblyRequest>,
-        ) -> Result<tonic::Response<tonic::codec::Streaming<super::EssemblyResponse>>, tonic::Status>
-        {
-            self.ready().await?;
-            let codec = tonic::codec::ProstCodec::default();
-            let path = http::uri::PathAndQuery::from_static(
-                "/api.Essembly/BidirectionalStreamingEssembly",
-            );
-            self.inner
-                .streaming(request.into_streaming_request(), path, codec)
-                .await
-        }
     }
     impl<T: Clone> Clone for EssemblyClient<T> {
         fn clone(&self) -> Self {
@@ -145,33 +107,6 @@ pub mod server {
             &self,
             request: tonic::Request<super::EssemblyRequest>,
         ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
-            Err(tonic::Status::unimplemented("Not yet implemented"))
-        }
-        #[doc = "Server streaming response type for the ServerStreamingEssembly method."]
-        type ServerStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
-            + Send
-            + 'static;
-        async fn server_streaming_essembly(
-            &self,
-            request: tonic::Request<super::EssemblyRequest>,
-        ) -> Result<tonic::Response<Self::ServerStreamingEssemblyStream>, tonic::Status> {
-            Err(tonic::Status::unimplemented("Not yet implemented"))
-        }
-        async fn client_streaming_essembly(
-            &self,
-            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
-        ) -> Result<tonic::Response<super::EssemblyResponse>, tonic::Status> {
-            Err(tonic::Status::unimplemented("Not yet implemented"))
-        }
-        #[doc = "Server streaming response type for the BidirectionalStreamingEssembly method."]
-        type BidirectionalStreamingEssemblyStream: Stream<Item = Result<super::EssemblyResponse, tonic::Status>>
-            + Send
-            + 'static;
-        async fn bidirectional_streaming_essembly(
-            &self,
-            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
-        ) -> Result<tonic::Response<Self::BidirectionalStreamingEssemblyStream>, tonic::Status>
-        {
             Err(tonic::Status::unimplemented("Not yet implemented"))
         }
     }
@@ -243,90 +178,6 @@ pub mod server {
                         let codec = tonic::codec::ProstCodec::default();
                         let mut grpc = tonic::server::Grpc::new(codec);
                         let res = grpc.unary(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.Essembly/ServerStreamingEssembly" => {
-                    struct ServerStreamingEssemblySvc<T: Essembly>(pub Arc<T>);
-                    impl<T: Essembly> tonic::server::ServerStreamingService<super::EssemblyRequest>
-                        for ServerStreamingEssemblySvc<T>
-                    {
-                        type Response = super::EssemblyResponse;
-                        type ResponseStream = T::ServerStreamingEssemblyStream;
-                        type Future =
-                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<super::EssemblyRequest>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { inner.server_streaming_essembly(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let method = ServerStreamingEssemblySvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec);
-                        let res = grpc.server_streaming(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.Essembly/ClientStreamingEssembly" => {
-                    struct ClientStreamingEssemblySvc<T: Essembly>(pub Arc<T>);
-                    impl<T: Essembly> tonic::server::ClientStreamingService<super::EssemblyRequest>
-                        for ClientStreamingEssemblySvc<T>
-                    {
-                        type Response = super::EssemblyResponse;
-                        type Future = BoxFuture<tonic::Response<Self::Response>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move { inner.client_streaming_essembly(request).await };
-                            Box::pin(fut)
-                        }
-                    }
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let method = ClientStreamingEssemblySvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec);
-                        let res = grpc.client_streaming(method, req).await;
-                        Ok(res)
-                    };
-                    Box::pin(fut)
-                }
-                "/api.Essembly/BidirectionalStreamingEssembly" => {
-                    struct BidirectionalStreamingEssemblySvc<T: Essembly>(pub Arc<T>);
-                    impl<T: Essembly> tonic::server::StreamingService<super::EssemblyRequest>
-                        for BidirectionalStreamingEssemblySvc<T>
-                    {
-                        type Response = super::EssemblyResponse;
-                        type ResponseStream = T::BidirectionalStreamingEssemblyStream;
-                        type Future =
-                            BoxFuture<tonic::Response<Self::ResponseStream>, tonic::Status>;
-                        fn call(
-                            &mut self,
-                            request: tonic::Request<tonic::Streaming<super::EssemblyRequest>>,
-                        ) -> Self::Future {
-                            let inner = self.0.clone();
-                            let fut = async move {
-                                inner.bidirectional_streaming_essembly(request).await
-                            };
-                            Box::pin(fut)
-                        }
-                    }
-                    let inner = self.inner.clone();
-                    let fut = async move {
-                        let method = BidirectionalStreamingEssemblySvc(inner);
-                        let codec = tonic::codec::ProstCodec::default();
-                        let mut grpc = tonic::server::Grpc::new(codec);
-                        let res = grpc.streaming(method, req).await;
                         Ok(res)
                     };
                     Box::pin(fut)

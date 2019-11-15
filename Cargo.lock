@@ -393,12 +393,13 @@ name = "essembly"
 version = "0.1.0-alpha.1"
 dependencies = [
  "accounts",
+ "essembly-api",
  "essembly-config",
  "essembly-core",
  "essembly-interfaces",
+ "essembly-logging",
  "essembly-store",
  "inventory",
- "logging",
  "tracing",
 ]
 
@@ -407,7 +408,10 @@ name = "essembly-api"
 version = "0.1.0-alpha.1"
 dependencies = [
  "bytes",
- "essembly",
+ "essembly-config",
+ "essembly-core",
+ "essembly-interfaces",
+ "essembly-logging",
  "failure",
  "failure_derive",
  "futures-preview",
@@ -496,6 +500,22 @@ dependencies = [
  "tonic",
  "tonic-build",
  "tower",
+]
+
+[[package]]
+name = "essembly-logging"
+version = "0.1.0-alpha.1"
+dependencies = [
+ "ansi_term 0.12.1",
+ "essembly-core",
+ "humantime",
+ "lazy_static",
+ "log",
+ "tracing",
+ "tracing-attributes 0.1.5 (git+https://github.com/tokio-rs/tracing)",
+ "tracing-core 0.1.7 (git+https://github.com/tokio-rs/tracing)",
+ "tracing-log",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -1033,22 +1053,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "14b6052be84e6b71ab17edffc2eeabf5c2c3ae1fdb464aae35ac50c67a44e1f7"
 dependencies = [
  "cfg-if",
-]
-
-[[package]]
-name = "logging"
-version = "0.1.0-alpha.1"
-dependencies = [
- "ansi_term 0.12.1",
- "essembly-core",
- "humantime",
- "lazy_static",
- "log",
- "tracing",
- "tracing-attributes 0.1.5 (git+https://github.com/tokio-rs/tracing)",
- "tracing-core 0.1.7 (git+https://github.com/tokio-rs/tracing)",
- "tracing-log",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -2513,7 +2517,7 @@ dependencies = [
 [[package]]
 name = "tracing-core"
 version = "0.1.7"
-source = "git+https://github.com/tokio-rs/tracing#d2305f8b5d5f2e8a038c98533ae1a6ae01319e75"
+source = "git+https://github.com/tokio-rs/tracing#773c44054aed7f072ff03ee5dc64391f799dc02d"
 dependencies = [
  "lazy_static",
  "spin",

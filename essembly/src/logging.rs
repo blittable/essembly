@@ -1,11 +1,10 @@
 //Reexport this for logger initialization
-pub use logging::trace::EssemblySubscriber;
 
 #[cfg(feature = "simple")]
-pub use logging::simple::*;
+pub use essembly_logging::simple;
 
 #[cfg(feature = "trace")]
-pub use logging::trace::*;
+pub use essembly_logging::trace;
 
 #[cfg(feature = "logging")]
-pub use logging::*;
+pub use essembly_logging::*;
