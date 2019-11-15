@@ -73,6 +73,7 @@ impl fmt::Debug for Error {
 }
 
 #[allow(dead_code)]
+#[derive(Debug)]
 pub enum ErrorCode {
     Io(io::Error),
     Serialization(String),

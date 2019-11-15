@@ -56,23 +56,23 @@ pub mod trace;
 //Experimental - i18n
 #[derive(Debug)]
 pub enum Locale {
-    th_TH,
-    en_US,
-    en_GB,
+    TH_TH,
+    EN_US,
+    EN_GB,
 }
 
 //This is just a test
 //This should be done with a real localization process.  See locale in this crate
 pub fn translate(locale: Locale, level: Level) -> &'static str {
     match locale {
-        Locale::th_TH => th_TH_HASHMAP.get(&level).unwrap(),
-        Locale::en_US => en_US_HASHMAP.get(&level).unwrap(),
-        _ => en_US_HASHMAP.get(&level).unwrap(),
+        Locale::TH_TH => TH_TH_HASHMAP.get(&level).unwrap(),
+        Locale::EN_US => EN_US_HASHMAP.get(&level).unwrap(),
+        _ => EN_US_HASHMAP.get(&level).unwrap(),
     }
 }
 
 lazy_static! {
-    static ref th_TH_HASHMAP: HashMap<Level, &'static str> = {
+    static ref TH_TH_HASHMAP: HashMap<Level, &'static str> = {
         let mut m = HashMap::new();
         m.insert(Level::TRACE, "ติดตาม");
         m.insert(Level::DEBUG, "ตรวจแก้จุดบกพร่องที่ผิด");
@@ -84,7 +84,7 @@ lazy_static! {
 }
 
 lazy_static! {
-    static ref en_US_HASHMAP: HashMap<Level, &'static str> = {
+    static ref EN_US_HASHMAP: HashMap<Level, &'static str> = {
         let mut m = HashMap::new();
         m.insert(Level::TRACE, "trace");
         m.insert(Level::DEBUG, "debug");

@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
+#![allow(unused_imports)]
 
 use self::importer::Parser;
 use self::importer::XLBRParser;
@@ -8,12 +9,9 @@ use core::str::FromStr;
 use essembly::config::Config;
 use essembly::logging::*;
 use failure::Fallible;
-use std::env;
-use std::ffi::OsStr;
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
-use tracing::subscriber;
 use tracing::*;
 
 mod importer;

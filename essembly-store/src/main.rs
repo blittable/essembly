@@ -4,16 +4,10 @@
 use rand::Rng;
 use std::collections::HashMap;
 pub use serde_derive::{Deserialize, Serialize};
-use tempfile::tempdir;
 
 
-use essembly_core::permissions::*;
 use essembly_config::*;
-use essembly_interfaces::api::*;
 use essembly_interfaces::registration::*;
-use std::time::{Duration, Instant};
-
-use std::fs::File;
 
 use tokio;
 
@@ -24,10 +18,9 @@ static DATABASE_NAME: &str = "essembly.db";
 
 use sled::Db;
 use essembly_core::{ permissions, user };
-use std::collections::VecDeque;
-use std::str;
 
 //Initialize via the store trait
+#[allow(dead_code)]
 fn initialize_store() {
 
     //SQLite
@@ -37,6 +30,8 @@ fn initialize_store() {
     //Postgres
 }
 
+
+#[allow(dead_code)]
 fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
 
     let p= essembly_core::permissions::Permissions::new();
@@ -49,16 +44,16 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     //let options = tree.open_tree("options")?;
     //let locations = tree.open_tree("locations")?;
 
-    sys.insert(&[p.sys, p.org, p.group, p.user], b"john");
+    let _result = sys.insert(&[p.sys, p.org, p.group, p.user], b"john");
 
     //println!("new user: {:?}", u);
 
 
-    let location = message.latlng.unwrap();
-    let longitude = location.longitude.to_string();
+    let _location = message.latlng.unwrap();
+    let _longitude = _location.longitude.to_string();
 
     for node in &tree.tree_names() {
-        println!("tree: {:?}", str::from_utf8(&node));
+        println!("tree: {:?}", std::str::from_utf8(&node));
     }
 
     // for x in locations.into_iter() {
@@ -81,6 +76,8 @@ pub fn write_users() {
 }
 
 pub fn load_test() {
+
+    use std::time::{Instant, Duration};
     let start = Instant::now();
 
     let config = sled::Config::default()
@@ -92,15 +89,15 @@ pub fn load_test() {
         .compression_factor(5)
         .snapshot_after_ops(1_000_000_000); //never
 
-    let mut cacheVals: HashMap<[u8; 32], [u8; 32]> = HashMap::with_capacity(250_000); 
+    let cache_vals: HashMap<[u8; 32], [u8; 32]> = HashMap::with_capacity(250_000); 
 
     println!("{:#?}", config);
     let db = config.open().unwrap();
 
-    cacheVals.into_par_iter().for_each(|x| {
+    cache_vals.into_par_iter().for_each(|x| {
         //cacheVals.insert(x.key, x.value);
         //println!("KV on insert: {:?}, {:?}", x.0.to_vec(), x.1.to_vec());
-        db.insert(x.0.to_vec(), x.1.to_vec());
+        let _res = db.insert(x.0.to_vec(), x.1.to_vec());
     });
 
     let duration = start.elapsed();

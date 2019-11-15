@@ -2,7 +2,8 @@
 fn test_client_registration_status() {
     use essembly::interfaces::*;
 
-    let status: registration::ClientRegistrationStatus = registration::ClientRegistrationStatus::Unknown;
+    let status: registration::ClientRegistrationStatus =
+        registration::ClientRegistrationStatus::Unknown;
     assert_eq!(status, registration::ClientRegistrationStatus::Unknown);
 }
 

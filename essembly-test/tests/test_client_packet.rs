@@ -1,34 +1,31 @@
 #![warn(rust_2018_idioms)]
+#![allow(unused_imports)]
 #[allow(warnings)]
 pub use serde_derive::{Deserialize, Serialize};
-
 
 use essembly::interfaces;
 use essembly::interfaces::api::*;
 use essembly::interfaces::registration::*;
-use tracing_attributes;
 use tracing;
+use tracing_attributes;
 
 use std::collections::VecDeque;
 
 use std::time::{Duration, Instant};
 
 use tokio;
-use tokio_test::block_on;
-use tokio_test::assert_ok;
 use tokio::timer::delay;
+use tokio_test::assert_ok;
+use tokio_test::block_on;
 
 use tonic::{
     transport::{Certificate, Channel, ClientTlsConfig, Identity},
     Request, Response, Status, Streaming,
 };
 
-use essembly::interfaces::registration::Client;
-use essembly::interfaces::api::{ EssemblyClientRegistration };
 use essembly::interfaces::api::client::EssemblyClient;
-use essembly::logging::*;
-
-
+use essembly::interfaces::api::EssemblyClientRegistration;
+use essembly::interfaces::registration::Client;
 
 #[tokio::main]
 #[instrument]
@@ -39,7 +36,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
-
     println!("Loading Certificates...");
 
     let server_root_ca_cert = tokio::fs::read("tests/tls/ca.pem").await?;
@@ -56,14 +52,14 @@ async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
         .identity(client_identity)
         .clone();
 
-        let channel = Channel::from_static("http://[::1]:50051")
+    let channel = Channel::from_static("http://[::1]:50051")
         .tls_config(&tls)
         .connect()
         .await?;
 
-        let setup_request = build_registration();
+    let setup_request = build_registration();
 
-       let request = tonic::Request::new(setup_request);
+    let request = tonic::Request::new(setup_request);
 
     let mut client = EssemblyClient::new(channel);
 
@@ -112,7 +108,6 @@ pub fn build_registration() -> interfaces::api::EssemblyClientRegistration {
         address: Some(new_address),
         status: new_registration_status,
     };
-
 
     new_registration.clone()
 }

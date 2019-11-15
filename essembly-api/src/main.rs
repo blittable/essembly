@@ -5,7 +5,6 @@ pub use serde_derive::{Deserialize, Serialize};
 
 use essembly_interfaces::*;
 
-use tracing::subscriber;
 #[allow(unused_imports)]
 use tracing::{debug, error, event, info, span, trace, warn, Level};
 
@@ -14,21 +13,19 @@ static DATABASE_NAME: &str = "essembly.db";
 
 use essembly_config::Config;
 use essembly_interfaces;
-use essembly_interfaces::api::{EssemblyRequest, EssemblyResponse} ;
+use essembly_interfaces::api::*;
 use essembly_core::*;
-use essembly_logging::{trace::EssemblySubscriber};
 use essembly_logging::*;
 
-use std::collections::VecDeque;
 use std::str;
 use tonic::{
     transport::{Certificate, Identity, Server, ServerTlsConfig},
-    Request, Response, Status, Streaming,
+    Request, Response, Status, 
 };
 
 type EssemblyResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
+#[allow(dead_code)]
 fn save_to_db(message: registration::Address) -> Result<(), Box<dyn std::error::Error>> {
     // #[cfg(debug)] {
     //     println!("Data file loaded at: {:?}", path);
@@ -75,13 +72,11 @@ impl essembly_interfaces::api::server::Essembly for EssemblyServer {
     }
 
 }
-    type ServerStreamingEssemblyStream = Stream;
 
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
     //subscriber::set_global_default(essembly::logging::trace::EssemblySubscriber::new(2)).unwrap();
     info!("Starting up essembly api server...");
     //Read config file
-    let config: Config = Config::new().load();
 
     let pem = std::fs::read("essembly-api/tls/server.pem")?;
     let key = std::fs::read("essembly-api/tls/server.key")?;

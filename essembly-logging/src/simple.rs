@@ -22,7 +22,7 @@ impl Logger for SimpleLogger {
     fn log(&self, level: Level, message: String) {
         println!(
             "simple logger Level: {} Message: {}",
-            translate(Locale::th_TH, level),
+            translate(Locale::TH_TH, level),
             message,
         );
     }

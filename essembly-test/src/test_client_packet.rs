@@ -3,22 +3,18 @@
 #[allow(dead_code)]
 pub use serde_derive::{Deserialize, Serialize};
 
-
 use essembly::interfaces;
-use tracing_attributes;
 use tracing;
+use tracing_attributes;
 
 use tokio;
 
-use tonic::{
-    transport::{Certificate, Channel, ClientTlsConfig, Identity},
-};
+use tonic::transport::{Certificate, Channel, ClientTlsConfig, Identity};
 
-use essembly::interfaces::registration::Client;
-use essembly::interfaces::api::{ EssemblyClientRegistration };
 use essembly::interfaces::api::client::EssemblyClient;
+use essembly::interfaces::api::EssemblyClientRegistration;
+use essembly::interfaces::registration::Client;
 use essembly::logging::*;
-
 
 #[tokio::main]
 #[tracing_attributes::instrument]
@@ -29,7 +25,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
-
     let mut logger = essembly::logging::simple::SimpleLogger::new();
     logger.initialize(Level::DEBUG);
 
@@ -49,14 +44,14 @@ async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
         .identity(client_identity)
         .clone();
 
-        let channel = Channel::from_static("http://[::1]:50051")
+    let channel = Channel::from_static("http://[::1]:50051")
         .tls_config(&tls)
         .connect()
         .await?;
 
-        let setup_request = build_registration();
+    let setup_request = build_registration();
 
-       let request = tonic::Request::new(setup_request);
+    let request = tonic::Request::new(setup_request);
 
     let mut client = EssemblyClient::new(channel);
 
@@ -69,8 +64,6 @@ async fn run_client() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 pub fn build_registration() -> interfaces::api::EssemblyClientRegistration {
-
-
     let address_line_1: String = "12/1 Some Soi".to_string();
     let address_line_2: String = "Sukhumvit".to_string();
 
@@ -107,7 +100,6 @@ pub fn build_registration() -> interfaces::api::EssemblyClientRegistration {
         address: Some(new_address),
         status: new_registration_status,
     };
-
 
     new_registration.clone()
 }
