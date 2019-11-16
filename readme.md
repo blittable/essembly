@@ -1,19 +1,44 @@
-## Essembly
+## Essembly: Developer Notes
 
 ### Project Structure
+
+`essembly-cli` is a reference client that uses all functionality.  Other clients (e.g. mobile, desktop) can be built using the cli's code.
+
+Details on the other crates can be found by viewing the readme documents at the root of each crate:
+
+[`essembly`](essembly/readme.md)
+
+[`essembly-cli`](essembly-cli/readme.md)
+
+[`essembly-config`](essembly-config/readme.md)
+
+[`essembly-core`](essembly-core/readme.md)
+
+[`essembly-interfaces`](essembly-interfaces/readme.md)
+
+[`essembly-logging`](essembly-logging/readme.md)
+
+[`essembly-store`](essembly-store/readme.md)
+
+[`essembly-test`](essembly-test/readme.md)
+
 
 ![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.svg)
 
 Dependencies:
 
-         Cli
-          |
+```
+                       cli
+                        |
+               Essembly (parent crate)
+                        |
+            Store, API, Logging, Config 
+                        |
+                       Core
+                        |
+               Accounts, Inventory
 
-       Essembly
-          |
-
-Interfaces, Core, Logging, API 
-
+```
 
    
 ### Testing
@@ -28,12 +53,18 @@ From the root directory, `cargo test --all`
 
 Note: This does not run the integration tests in the essembly-test crate
 
-#### Running Essembly Integration Tests
+#### Running Essembly Integration Tests (Manual)
+
+First, run `cargo run essembly-api` to start the API server
 From the essembly-test directory, `cargo test`
 
-### Development Testing
+
+#### Run the Essembly client from the cli 
+
+First, run `cargo run essembly-api` to start the API server
 
 The reference client is the essembly-cli:   `cargo run --bin essembly-cli --help` 
+
 The cli, and other crates, references the one (and only config file).  The supporting crate is essembly-config 
 
 Starting it does the following:
@@ -46,7 +77,7 @@ Starting it does the following:
 4) Uses the API to commit to database  
 
 
-#### Startup Configuration
+### Startup Configuration
 
 All crates rely on a single configuration file, `config.toml`.  The location of the startup configuration file can be changed by setting an environment variable, `ESSEMBLY_CONFIG`
 

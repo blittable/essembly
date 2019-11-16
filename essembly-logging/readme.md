@@ -1,4 +1,4 @@
-## The `essembly-core logger` crate contains all of the logging logic for essembly. 
+## The `essembly-logger` crate contains all of the logging logic for essembly. 
 
 
 There are two primary users:
@@ -30,13 +30,7 @@ local = { directory = "/var/lib/vector" }
 remote = { ip = "123.333.333.23", port = "2234" }
 ```
 
-Each component in the system can be configured for logging with different levels of verbosity.  After a component is started, the logging should happen automatically.   
+Each component in the system can be configured for logging with different levels of verbosity.  
 
-User Stories:
-
-1) I start my POS system and I want to look at the logs as I use the system.
-2) I am implementing a distributed installation, and I want to cofigure the system.
-3) I am trouble-shooting a problem in the system, and I need to see the logs remotely.
-
-
+After a component is started, the logging should happen automatically.   
 

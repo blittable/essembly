@@ -28,7 +28,6 @@ use essembly::interfaces::api::EssemblyClientRegistration;
 use essembly::interfaces::registration::Client;
 
 #[tokio::main]
-#[instrument]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Calling client packet send...");
     run_client().await?;

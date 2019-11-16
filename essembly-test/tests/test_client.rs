@@ -24,7 +24,6 @@ use essembly::interfaces::api::client::EssemblyClient;
 use essembly::interfaces::api::server::*;
 use essembly::interfaces::registration::*;
 
-use http::header::HeaderValue;
 use tonic::body::BoxBody;
 use tower::Service;
 
@@ -32,7 +31,6 @@ use tower::Service;
 pub struct EssemblyServer;
 
 type EssemblyResult<T> = Result<Response<T>, Status>;
-type Stream = VecDeque<Result<EssemblyResponse, Status>>;
 
 #[tonic::async_trait]
 impl server::Essembly for EssemblyServer {
@@ -53,7 +51,7 @@ impl server::Essembly for EssemblyServer {
 //Currently this test just drops through
 #[test]
 fn run_server_test() {
-    run_server();
+    let _future = run_server();
 }
 
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
