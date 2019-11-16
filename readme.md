@@ -23,20 +23,31 @@ Details on the other crates can be found by viewing the readme documents at the 
 [`essembly-test`](essembly-test/readme.md)
 
 
+
 ![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.svg)
 
-Dependencies:
+Top Crate Dependencies (business logic is contained in `essembly-core`):
 
 ```
-                       cli
+                       cli                            
+                        |                             
+               Essembly (parent crate)                
                         |
-               Essembly (parent crate)
+         Interfaces, Config, Logging, Core
+              |
+             Core
+
+                       api 
                         |
-            Store, API, Logging, Config 
+         Interfaces, Config, Logging, Core
+              |
+             Core
+
+                      store 
                         |
-                       Core
-                        |
-               Accounts, Inventory
+         Interfaces, Config, Logging, Core?
+              |
+             Core
 
 ```
 
@@ -78,12 +89,13 @@ Starting it does the following:
 3) Connects to the API,
 4) Uses the API to commit to database  
 
+Note - the essembly-cli does not do direct to db, but requires the API.
 
-### Startup Configuration
+### Configuration
 
 All crates rely on a single configuration file, `config.toml`.  The location of the startup configuration file can be changed by setting an environment variable, `ESSEMBLY_CONFIG`
 
-#### Logging
+### Logging
 
 There are 5 logging levels:
 
