@@ -10,9 +10,9 @@ use mockall::*;
 use uuid::Uuid;
 use uuid::{Variant, Version};
 
-//Objects::Permissions::Users
-//Such that Any Object can have any set of permissions, which can be applied to any number of users
-#[doc(inline)]
+/// ExternalId is used when a user as an id that is outside the system
+/// (e.g. employee number)
+/// # Example
 #[derive(Debug)]
 pub struct ExternalId {
     id: String,

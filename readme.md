@@ -26,7 +26,7 @@ Details on the other crates can be found by viewing the readme documents at the 
 
 ![Project Structure](https://github.com/xenirio/essembly/blob/master/assets/essembly-project-structure.svg)
 
-Top Crate Dependencies (business logic is contained in `essembly-core`):
+Runnable Crate Dependencies (business logic is contained in `essembly-core`):
 
 ```
                        cli                            

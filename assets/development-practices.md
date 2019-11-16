@@ -1,27 +1,32 @@
 # Essembly Development Practices
 
 This is the draft version of development practices based on Agile.
-There are 3 major sections to focus
+
+There are 3 major sections: 
 
 * ## Development Process
     * ### Development
+
         * #### Transparency
-            Be able to check what happen about the data and process.
+
+            Be able to verify what happens with the process.
 
             * **Process Timeline**  
-                To visualize set of processes and comsuming time as timeline.
+                To visualize set of processes and consuming time as timeline.
                 
             * **Module Interaction**  
-                To visualize interaction of modules in the process into graph form.
+                To visualize interaction of modules in the process as a graph.
             
             * **Data Transformation**  
-                See what happen about the data and how they transform.
+                See what happens with data in the system and how it is transformed.
         
         * #### Debugging
+
             * **Process Reproduction**  
-                Be able to reproduce any process again with the same environment and the same data that was snapshot as binary file.
+                Be able to reproduce any process again with the same environment and the same data along with capturing or rebuilding the related code at the exact version level.
 
         * #### Framework Agreement
+
             * **Payload/Input**  
                 Do the specification the standard form of argument name, type, description. for example,
 
@@ -96,6 +101,7 @@ There are 3 major sections to focus
                 ```
 
             * **Response/Output**  
+
                 Do the specification the standard output form.
 
         * #### Logging
@@ -105,10 +111,10 @@ There are 3 major sections to focus
         * #### Unit Testing
     
     * ### Milestone
-        Group tasks togeter for achieve the feature with a number of user story that selected from **Product Backlog**
+        Group tasks together for delivering the feature with a number of user stories taken from the  the **Product Backlog**
 
         * #### Task
-            Describe the actual work that developer need to do.
+            Describe the actual work that developer needs to do.
 
     * ### Deployment
         * #### Release Cycle
@@ -141,18 +147,18 @@ There are 3 major sections to focus
     * ### Stakeholder & Product Owner
         * #### User Story
             * **Product Backlog**  
-                Describe for any idea, task, note for transform into more clarify tasks.
+                Detail any idea, task, or other notes for transforming into clear tasks.
 
     * ### Product Owner & Developer
         * #### Tasks
-            PO/PM and Developers working together to translate the User Story into Tasks. The task is solid form, it describes clearly what actual work that the developer needs to do.
+            PO/PM and Developers work together to translate the User Story into Tasks. The task is concrete, it describes clearly what actual work a developer needs to do.
         
         * #### Technical Discussion
-            Sometime we got the technical problems that maybe change the project plan. We need the discuss with PO/PM to find the good solution.
+            Sometime we got have technical problems that can alter the project plan. This needs to be discussed with the PO/PM to find a solution.
 
     * ### Developer Team
         * #### Code Review
-            * **Code Smell**  
+            * **Code Smells**  
                 To check healty of the code.
                 http://mikamantyla.eu/BadCodeSmellsTaxonomy.html
             
