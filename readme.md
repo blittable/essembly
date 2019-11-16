@@ -43,7 +43,9 @@ Dependencies:
    
 ### Testing
 
-Most code is tested in the .rs files themselves.  The generated code (from the protobufs) is tested in the essembly-test project (not a release assembly).  
+Most code is tested in the .rs files themselves.  
+
+The generated code (from the protobufs) is tested in the `essembly-test` project (not a release assembly).  
 
 Integration tests are in the `essembly-test` project.  
 
@@ -81,11 +83,15 @@ Starting it does the following:
 
 All crates rely on a single configuration file, `config.toml`.  The location of the startup configuration file can be changed by setting an environment variable, `ESSEMBLY_CONFIG`
 
-
-There are 4 levels
-trace (everything), debug(almost everything), error (big problems), , warn (little problems), info (direct messages)
-
 #### Logging
+
+There are 5 logging levels:
+
+1. trace (everything), 
+2. debug(almost everything), 
+3. error (big problems), 
+4. warn (little problems), 
+5. info (direct messages)
 
 Currently, the logging is using the tokio-trace library (`subscriber` below).  There is also a toy simple logger that does *not* yet implement the std::log trait.
 
@@ -101,7 +107,8 @@ Currently, the logging is using the tokio-trace library (`subscriber` below).  T
  logger.log(essembly::logging::Level::DEBUG, "foo".to_string());
 
  let subscriber = tracing_subscriber::fmt::Subscriber::builder()
-        .finish();
+   .finish();
+
     tracing::subscriber::set_global_default(subscriber).unwrap();
 
  info!("server started");
