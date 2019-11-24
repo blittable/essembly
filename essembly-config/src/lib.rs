@@ -303,7 +303,7 @@ mod tests {
 
     #[test]
     fn test_config_env_variable() {
-        let path = env::current_dir().unwrap();
+        let _path = env::current_dir().unwrap();
 
         let env_config_key = "ESSEMBLY_CONFIG";
         env::set_var(env_config_key, "../config.toml");

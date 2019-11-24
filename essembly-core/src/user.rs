@@ -105,7 +105,7 @@ fn build_user() {
     };
     let i = Identifier { id_type: ext_id };
 
-    let j = User {
+    let _j = User {
         id: Ids::Internal(i),
         permissions: Permissions::new(),
     };
@@ -115,7 +115,7 @@ fn build_user() {
     };
     let k = Identifier { id_type: guid_id };
 
-    let m = User {
+    let _m = User {
         id: Ids::Internal(k),
         permissions: Permissions::new(),
     };

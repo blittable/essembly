@@ -113,14 +113,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
    // let mut logger: essembly_logging::simple::SimpleLogger = essembly_logging::simple::SimpleLogger::new(); 
    // logger.initialize(essembly_logging::Level::DEBUG);
 
-    let span = span!(
-        Level::TRACE,
-        "starting",
-        direct_to_db = ?config.cli.details.direct_to_db,
-        log_level = ?config.cli.details.logging,
-    );
-
-
     debug!("API configuration: {:?}", config.api);
     debug!("API logging configuration: {:?}", config.logger);
     tracing::debug!("API db configuration: {:?}", config.db);

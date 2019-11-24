@@ -77,7 +77,7 @@ fn raw_test() {
     // println!("P n bytes is: {:b}", &p);
     // println!("W n bytes is: {:b}", &w);
 
-    let r = (n << 7) & (m << 7) & (p << 7) & (w << 7);
+    let _r = (n << 7) & (m << 7) & (p << 7) & (w << 7);
 
     //println!("R in bytes is: {:b}", &r);
 }

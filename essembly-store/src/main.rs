@@ -10,8 +10,8 @@ use std::collections::HashMap;
 use tracing::{debug, error, event, info, span, trace, warn, Level};
 
 use essembly_config::*;
-use essembly_logging::*;
 use essembly_interfaces::registration::*;
+
 use tracing;
 use tracing_subscriber;
 
