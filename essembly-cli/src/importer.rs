@@ -1,4 +1,6 @@
 use roxmltree;
+use roxmltree::Node;
+use std::collections::HashMap;
 
 pub trait Parser {
     fn new() -> Self;
@@ -28,8 +30,10 @@ impl Parser for XLBRParser {
             if node.is_element() {
                 match node.tag_name().name().as_ref() {
                     "accountingEntries" => println!("Entries"),
-                    "entryHeader" => println!("Header"),
-                    "entryDetail" => println!("Detail"),
+                    "entryHeader" => {
+                        println!("Header");
+                        hunt_type(&node);
+                    }
                     _ => (),
                 }
 
@@ -41,6 +45,61 @@ impl Parser for XLBRParser {
                 //     doc.text_pos_at(node.range().start)
                 // );
             }
+
+            //let p = doc.descendants().find(|n| n.has_tag_name("p")).unwrap();
+            // if node.has_attribute() {
+            //     println!("Type: {:#?}", node.node_type());
+            // }
         }
     }
 }
+
+fn hunt_type(root_node: &Node) {
+
+    //let mut uris = HashMap::new();
+
+    for node in root_node.children() {
+
+        println!("type {:?}", node.node_type());
+        println!("tag {:?}", node.tag_name().name());
+
+                match node.tag_name().name().as_ref() {
+                    "entryDetail" => {
+                        println!("Recursing");
+                        hunt_type(&node);
+                    }
+                    _ => (),
+                }
+        }
+}
+
+        // for node in doc.root().descendants() {
+
+        // for ns in node.children() {
+        //     println!("val {:?}", ns);
+        //     uris.insert(ns.text(), "text");
+        // }
+        // }
+
+        // println!("name {:?}", node.tag_name().name());
+        // println!("Child: {:?}", node.node_type());
+
+// fn parse_xml_children(node: &Node) {
+//     println!("Children **********************************");
+
+//     let details = node
+//         .descendants()
+//         .find(|n| n.has_tag_name("entryDetail"))
+//         .unwrap();
+
+//     for child in details.children() {
+//         println!("Child: {:#?}", child.node_type());
+//         println!("Attributes: {:#?}", child.attributes());
+//     }
+// }
+
+// Type: Element
+// Attributes: [
+//     Attribute { name: contextRef, value: "now" },
+//     Attribute { name: decimals, value: "2" },
+//     Attribute { name: unitRef, value: "usd" },

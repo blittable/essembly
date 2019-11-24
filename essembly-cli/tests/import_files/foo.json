@@ -1,0 +1,266 @@
+{
+		"accounting_journal": {
+
+			"documentInfo": {
+				"entriesType": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "journal"
+				},
+				"uniqueID": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "001"
+				},
+				"language": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "iso639:en"
+				},
+				"creationDate": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "2005-07-05"
+				},
+				"creator": {
+					"_contextRef": "now",
+					"__prefix": "gl-bus",
+					"__text": "XBRL GL Working Group"
+				},
+				"entriesComment": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "A best practice journal entries instance document"
+				},
+				"periodCoveredStart": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "2005-06-01"
+				},
+				"periodCoveredEnd": {
+					"_contextRef": "now",
+					"__prefix": "gl-cor",
+					"__text": "2005-06-30"
+				},
+				"sourceApplication": {
+					"_contextRef": "now",
+					"__prefix": "gl-bus",
+					"__text": "XABRA"
+				},
+				"defaultCurrency": {
+					"_contextRef": "now",
+					"__prefix": "gl-muc",
+					"__text": "iso4217:usd"
+				},
+				"__prefix": "gl-cor"
+			},
+			"entityInformation": {
+				"organizationIdentifiers": {
+					"organizationIdentifier": {
+						"_contextRef": "now",
+						"__prefix": "gl-bus",
+						"__text": "ABC Company"
+					},
+					"organizationDescription": {
+						"_contextRef": "now",
+						"__prefix": "gl-bus",
+						"__text": "Company Name"
+					},
+					"__prefix": "gl-bus"
+				},
+				"__prefix": "gl-cor"
+			},
+			"entryHeader": 
+				{
+					"enteredBy": {
+						"_contextRef": "now",
+						"__prefix": "gl-cor",
+						"__text": "Otto Wellwood"
+					},
+					"enteredDate": {
+						"_contextRef": "now",
+						"__prefix": "gl-cor",
+						"__text": "2005-07-01"
+					},
+					"sourceJournalID": {
+						"_contextRef": "now",
+						"__prefix": "gl-cor",
+						"__text": "gj"
+					},
+					"sourceJournalDescription": {
+						"_contextRef": "now",
+						"__prefix": "gl-bus",
+						"__text": "JE"
+					},
+					"entryType": {
+						"_contextRef": "now",
+						"__prefix": "gl-cor",
+						"__text": "standard"
+					},
+					"entryNumber": {
+						"_contextRef": "now",
+						"__prefix": "gl-cor",
+						"__text": "50"
+					},
+					"entryComment": {
+						"_contextRef": "now",
+						"__prefix": "gl-cor",
+						"__text": "The comment for this entry"
+					},
+					"entryDetail": [
+						{
+							"lineNumber": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "1"
+							},
+							"account": {
+								"accountMainID": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "10100"
+								},
+								"accountMainDescription": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "Rent"
+								},
+								"accountPurposeCode": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "usgaap"
+								},
+								"accountType": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "account"
+								},
+								"__prefix": "gl-cor"
+							},
+							"amount": {
+								"_contextRef": "now",
+								"_decimals": "2",
+								"_unitRef": "usd",
+								"__prefix": "gl-cor",
+								"__text": "500"
+							},
+							"debitCreditCode": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "D"
+							},
+							"postingDate": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "2005-06-30"
+							},
+							"identifierReference": {
+								"identifierCode": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "1130"
+								},
+								"identifierDescription": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "Rettaler Property Ltd"
+								},
+								"identifierType": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "V"
+								},
+								"__prefix": "gl-cor"
+							},
+							"documentType": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "check"
+							},
+							"postingStatus": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "posted"
+							},
+							"__prefix": "gl-cor"
+						},
+						{
+							"lineNumber": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "2"
+							},
+							"account": {
+								"accountMainID": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "10200"
+								},
+								"accountMainDescription": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "Chequing"
+								},
+								"accountPurposeCode": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "usgaap"
+								},
+								"accountType": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "account"
+								},
+								"__prefix": "gl-cor"
+							},
+							"amount": {
+								"_contextRef": "now",
+								"_decimals": "2",
+								"_unitRef": "usd",
+								"__prefix": "gl-cor",
+								"__text": "500"
+							},
+							"debitCreditCode": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "C"
+							},
+							"postingDate": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "2005-06-30"
+							},
+							"identifierReference": {
+								"identifierCode": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "1130"
+								},
+								"identifierDescription": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "Rettaler Property Ltd"
+								},
+								"identifierType": {
+									"_contextRef": "now",
+									"__prefix": "gl-cor",
+									"__text": "V"
+								},
+								"__prefix": "gl-cor"
+							},
+							"documentType": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "check"
+							},
+							"postingStatus": {
+								"_contextRef": "now",
+								"__prefix": "gl-cor",
+								"__text": "posted"
+                            },
+							"__prefix": "gl-cor"
+                        }
+                    ]
+                }
+            }
+        }
