@@ -17,9 +17,10 @@ futures-preview = { version = "=0.3.0-alpha.19", default-features = false, featu
 tower = "0.3.0-alpha.2"
 http = "0.1"
 
-tracing = "0.1.5"
+tracing = "0.1.10"
 tracing-subscriber = { git = "https://github.com/tokio-rs/tracing"}
 tracing-attributes = { git = "https://github.com/tokio-rs/tracing"}
+tracing-futures = { git = "https://github.com/tokio-rs/tracing"}
 
 [dependencies.essembly-core]
 path = "../essembly-core"

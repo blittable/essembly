@@ -37,20 +37,12 @@ impl Config {
 
         //CLI
         let cli_primary: CliDetails = CliDetails {
-            ip: String::new(),
-            port: String::new(),
-            logging: String::new(),
-        };
-
-        let cli_secondary: CliDetails = CliDetails {
-            ip: String::new(),
-            port: String::new(),
+            direct_to_db: false,
             logging: String::new(),
         };
 
         let _cli: CLI = CLI {
-            primary: cli_primary,
-            secondary: cli_secondary,
+            details: cli_primary,
         };
 
         //API
@@ -200,15 +192,12 @@ pub struct DbDetails {
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct CLI {
-    pub primary: CliDetails,
-    pub secondary: CliDetails,
+    pub details: CliDetails,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
-#[serde(rename_all = "kebab-case")]
 pub struct CliDetails {
-    pub ip: String,
-    pub port: String,
+    pub direct_to_db: bool,
     pub logging: String,
 }
 
@@ -244,8 +233,7 @@ mod tests {
             "primary = { ip = \"localhost\", port = \"2888\" } \n",
             "secondary = { ip = \"222.222.222.2\", port = \"2888\" } \n",
             "[cli]\n",
-            "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
-            "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "details = { direct_to_db = true, logging = \"trace\" }\n",
             "[api]\n",
             "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
             "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",

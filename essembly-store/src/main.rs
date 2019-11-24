@@ -5,6 +5,10 @@ use rand::Rng;
 use std::collections::HashMap;
 pub use serde_derive::{Deserialize, Serialize};
 
+//use essembly_logging::*;
+
+#[allow(unused_imports)]
+use tracing::{debug, error, event, info, span, trace, warn, Level};
 
 use essembly_config::*;
 use essembly_interfaces::registration::*;
@@ -111,14 +115,38 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     //Read config file
     let config: Config = Config::new().load();
-    let _db_type = config.db.primary.db_type;
+    let db_type = &config.db.primary.db_type;
 
-    load_test();
+    let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
+    tracing::subscriber::set_global_default(subscriber).unwrap();
+
+    info!("server started");
+    trace!("tracing...");
+    warn!("tracing...");
+
+    let span = span!(
+        Level::DEBUG,
+        "starting",
+        ip = ?config.cli.details.direct_to_db,
+        log_level = ?config.cli.details.logging,
+    );
+
+    debug!("API configuration: {:?}", config.api);
+    debug!("Store logging configuration: {:?}", config.logger);
+
+    tracing::debug!("Store db directory: {:?}", config.db.primary);
+    tracing::debug!("Store db type: {:?}", db_type);
+
+
+    let _enter = span.enter();
+
+    // Test 250K insert into essembly
+    // load_test();
 
     //let config_string = tokio::fs::read(config).await?;
     //let list: Config = toml::from_str(&tokio::fs::read(config)).unwrap();
 
-    //Initialize DB
+    //Initialize DBhttps://www.davekuhlman.org/generateDS.html
     //let mut cert_a = File::open("essembly-store/tls/server.pem")?;
 
     //let cert = tokio::fs::read("tls/server.pem").await?;

@@ -11,7 +11,7 @@ trace = ["tracing-subscriber", "tracing-attributes"]
 [dependencies]
 essembly-core = { version = "0.1.0-alpha.1", path = "../essembly-core" }
 
-tracing = { version = "0.1", features = ["max_level_trace"] }
+tracing = { version = "0.1.10", features = ["max_level_info"] }
 tracing-core = { git = "https://github.com/tokio-rs/tracing" }
 tracing-log = { git = "https://github.com/tokio-rs/tracing" }
 tracing-subscriber = { git = "https://github.com/tokio-rs/tracing", optional = true }

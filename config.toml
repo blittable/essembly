@@ -3,8 +3,7 @@ primary = { ip = "localhost", port = "2888" }
 secondary = { ip = "222.222.222.2", port = "2888" }
 
 [cli]
-primary = { ip = "localhost", port = "2234", logging = "trace" }
-secondary = { ip = "localhost", port = "2235", logging = "trace" }
+details = { direct_to_db = true, logging = "trace" }
 
 [api]
 primary = { ip = "localhost", port = "2234", logging = "trace" }

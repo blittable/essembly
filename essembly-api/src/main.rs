@@ -14,7 +14,7 @@ static DATABASE_NAME: &str = "essembly.db";
 use essembly_config::Config;
 use essembly_interfaces;
 use essembly_interfaces::api::*;
-use essembly_logging::*;
+//use essembly_logging::*;
 
 use std::str;
 use tonic::{
@@ -71,11 +71,14 @@ impl essembly_interfaces::api::server::Essembly for EssemblyServer {
     }
 
 }
-
 async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
-    //subscriber::set_global_default(essembly::logging::trace::EssemblySubscriber::new(2)).unwrap();
     info!("Starting up essembly api server...");
     //Read config file
+    trace!("server started");
+
+    span!(target: "app_spans", Level::TRACE, "my span");
+    event!(target: "app_events", Level::INFO, "something has happened!");
+    event!(target: "app_events", Level::DEBUG, "something debug has happened!");
 
     let pem = std::fs::read("essembly-api/tls/server.pem")?;
     let key = std::fs::read("essembly-api/tls/server.key")?;
@@ -106,35 +109,45 @@ async fn run_server() -> Result<(), Box<dyn std::error::Error>> {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let config = &Config::new().load();
 
-    let mut logger: essembly_logging::simple::SimpleLogger = essembly_logging::simple::SimpleLogger::new();
-
-    logger.initialize(essembly_logging::Level::DEBUG);
-
-    logger.log(essembly_logging::Level::DEBUG, "foo".to_string());
+   // let mut logger: essembly_logging::simple::SimpleLogger = essembly_logging::simple::SimpleLogger::new(); 
+    //logger.initialize(essembly_logging::Level::DEBUG);
 
     let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
-
-    tracing::subscriber::set_global_default(subscriber).unwrap();
+    //tracing::subscriber::set_global_default(subscriber).unwrap();
 
     info!("server started");
-    trace!("tracing...");
-    warn!("tracing...");
+    trace!("server started");
+    debug!("server started");
+    warn!("server started");
 
     let span = span!(
-        Level::DEBUG,
+        Level::TRACE,
         "starting",
-        ip = ?config.cli.primary.ip,
-        port = ?config.cli.primary.port,
-        log_level = ?config.cli.primary.logging,
+        direct_to_db = ?config.cli.details.direct_to_db,
+        log_level = ?config.cli.details.logging,
     );
+
+    span.enter();
+
+    span!(Level::TRACE, "login");
+    span!(Level::DEBUG, "dlogin");
+    span!(Level::INFO, "dilogin");
+    span!(Level::WARN, "dwilogin");
 
     debug!("API configuration: {:?}", config.api);
     debug!("API logging configuration: {:?}", config.logger);
     tracing::debug!("API db configuration: {:?}", config.db);
 
-    event!(Level::DEBUG, "something happened");
+    span!(Level::TRACE, "something happened");
 
     let _enter = span.enter();
+        tracing::debug!("API db configuration: {:?}", config.db);
+
+    span!(target: "app_spans", Level::TRACE, "my span");
+    span!(Level::INFO, "dilogin");
+    event!(target: "app_events", Level::INFO, "something has happened!");
+    trace!("server started");
+
     run_server().await?;
 
     Ok(())

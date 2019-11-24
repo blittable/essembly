@@ -13,6 +13,7 @@ use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
 use tracing::*;
+use tracing::level_filters::*;
 
 mod importer;
 
@@ -178,17 +179,22 @@ arg_enum! {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     //Initialize the client with its configuration
     let config = &Config::new().load();
-    let primary = &config.cli.primary;
-    println!("cli config: {:?}", primary);
+    let primary = &config.cli.details;
 
-    let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
-    tracing::subscriber::set_global_default(subscriber).unwrap();
+    //logging
+    let s = essembly::logging::trace::EssemblySubscriber::new(4);
+    tracing::subscriber::set_global_default(s).unwrap();
+
     info!("cli runtime started");
+    debug!("cli config: {:?}", config.cli);
+    debug!("api config: {:?}", config.cli);
 
-    debug!("config: {:?}", config);
+    //Validation
+    // Do we have a store?
 
-    //If we are logging, then pass the configuration logging value to essembly::logger
+
 
     Essembly::from_args().run().await?;
+
     Ok(())
 }

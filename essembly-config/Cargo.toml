@@ -7,7 +7,6 @@ keywords = ["cli", "erp", "essembly"]
 categories = ["erp", "business", "accounting"]
 
 [dependencies]
-tracing = { version = "0.1.5", optional = true }
 serde = "1.0"
 failure = "0.1.5"
 toml = "0.5"

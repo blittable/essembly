@@ -14,7 +14,6 @@ serde_regex = "0.4.0"
 dirs = "2.0.2"
 failure = "0.1.5"
 lazy_static = "1.4.0"
-tracing = "0.1.9"
 http = "0.1"
 tokio = { version = "0.2.0-alpha.6" }
 toml = "0.5"
@@ -31,11 +30,14 @@ regex = "1.0"
 rand = "0.7"
 tempfile = "3.1" 
 rayon = "1.2.0" 
+rusqlite = "0.20.0"
 
-
-# essembly-core = { version = "=0.1.0-alpha.1", path = "../essembly", default-features = false, features = ["core"]} 
+tracing = "0.1.10"
+tracing-subscriber = { git = "https://github.com/tokio-rs/tracing"}
+tracing-attributes = { git = "https://github.com/tokio-rs/tracing"}
 
 [dependencies.essembly-core]
+#essembly-core = { version = "=0.1.0-alpha.1", path = "../essembly", default-features = false, features = ["core"]} 
 path = "../essembly-core"
 version = "0.1.0-alpha.1"
 
@@ -45,6 +47,10 @@ version = "0.1.0-alpha.1"
 
 [dependencies.essembly-config]
 path = "../essembly-config"
+version = "0.1.0-alpha.1"
+
+[dependencies.essembly-logging]
+path = "../essembly-logging"
 version = "0.1.0-alpha.1"
 
 [build-dependencies]
