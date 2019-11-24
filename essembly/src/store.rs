@@ -2,4 +2,4 @@
 //!
 //!
 
-pub use essembly_store::store::Store;
+pub use essembly_store::store::*;

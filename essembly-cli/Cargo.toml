@@ -26,7 +26,7 @@ tracing-subscriber = { git = "https://github.com/tokio-rs/tracing" }
 path = "../essembly"
 version = "0.1.0-alpha.1"
 default-features = false
-features = [ "core", "config", "logging" ]
+features = [ "core", "config", "logging", "store" ]
 
 
 

@@ -1,21 +1,59 @@
 use essembly_core::error;
+use essembly_logging::*;
+
+//use trace::{debug, error, event, info, span, trace, warn };
 
 #[allow(dead_code)]
-struct Sled {}
+pub struct Sled {}
 
 #[allow(dead_code)]
+#[derive(Debug, Clone)]
 struct Record {}
 
 trait DB {
     type Format;
     fn save_record(r: Record) -> Result<(), error::Error>;
+    fn create(path: &'static str, file: String) -> Result<(), error::Error>;
 }
 
-#[warn(unused_variables)]
 impl DB for Sled {
     type Format = Record;
 
     fn save_record(_r: Record) -> Result<(), error::Error> {
+        Ok(())
+    }
+
+    fn create(path: &'static str, _file: String) -> Result<(), error::Error> {
+        let config = sled::Config::default()
+            .path(path)
+            .to_owned()
+            .cache_capacity(51200)
+            .use_compression(false)
+            .flush_every_ms(Some(100))
+            .compression_factor(5)
+            .snapshot_after_ops(1_000); //never
+
+        let _db = config.open().unwrap();
+
+        Ok(())
+    }
+}
+
+#[allow(dead_code)]
+pub struct Sqlite {}
+
+//#[warn(unused_variables)]
+impl DB for Sqlite {
+    type Format = Record;
+
+    fn save_record(_record: Record) -> Result<(), error::Error> {
+        //info!("Saving to DB: {:?}", record);
+
+        Ok(())
+    }
+
+    fn create(_path: &'static str, _file: String) -> Result<(), error::Error> {
+
         Ok(())
     }
 }

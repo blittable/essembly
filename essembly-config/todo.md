@@ -1,2 +1,3 @@
 1. The configuration file has two types (db-type and logging) that should error with warning if the type is not a member of an enum.
-The enums are: db-type { sled, sqlite}, logging { trace, debug, warn, error, info } 
+2. Confusion between essembly::logging and essembly.logging
+

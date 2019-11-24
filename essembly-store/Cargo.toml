@@ -30,11 +30,16 @@ regex = "1.0"
 rand = "0.7"
 tempfile = "3.1" 
 rayon = "1.2.0" 
-rusqlite = "0.20.0"
 
 tracing = "0.1.10"
 tracing-subscriber = { git = "https://github.com/tokio-rs/tracing"}
 tracing-attributes = { git = "https://github.com/tokio-rs/tracing"}
+tracing-futures = { git = "https://github.com/tokio-rs/tracing"}
+
+[dependencies.rusqlite]
+version = "0.20.0"
+features = ["bundled"]
+
 
 [dependencies.essembly-core]
 #essembly-core = { version = "=0.1.0-alpha.1", path = "../essembly", default-features = false, features = ["core"]} 

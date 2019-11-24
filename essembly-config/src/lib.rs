@@ -5,7 +5,7 @@ use std::env;
 use std::ffi::OsStr;
 use std::fs::File;
 use std::io::Read;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[derive(Clone, Serialize, Deserialize, Debug)]
 #[serde(rename_all = "kebab-case")]
@@ -64,23 +64,23 @@ impl Config {
         };
 
         //DB
-        let db_primary: DbDetails = DbDetails {
+        let db_remote: DbRemote = DbRemote {
             db_type: String::new(),
             ip: String::new(),
             port: String::new(),
             logging: String::new(),
         };
 
-        let db_secondary: DbDetails = DbDetails {
+        let db_local: DbLocal = DbLocal {
             db_type: String::new(),
-            ip: String::new(),
-            port: String::new(),
+            path: String::new(),
+            file: String::new(),
             logging: String::new(),
         };
 
         let _db: DB = DB {
-            primary: db_primary,
-            secondary: db_secondary,
+            remote: db_remote,
+            local: db_local,
         };
 
         //Logger
@@ -105,6 +105,15 @@ impl Config {
             api: _api,
             logger: _logger,
         }
+    }
+
+    /// This method validates that the database in the configuration
+    /// is reachable.  
+    pub fn db_file_exists(&self) -> bool {
+
+        let full_db_path_file = &format!("{}/{}", self.db.local.path, self.db.local.file);
+        //let full_db_path_file = &self.path, &self.file;
+        Path::new(full_db_path_file).exists()
     }
 
     pub fn load(self) -> Self {
@@ -176,16 +185,25 @@ pub struct ApiDetails {
 #[serde(rename_all = "kebab-case")]
 #[derive(Clone, Serialize, Deserialize, Debug)]
 pub struct DB {
-    pub primary: DbDetails,
-    pub secondary: DbDetails,
+    pub remote: DbRemote,
+    pub local: DbLocal,
 }
 
 #[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
 #[serde(rename_all = "kebab-case")]
-pub struct DbDetails {
+pub struct DbRemote {
     pub db_type: String,
     pub ip: String,
     pub port: String,
+    pub logging: String,
+}
+
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq)]
+#[serde(rename_all = "kebab-case")]
+pub struct DbLocal {
+    pub db_type: String,
+    pub path: String,
+    pub file: String,
     pub logging: String,
 }
 
@@ -221,6 +239,7 @@ pub struct LoggerRemote {
     pub port: String,
 }
 
+
 #[cfg(test)]
 mod tests {
     use super::Config;
@@ -238,8 +257,8 @@ mod tests {
             "primary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
             "secondary = { ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
             "[db]\n",
-            "primary = { db-type = \"sled\", ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
-            "secondary = { db-type = \"sled\", ip = \"222.222.222.2\", port = \"2234\", logging = \"trace\" }\n",
+            "remote = { db-type = \"sled\", ip = \"localhost\", port = \"2234\", logging = \"trace\" }\n",
+            "local = { db-type = \"sled\", path = \"/db\", file = \"essembly.db\", logging = \"trace\" }\n",
             "[logger]\n",
             "local = { directory = \"/var/lib/vector\" }\n",
             "remote = { ip = \"localhost\", port = \"2234\" }\n",
@@ -250,7 +269,6 @@ mod tests {
             test_config.traffic_cop.primary,
             test_config.traffic_cop.secondary
         );
-        assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
 
     #[test]
@@ -269,7 +287,6 @@ mod tests {
             test_config.traffic_cop.primary,
             test_config.traffic_cop.secondary
         );
-        assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
 
     #[test]
@@ -282,8 +299,6 @@ mod tests {
         };
 
         assert_ne!(test_config.logger.local, test_local_logger_empty);
-
-        assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
 
     #[test]
@@ -303,6 +318,5 @@ mod tests {
             test_config.traffic_cop.primary,
             test_config.traffic_cop.secondary
         );
-        assert_ne!(test_config.db.primary, test_config.db.secondary);
     }
 }

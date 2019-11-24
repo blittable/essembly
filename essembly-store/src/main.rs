@@ -2,16 +2,18 @@
 #[allow(dead_code)]
 #[allow(warnings)]
 use rand::Rng;
-use std::collections::HashMap;
 pub use serde_derive::{Deserialize, Serialize};
+use std::collections::HashMap;
 
-//use essembly_logging::*;
 
 #[allow(unused_imports)]
 use tracing::{debug, error, event, info, span, trace, warn, Level};
 
 use essembly_config::*;
+use essembly_logging::*;
 use essembly_interfaces::registration::*;
+use tracing;
+use tracing_subscriber;
 
 use tokio;
 
@@ -33,24 +35,21 @@ fn initialize_store() {
     //Postgres
 }
 
-
 #[allow(dead_code)]
 fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
+    debug!("Saving to DB: {:?}", message);
 
-    let p= essembly_core::permissions::Permissions::new();
-
-
+    let p = essembly_core::permissions::Permissions::new();
     let path = "/sled/essembly.db";
     let tree = Db::open(path)?;
 
-    let sys= tree.open_tree("sys")?;
+    let sys = tree.open_tree("sys")?;
     //let options = tree.open_tree("options")?;
     //let locations = tree.open_tree("locations")?;
 
     let _result = sys.insert(&[p.sys, p.org, p.group, p.user], b"john");
 
     //println!("new user: {:?}", u);
-
 
     let _location = message.latlng.unwrap();
     let _longitude = _location.longitude.to_string();
@@ -74,13 +73,10 @@ fn save_to_db(message: Address) -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-pub fn write_users() {
-
-}
+pub fn write_users() {}
 
 pub fn load_test() {
-
-    use std::time::{Instant };
+    use std::time::Instant;
     let start = Instant::now();
 
     let config = sled::Config::default()
@@ -92,7 +88,7 @@ pub fn load_test() {
         .compression_factor(5)
         .snapshot_after_ops(1_000_000_000); //never
 
-    let cache_vals: HashMap<[u8; 32], [u8; 32]> = HashMap::with_capacity(250_000); 
+    let cache_vals: HashMap<[u8; 32], [u8; 32]> = HashMap::with_capacity(250_000);
 
     println!("{:#?}", config);
     let db = config.open().unwrap();
@@ -112,17 +108,14 @@ pub struct EssemblyServer;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-
     //Read config file
     let config: Config = Config::new().load();
-    let db_type = &config.db.primary.db_type;
+    let db_type = &config.db.local.db_type;
 
     let subscriber = tracing_subscriber::fmt::Subscriber::builder().finish();
     tracing::subscriber::set_global_default(subscriber).unwrap();
 
-    info!("server started");
-    trace!("tracing...");
-    warn!("tracing...");
+    info!("db server started...");
 
     let span = span!(
         Level::DEBUG,
@@ -134,9 +127,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     debug!("API configuration: {:?}", config.api);
     debug!("Store logging configuration: {:?}", config.logger);
 
-    tracing::debug!("Store db directory: {:?}", config.db.primary);
-    tracing::debug!("Store db type: {:?}", db_type);
-
+    debug!("Store db directory: {:?}", config.db.local.path);
+    debug!("Store db file: {:?}", config.db.local.file);
+    debug!("Store db type: {:?}", db_type);
 
     let _enter = span.enter();
 

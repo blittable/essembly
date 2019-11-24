@@ -8,12 +8,14 @@ use clap::arg_enum;
 use core::str::FromStr;
 use essembly::config::Config;
 use essembly::logging::*;
+use essembly::store::*;
 use failure::Fallible;
+use std::io::{stdin, stdout, Write};
 use std::path::PathBuf;
 use std::string::String;
 use structopt::StructOpt;
-use tracing::*;
 use tracing::level_filters::*;
+use tracing::*;
 
 mod importer;
 
@@ -175,8 +177,61 @@ arg_enum! {
     }
 }
 
+#[derive(Debug, Clone)]
+#[allow(non_camel_case_types)]
+enum INIT_CASES {
+    FILE_DOES_NOT_EXIST,
+    CONFIG_ERROR,
+}
+
+fn initialize_configuration(case: INIT_CASES, errant_parameters: Vec<String>) -> bool {
+    match case {
+        INIT_CASES::FILE_DOES_NOT_EXIST => {
+            println!("\n");
+            warn!(
+                "\nThe database file in the config.toml does not exist: {:?}",
+                errant_parameters
+            );
+            info!("\nDo you want to create it now? (y/n)");
+
+            let mut s = String::new();
+            print!(": ");
+            let _ = stdout().flush();
+
+            stdin()
+                .read_line(&mut s)
+                .expect("incorrect choice");
+            if let Some('\n') = s.chars().next_back() {
+                s.pop();
+            }
+            if let Some('\r') = s.chars().next_back() {
+                s.pop();
+            }
+
+            if s.eq_ignore_ascii_case("y")
+            {
+                println!("Creating database file.");
+                println!("\n");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        },
+        INIT_CASES::CONFIG_ERROR => {
+            warn!(
+                "The config.toml was unreadable or contained an error: {:?}",
+                case
+            );
+                return false;
+        }
+    }
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
     //Initialize the client with its configuration
     let config = &Config::new().load();
     let primary = &config.cli.details;
@@ -189,10 +244,33 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     debug!("cli config: {:?}", config.cli);
     debug!("api config: {:?}", config.cli);
 
-    //Validation
-    // Do we have a store?
+    //Validation - Should this be done here or 100% in essembly-config?
+    if config.cli.details.direct_to_db {
+        debug!(
+            "direct to database is: {:?}",
+            config.cli.details.direct_to_db
+        );
 
+        trace!("direct to database file path: {:?}", config.db.local);
+        debug!("database exists: {:?}", config.db_file_exists());
 
+        if !config.db_file_exists() {
+            let create = initialize_configuration(
+                INIT_CASES::FILE_DOES_NOT_EXIST,
+                vec![config.db.local.path.clone(), config.db.local.file.clone()],
+            );
+
+            if create {
+                let mut db = essembly::store::StoreBuilder::new();
+
+                db.path = Box::new(config.db.local.path.clone());
+                db.file = Box::new(config.db.local.file.clone());
+                db.db_type = essembly::store::Supported_Databases::Sqlite;
+
+                db.initialize();
+            }
+        }
+    }
 
     Essembly::from_args().run().await?;
 

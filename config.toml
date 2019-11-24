@@ -10,8 +10,8 @@ primary = { ip = "localhost", port = "2234", logging = "trace" }
 secondary = { ip = "localhost", port = "2235", logging = "trace" }
 
 [db]
-primary = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace" }
-secondary = {db-type = "sled",  ip = "localhost", port = "2334", logging = "trace" }
+remote = {db-type = "sled",  ip = "localhost", port = "2234", logging = "trace" }
+local = {db-type = "sqlite",  path = "/db", file = "essembly.db", logging = "trace" }
 
 [logger]
 local = { logger-type = "simple", directory = "/var/lib/vector" }
