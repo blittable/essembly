@@ -1,8 +1,8 @@
 /*!
-# Object 
-An [`Object`] represents an action taken by a User in the system. 
+# Object
+An [`Object`] represents an action taken by a User in the system.
 
-*/ 
+*/
 
 use uuid::Uuid;
 use uuid::{Variant, Version};
@@ -16,15 +16,14 @@ pub enum ObjectTypes {
 
 #[derive(Debug)]
 pub struct Id<T> {
-    pub id: T, 
+    pub id: T,
 }
 
-struct Object<T> {
+#[derive(Debug)]
+pub struct Object<T> {
     pub id: Option<T>,
-    pub object_type: ObjectTypes 
+    pub object_type: ObjectTypes,
 }
-
-
 
 // #[test]
 // fn build_user() {

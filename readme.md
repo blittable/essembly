@@ -124,3 +124,14 @@ Currently, the logging is using the tokio-trace library (`subscriber` below).  T
  info!("server started");
 ```
 
+##
+
+Planning:
+
+
+
+Blackbox Testing
+
+1.    
+
+

@@ -1,6 +1,5 @@
 use roxmltree;
 use roxmltree::Node;
-use std::collections::HashMap;
 
 pub trait Parser {
     fn new() -> Self;
@@ -55,34 +54,32 @@ impl Parser for XLBRParser {
 }
 
 fn hunt_type(root_node: &Node) {
-
     //let mut uris = HashMap::new();
 
     for node in root_node.children() {
-
         println!("type {:?}", node.node_type());
         println!("tag {:?}", node.tag_name().name());
 
-                match node.tag_name().name().as_ref() {
-                    "entryDetail" => {
-                        println!("Recursing");
-                        hunt_type(&node);
-                    }
-                    _ => (),
-                }
+        match node.tag_name().name().as_ref() {
+            "entryDetail" => {
+                println!("Recursing");
+                hunt_type(&node);
+            }
+            _ => (),
         }
+    }
 }
 
-        // for node in doc.root().descendants() {
+// for node in doc.root().descendants() {
 
-        // for ns in node.children() {
-        //     println!("val {:?}", ns);
-        //     uris.insert(ns.text(), "text");
-        // }
-        // }
+// for ns in node.children() {
+//     println!("val {:?}", ns);
+//     uris.insert(ns.text(), "text");
+// }
+// }
 
-        // println!("name {:?}", node.tag_name().name());
-        // println!("Child: {:?}", node.node_type());
+// println!("name {:?}", node.tag_name().name());
+// println!("Child: {:?}", node.node_type());
 
 // fn parse_xml_children(node: &Node) {
 //     println!("Children **********************************");

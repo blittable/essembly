@@ -1,3 +1,4 @@
+#![allow(unused_variables)]
 #[cfg(test)]
 use mockall::*;
 
@@ -6,6 +7,7 @@ trait Taxable {
     fn calc_tax(&self, amount: f32, rate: f32) -> f32;
 }
 
+#[allow(dead_code)]
 impl dyn Taxable {
     pub fn calc_tax(&self, amount: f32, rate: f32) -> f32 {
         amount * rate

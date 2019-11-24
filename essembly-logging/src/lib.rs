@@ -1,5 +1,4 @@
 #![allow(non_camel_case_types)]
-#![allow(upper_case_names)]
 #[macro_use]
 extern crate lazy_static;
 use std::collections::HashMap;

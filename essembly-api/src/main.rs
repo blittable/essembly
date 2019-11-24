@@ -14,7 +14,6 @@ static DATABASE_NAME: &str = "essembly.db";
 use essembly_config::Config;
 use essembly_interfaces;
 use essembly_interfaces::api::*;
-use essembly_core::*;
 use essembly_logging::*;
 
 use std::str;

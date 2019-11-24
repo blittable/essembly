@@ -17,7 +17,6 @@ use rayon::prelude::*;
 static DATABASE_NAME: &str = "essembly.db";
 
 use sled::Db;
-use essembly_core::{ permissions, user };
 
 //Initialize via the store trait
 #[allow(dead_code)]
@@ -77,7 +76,7 @@ pub fn write_users() {
 
 pub fn load_test() {
 
-    use std::time::{Instant, Duration};
+    use std::time::{Instant };
     let start = Instant::now();
 
     let config = sled::Config::default()
@@ -109,9 +108,10 @@ pub struct EssemblyServer;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+
     //Read config file
     let config: Config = Config::new().load();
-    let db_type = config.db.primary.db_type;
+    let _db_type = config.db.primary.db_type;
 
     load_test();
 

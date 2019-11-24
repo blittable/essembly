@@ -1,8 +1,12 @@
 use std::iter;
 
+#[allow(non_upper_case_globals)]
 pub(crate) const sys: &'static str = "sys";
+#[allow(non_upper_case_globals)]
 pub(crate) const org: &'static str = "org";
+#[allow(non_upper_case_globals)]
 pub(crate) const group: &'static str = "group";
+#[allow(non_upper_case_globals)]
 pub(crate) const user: &'static str = "user";
 
 #[derive(Debug, Copy, Clone)]
@@ -16,7 +20,6 @@ pub struct Permissions {
 impl Permissions {
     //new() returns with all values unitialized
     pub fn new() -> Self {
-
         Permissions {
             sys: 0b00000000,
             org: 0b00000000,
@@ -37,7 +40,6 @@ impl Permissions {
     //lead bit as 1.  All users need to be active in all groups in
     //order to use the system
     pub fn is_active(&self) -> bool {
-
         let result = (self.sys << 7) & (self.org << 7) & (self.group << 7) & (self.user << 7);
         result == 128_u8
     }
@@ -82,7 +84,6 @@ fn raw_test() {
 
 #[test]
 fn new_permissions_is_not_active() {
-
     let mask = Permissions::new();
 
     assert_eq!(mask.is_active(), false);
